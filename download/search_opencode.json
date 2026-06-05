@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://opencode.ai",
+    "name": "OpenCode | The open source AI coding agent",
+    "snippet": "The open source AI coding agent. Free models included or connect any model from any provider, including Claude, GPT, Gemini and more.",
+    "host_name": "opencode.ai",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=ipY_e9sldFM",
+    "name": "OpenCode: The BEST AI Coding Agent Ever! BYE Gemini CLI",
+    "snippet": "... , TUI AI, AI agent terminal, coding workflow, AI for developers, AI productivity tools, OpenCode tutorial, AI CLI, agentic AI, OpenCode 2025.",
+    "host_name": "www.youtube.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=20vcJmqAr4M",
+    "name": "OpenCode: Free AI Coding Agent Setup Guide 2026 - YouTube",
+    "snippet": "Set up OpenCode — the FREE open-source AI coding agent — using completely free LLM models like Google Gemini, Groq, and Ollama.",
+    "host_name": "www.youtube.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://opencode.ai/docs",
+    "name": "Intro | AI coding agent built for the terminal - OpenCode",
+    "snippet": "OpenCode is an open source AI coding agent. It's available as a terminal-based interface, desktop app, or IDE extension. OpenCode TUI with the opencode ...",
+    "host_name": "opencode.ai",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/LocalLLaMA/comments/1rcjzsk/is_opencode_the_best_free_coding_agent_currently",
+    "name": "Is opencode the best free coding agent currently? : r/LocalLLaMA",
+    "snippet": "OpenCode is surprisingly demanding on CPU load on laptop even though it's just a TUI. I used a laptop with Ryzen AI 350 and I can see core ...",
+    "host_name": "www.reddit.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

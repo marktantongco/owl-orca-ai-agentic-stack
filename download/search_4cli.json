@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://www.reddit.com/r/LLMDevs/comments/1rbye2i/i_built_a_cli_that_tells_me_what_i_actually_did",
+    "name": "I built a CLI that tells me what I actually did all day across Claude",
+    "snippet": "I built a CLI that tells me what I actually did all day across Claude Code, Cursor, Codex, and OpenCode. Tools.",
+    "host_name": "www.reddit.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/Enderfga/claw-orchestrator",
+    "name": "Enderfga/claw-orchestrator - GitHub",
+    "snippet": "Run Claude Code, Codex, Gemini, Cursor Agent and custom coding CLIs as one unified runtime for claw-style agent systems.",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "Jun 4, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=7fQcsPOm8ys&vl=en",
+    "name": "Gemini CLI vs Claude Code vs Codex Compared! Should You Use",
+    "snippet": "The latest Coding CLI currently available including Gemini CLI, Claude Code and OpenAI Codex CLI. Even Qwen Coding was recently released and ...",
+    "host_name": "www.youtube.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://ai.sulat.com/the-definitive-guide-to-codex-cli-from-first-install-to-production-workflows-a9f1e7c887ab",
+    "name": "The definitive guide to Codex CLI: from first install to production",
+    "snippet": "Codex CLI is a terminal-native coding agent from OpenAI. You type a natural-language instruction, and it reads your codebase, writes code, runs ...",
+    "host_name": "ai.sulat.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://community.openai.com/t/introducing-codex-plugin-for-claude-code/1378186",
+    "name": "Introducing Codex Plugin for Claude Code",
+    "snippet": "The plugin delegates through the local Codex CLI and Codex app server. So it uses the same local auth, config, environment, and MCP setup ...",
+    "host_name": "community.openai.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

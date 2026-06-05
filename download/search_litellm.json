@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://github.com/BerriAI/litellm",
+    "name": "GitHub - BerriAI/litellm: Python SDK, Proxy Server (AI Gateway) to",
+    "snippet": "LiteLLM is an open source AI Gateway that gives you a single, unified interface to call 100+ LLM providers — OpenAI, Anthropic, Gemini, Bedrock, Azure, ...\nLiteLLM is an open source AI Gateway that gives you a single, unified interface to call 100+ LLM providers — OpenAI, Anthropic, Gemini, Bedrock, Azure, and more — using the OpenAI format. Use it as a Python SDK for direct library integration, or deploy the AI Gateway (Proxy Server) as a centralized service for your team or organization.",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.litellm.ai/docs",
+    "name": "Getting Started - LiteLLM",
+    "snippet": "LiteLLM is an open-source library that gives you a single, unified interface to call 100+ LLMs — OpenAI, Anthropic, Vertex AI, Bedrock, and more — using the ...",
+    "host_name": "docs.litellm.ai",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.litellm.ai",
+    "name": "LiteLLM",
+    "snippet": "LLM Gateway (OpenAI Proxy) to manage authentication, loadbalancing, and spend tracking across 100+ LLMs. All in the OpenAI format.",
+    "host_name": "www.litellm.ai",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/LocalLLaMA/comments/1lh5gwl/built_a_litellm_adapter_for_locally_hosted",
+    "name": "Built a LiteLLM adapter for locally hosted HuggingFace models on",
+    "snippet": "So here's the thing: LiteLLM is AMAZING for calling 100+ LLM providers through a unified OpenAI-like interface. It supports HuggingFace ...",
+    "host_name": "www.reddit.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.statsig.com/perspectives/lite-llm-proxy-api",
+    "name": "LiteLLM proxy: Unified API for multiple providers - Statsig",
+    "snippet": "The LiteLLM Proxy gives one OpenAI-compatible front door to many providers. You call familiar endpoints like /chat/completions , /embeddings , / ...",
+    "host_name": "www.statsig.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

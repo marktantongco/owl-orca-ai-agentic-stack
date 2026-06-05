@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://www.ai21.com/glossary/foundational-llm/task-decomposition",
+    "name": "What is Task Decomposition? - AI21",
+    "snippet": "How does task decomposition work? · 1. Defining the primary goal · 2. Breaking down subtasks · 3. Matching tools to tasks · 4. Linking task outputs.",
+    "host_name": "www.ai21.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/codex/a-deep-dive-into-ai-coding-agents-task-decomposition-architecture-bd42db97bab8",
+    "name": "A Deep Dive into AI Coding Agents' Task Decomposition Architecture",
+    "snippet": "Rather than generating an upfront plan, the agent executes a continuous loop: observe the environment, think about the next action, act, repeat.",
+    "host_name": "medium.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://mbrenndoerfer.com/writing/breaking-down-tasks-task-decomposition-ai-agents",
+    "name": "Breaking Down Tasks: Master Task Decomposition for AI Agents",
+    "snippet": "Learn how AI agents break down complex goals into manageable subtasks. Understand task decomposition strategies, sequential vs parallel tasks, ...",
+    "host_name": "mbrenndoerfer.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://oneuptime.com/blog/post/2026-01-30-task-decomposition/view",
+    "name": "How to Create Task Decomposition - OneUptime",
+    "snippet": "A practical guide to implementing task decomposition in AI agents, covering strategies for breaking complex goals into manageable subtasks ...",
+    "host_name": "oneuptime.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.remoteopenclaw.com/agents/claude/davila7/claude-code-templates/task-decomposition-expert",
+    "name": "Task Decomposition Expert | Claude Code Agent Directory",
+    "snippet": "Work Breakdown Structure (WBS) Decompose the goal into a three-level hierarchy: ``` Level 1: Primary Objectives (high-level outcomes, 3–7 total) Level 2: Tasks ...",
+    "host_name": "www.remoteopenclaw.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

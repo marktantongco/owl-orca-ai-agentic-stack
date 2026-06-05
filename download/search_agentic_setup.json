@@ -1,0 +1,74 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=20vcJmqAr4M",
+    "name": "OpenCode: Free AI Coding Agent Setup Guide 2026 - YouTube",
+    "snippet": "Set up OpenCode — the FREE open-source AI coding agent — using completely free LLM models like Google Gemini, Groq, and Ollama.",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/selfhosted/comments/1jbk06h/the_complete_guide_to_building_your_free_local_ai",
+    "name": "The Complete Guide to Building Your Free Local AI Assistant with",
+    "snippet": "In my guide, I walk you through setting up your local AI environment using Ollama and Open WebUI—a setup that lets you run a custom ChatGPT ...",
+    "host_name": "www.reddit.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://localai.io",
+    "name": "LocalAI",
+    "snippet": "LLM Inferencing: LocalAI is a free, Open Source OpenAI alternative. Run LLMs, generate images, audio and more locally with consumer grade hardware. Agentic- ...\nThe free, OpenAI and Anthropic alternative. A small, composable AI stack: run any model locally and install only what you use.",
+    "host_name": "localai.io",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/ShaikhWarsi/free-ai-tools",
+    "name": "GitHub - ShaikhWarsi/free-ai-tools: Curated list of free and low cost",
+    "snippet": "Curated list of free LLM APIs, coding copilots, AI IDEs, agents, and infrastructure tools for building real AI applications. What's Inside. ✓ ...",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://aimultiple.com/open-source-ai-agents",
+    "name": "Best 50+ Open Source AI Agents Listed - AIMultiple",
+    "snippet": "The top 10+ open source AI agent projects on GitHub: Open Interpreter, Jarvis, AgentGPT, evoninja, VannaCoding, Devon, PR-Agent, Aide, ...",
+    "host_name": "aimultiple.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=-Wp3WdyzvXg",
+    "name": "AI Builder Hands-on tutorial: Build your first FREE AI agent - YouTube",
+    "snippet": "Hands-on tutorial to show how to build your first AI agent to get you started! Ready to run on Colab. Requirement: Ollama and Strands.",
+    "host_name": "www.youtube.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=zAK1_8GSrWk",
+    "name": "100% Free Way to Run AI Agents Locally (OpenClaw + Ollama",
+    "snippet": "In this beginner tutorial I show you exactly how to install OpenClaw and Ollama on Linux (Ubuntu) from scratch, point them at each other, and ...",
+    "host_name": "www.youtube.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.gumloop.com/blog/agentic-ai-tools",
+    "name": "8 best agentic AI tools I'm using in 2026 (free + paid) - Gumloop",
+    "snippet": "Looking for the best agentic AI tools on the market? I tested dozens of tools to find the best ones for different use cases.",
+    "host_name": "www.gumloop.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  }
+]
