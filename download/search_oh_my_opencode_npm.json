@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.npmjs.com/package/oh-my-opencode",
+    "name": "oh-my-opencode - NPM",
+    "snippet": "oh-my-opencode. TypeScript icon, indicating that this package has built-in type declarations ... Your Codex will code clearly and complete tasks ...\nThe published npm package and CLI binary are still named oh-my-opencode (dual-published as oh-my-openagent during the rename transition). Inside opencode.json, the compatibility layer prefers the plugin entry oh-my-openagent, while legacy oh-my-opencode entries still load with a warning.",
+    "host_name": "www.npmjs.com",
+    "rank": 0,
+    "date": "Jun 2, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/opensoft/oh-my-opencode",
+    "name": "opensoft/oh-my-opencode: #1 OpenCode Plugin- Battery  - GitHub",
+    "snippet": "OhMyOpenCode is free and open-source. Do not download installers or enter payment details on third-party sites that claim to be \"official.\" Because the ...",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://intel.aikido.dev/packages/npm/oh-my-opencode",
+    "name": "oh-my-opencode - npm package - Aikido Intel",
+    "snippet": "The Best AI Agent Harness - Batteries-Included OpenCode Plugin with Multi-Model Orchestration, Parallel Background Agents, and Crafted LSP/AST Tools Latest: ...\nAre You Affected? Connect your repositories to instantly see whether vulnerable or malicious packages exist in your codebase.",
+    "host_name": "intel.aikido.dev",
+    "rank": 2,
+    "date": "Jun 2, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent/issues/2749",
+    "name": "Plugin still displays as \"oh-my-opencode\" in OpenCode status bar",
+    "snippet": "Mark the old oh-my-opencode npm package as deprecated with a message like: \"This package has been renamed to oh-my-openagent. Please update ...",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.npmjs.com/package/oh-my-opencode-slim",
+    "name": "oh-my-opencode-slim - NPM",
+    "snippet": "oh-my-opencode-slim is an agent orchestration plugin for OpenCode. It includes a built-in team of specialized agents that can scout a codebase, ...",
+    "host_name": "www.npmjs.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/ClaudeCode/comments/1pp2tyw/ohmyopencode_has_been_a_gamechanger",
+    "name": "oh-my-opencode has been a gamechanger : r/ClaudeCode - Reddit",
+    "snippet": "I highly suggest you give it a try. Just prompt Claude Code with the following: Install and configure oh-my-opencode. 1. Fetch the README from ...",
+    "host_name": "www.reddit.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://opencode.ai/docs",
+    "name": "Intro | AI coding agent built for the terminal - OpenCode",
+    "snippet": "OpenCode is an open source AI coding agent. It's available as a terminal-based interface, desktop app, or IDE extension. OpenCode TUI with the opencode ...",
+    "host_name": "opencode.ai",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.npmjs.com/~code-yeongyu",
+    "name": "code-yeongyu - NPM",
+    "snippet": "oh-my-opencode-darwin-arm64. Platform-specific binary for oh-my-opencode (darwin-arm64). GitHub Actions. published 4.5.12 • 7 hours agopublished version 4.5.12 ...",
+    "host_name": "www.npmjs.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blog.vfiles.no/posts/my-oh-my-opencode-setup",
+    "name": "My 'Oh My Opencode' Setup - Posts",
+    "snippet": "This post is my current “oh-my-opencode” setup: Ghostty as the terminal, opencode as the driver, and GitHub Copilot (via MCP) as the model ...",
+    "host_name": "blog.vfiles.no",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-opencode",
+    "name": "GitHub - code-yeongyu/oh-my-openagent: omo; the one and only",
+    "snippet": "The published npm package and CLI binary are still named oh-my-opencode (dual-published as oh-my-openagent during the rename transition). Inside opencode.json, the compatibility layer prefers the plugin entry oh-my-openagent, while legacy oh-my-opencode entries still load with a warning.",
+    "host_name": "github.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

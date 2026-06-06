@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim",
+    "name": "alvinunreal/oh-my-opencode-slim - GitHub",
+    "snippet": "oh-my-opencode-slim is an agent orchestration plugin for OpenCode. It includes a built-in team of specialized agents that can scout a codebase, look up fresh ...\noh-my-opencode-slim is an agent orchestration plugin for OpenCode. It includes a built-in team of specialized agents that can scout a codebase, look up fresh documentation, review architecture, handle UI work, and execute well-scoped implementation tasks under one orchestrator.",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent",
+    "name": "GitHub - code-yeongyu/oh-my-openagent: omo/lazycodex",
+    "snippet": "We are restructuring the codebase to support multiple agent harnesses (OpenCode, Codex, Pi, and others). If you are interested in contributing, please read the ...",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/opencodeCLI/comments/1ss1nv2/ohmyopencodeslim_reached_v100",
+    "name": "oh-my-opencode-slim reached v1.0.0 : r/opencodeCLI - Reddit",
+    "snippet": "https://github.com/alvinunreal/oh-my-opencode-slim version 1 is upon us. We fixed few bugs and slimmed the repo. And have some new features:.",
+    "host_name": "www.reddit.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/anomalyco/opencode/issues/22136",
+    "name": "Add oh-my-opencode-slim to ecosystem page · Issue #22136 - GitHub",
+    "snippet": "The original oh-my-opencode is already listed. This fork offers a more token-efficient alternative for users who want the same agent features ...",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.dataleadsfuture.com/how-i-use-opencode-oh-my-opencode-slim-and-openspec-to-build-my-own-ai-coding-environment",
+    "name": "How I Use OpenCode, Oh-My-OpenCode-Slim, and OpenSpec to",
+    "snippet": "Build your own AI coding environment with OpenCode, Oh-My-OpenCode-Slim, and OpenSpec. Learn practical tips on vibe coding and SDD workflows using ...",
+    "host_name": "www.dataleadsfuture.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/alvinunreal",
+    "name": "Alvin (@alvinunreal) - GitHub",
+    "snippet": "Slimmed, cleaned and fine-tuned oh-my-opencode fork, consumes much less tokens. TypeScript 5.1k 335 · tmuxai tmuxai Public.",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://newreleases.io/project/github/alvinunreal/oh-my-opencode-slim/release/v1.0.0",
+    "name": "alvinunreal/oh-my-opencode-slim v1.0.0 on GitHub - NewReleases.io",
+    "snippet": "What's Changed · fix: isolate host smoke config and probe global health by @alvinunreal in #331 · fix: custom orchestrator prompt gets appended ...",
+    "host_name": "newreleases.io",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://sourceforge.net/projects/oh-my-opencode-slim.mirror",
+    "name": "Oh My OpenCode Slim download | SourceForge.net",
+    "snippet": "Download Oh My OpenCode Slim for free. Slimmed, cleaned and fine-tuned oh-my-opencode fork. Oh My OpenCode Slim is a lightweight, optimized fork of the broader oh-my-opencode ecosystem, designed to deliver high-performance multi-agent coding workflows while significantly reducing token consumption and system overhead. It retains the core concept of orchestrating multiple specialized AI agents ...",
+    "host_name": "sourceforge.net",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.npmjs.com/package/oh-my-opencode-slim",
+    "name": "oh-my-opencode-slim - npm",
+    "snippet": "oh-my-opencode-slim is an agent orchestration plugin for OpenCode. It includes a built-in team of specialized agents that can scout a codebase, look up fresh documentation, review architecture, handle UI work, and execute well-scoped implementation tasks under one orchestrator.",
+    "host_name": "www.npmjs.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://awesome.ecosyste.ms/projects/github.com%2Falvinunreal%2Foh-my-opencode-slim",
+    "name": "https://github.com/alvinunreal/oh-my-opencode-slim",
+    "snippet": "Slimmed and cleaned oh-my-opencode, consumes much less tokens. Seven divine beings emerged from the dawn of code, each an immortal master of their craft await your command to forge order from chaos and build what was once thought impossible. The installer generates an OpenAI configuration by default (using `gpt-5.4` and `gpt-5.4-mini`).",
+    "host_name": "awesome.ecosyste.ms",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

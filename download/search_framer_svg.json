@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=-6B4w7eammw",
+    "name": "Scroll to Reveal — A Next.js Scroll Animation That Peels Cards to Life",
+    "snippet": "Learn how to build a stunning scroll animation in Next.js using GSAP and ScrollTrigger to reveal cards with smooth, layered motion.",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/reactjs/comments/1b3arl3/how_to_create_onscroll_image_animations_with",
+    "name": "How to Create On-Scroll Image Animations with Next.js & Framer",
+    "snippet": "Useful video for anyone learning react / next.js wanting to integrate seamless on-scroll image animations to their projects using framer ...",
+    "host_name": "www.reddit.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://motion.dev/docs/react-scroll-animations",
+    "name": "React scroll animation | scroll-linked & parallax - Motion.dev",
+    "snippet": "Learn how to create scroll animations in React with Motion. This guide covers scroll-linked animations, scroll-triggered animations, parallax, ...",
+    "host_name": "motion.dev",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://jb.desishub.com/blog/framer-motion",
+    "name": "Framer Motion Scroll Animations Guide - Next.js, TypeScript  - JB",
+    "snippet": "Framer Motion is a powerful animation library for React that makes creating scroll-based animations intuitive and performant. ... Create a text reveal animation ...",
+    "host_name": "jb.desishub.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blog.logrocket.com/react-scroll-animations-framer-motion",
+    "name": "Implementing React scroll animations with Framer Motion",
+    "snippet": "In this article, we'll demonstrate how to create scroll animations with Framer Motion, a complete animation library that doesn't require you to be a CSS expert.",
+    "host_name": "blog.logrocket.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://stackoverflow.com/questions/70310602/next-js-framer-motion-scroll-progress-animation",
+    "name": "Next.js + Framer Motion scroll progress animation - Stack Overflow",
+    "snippet": "I want to create a viewport scroll progress circle with Framer Motion in a Next.js app (using tailwind as CSS).",
+    "host_name": "stackoverflow.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=D_iA0gAM6Jc",
+    "name": "Scroll Reveal Animation in React using Framer Motion - YouTube",
+    "snippet": "Discover the art of crafting captivating scroll reveal animations in your Reactjs application using the powerful, intuitive React Framer ...",
+    "host_name": "www.youtube.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://dev.to/elvis2280/scroll-reveal-with-framer-motion-224",
+    "name": "Scroll reveal with Framer Motion - DEV Community",
+    "snippet": "In this blog I'll show you how u can implement a Scroll reveal animation with framer motion, you'll be surprised how much easy it will be.",
+    "host_name": "dev.to",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/vercel/next.js/discussions/73047",
+    "name": "Creating Layout Animations with Next.js and Framer Motion #73047",
+    "snippet": "Here's a step-by-step guide to implement layout animations with modal transitions. Or just check out my example.",
+    "host_name": "github.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://shivamkatareblog.hashnode.dev/create-beautiful-scroll-animations-in-nextjs-using-framer-motion",
+    "name": "Next.js Scroll Animations with Framer Motion - Shivam Katare",
+    "snippet": "Learn to create beautiful scroll animations in Next.js with Framer Motion. Enhance user experience with engaging visual effects for smooth ...",
+    "host_name": "shivamkatareblog.hashnode.dev",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

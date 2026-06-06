@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent",
+    "name": "GitHub - code-yeongyu/oh-my-openagent: omo/lazycodex",
+    "snippet": "11 agents, 54+ lifecycle hooks, 5 built-in MCPs, all slash commands, Team Mode, ulw-loop, ultrawork, hashline edits — everything. Light ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "Jun 4, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://lobehub.com/bg/skills/duclm1x1-dive-ai-oh-my-opencode",
+    "name": "oh-my-opencode | Skills Marketplace - LobeHub",
+    "snippet": "Multi-agent orchestration plugin that transforms OpenCode into a full agent harness with specialized agents, background task execution, category ...",
+    "host_name": "lobehub.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/opencodeCLI/comments/1rz44y1/am_i_wrong_about_oh_my_opencode_omo_being",
+    "name": "Am I wrong about Oh My OpenCode (OmO) being overkill  - Reddit",
+    "snippet": "Ahh, should have started with planner agents like \"Prometheus\" and \"Atlas\" instead. My mistake was telling \"Sisyphus\" to create a plan, and ...",
+    "host_name": "www.reddit.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.glukhov.org/ai-devtools/opencode/oh-my-opencode-agents",
+    "name": "Oh My Opencode Specialised Agents Deep Dive and Model Guide",
+    "snippet": "Agents that support multiple model families (Prometheus, Atlas) auto-detect your model at runtime via isGptModel() and switch prompts automatically. Agents that ...",
+    "host_name": "www.glukhov.org",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://dev.to/chand1012/the-best-way-to-do-agentic-development-in-2026-14mn",
+    "name": "The best way to do agentic development in 2026 - DEV Community",
+    "snippet": "Its basically a plugin that significantly improves the performance of OpenCode with subagents, and an \"ultrawork\" mode that allows more ...",
+    "host_name": "dev.to",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://github.com/opensoft/oh-my-opencode",
+    "name": "opensoft/oh-my-opencode: #1 OpenCode Plugin- Battery  - GitHub",
+    "snippet": "OhMyOpenCode is free and open-source. Do not download installers or enter payment details on third-party sites that claim to be \"official.\" Because the ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/opensoft/oh-my-opencode/blob/dev/docs/guide/overview.md",
+    "name": "oh-my-opencode/docs/guide/overview.md at dev - GitHub",
+    "snippet": "Oh My OpenCode Overview. Learn about Oh My OpenCode, a plugin that transforms OpenCode into the best agent harness. TL;DR.",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/opensoft/oh-my-opencode/pulls",
+    "name": "Pull requests · opensoft/oh-my-opencode - GitHub",
+    "snippet": "Pull requests help you collaborate on code with other people. As pull requests are created, they'll appear here in a searchable and filterable list. To get ...",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/opensoft/oh-my-opencode/activity",
+    "name": "Activity · opensoft/oh-my-opencode - GitHub",
+    "snippet": "1 OpenCode Plugin- Battery included. ASYNC SUBAGENTS (YES LIKE CLAUDE CODE) · Curated agents with proper models · Crafted tools like LSP/AST included ...",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/opensoft/oh-my-opencode/blob/dev/AGENTS.md",
+    "name": "AGENTS.md - opensoft/oh-my-opencode - GitHub",
+    "snippet": "OpenCode plugin: multi-model agent orchestration (Claude Opus 4.5, GPT-5.2, Gemini 3 Flash, Grok Code, GLM-4.7). 31 lifecycle hooks, 20+ tools (LSP, AST-Grep, ...",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

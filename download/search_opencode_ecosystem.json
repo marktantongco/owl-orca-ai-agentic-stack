@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://opencode.ai/docs/plugins",
+    "name": "Plugins - OpenCode",
+    "snippet": "Plugins allow you to extend OpenCode by hooking into various events and customizing behavior. You can create plugins to add new features, integrate with ...",
+    "host_name": "opencode.ai",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/opencodeCLI/comments/1qa16bv/opencode_plugin_marketplace_experiment",
+    "name": "OpenCode plugin marketplace (experiment) : r/opencodeCLI - Reddit",
+    "snippet": "OpenCode plugin marketplace recommendations. OpenCode extensions and skills. How to add plugins in OpenCode. How to integrate AI models with ...",
+    "host_name": "www.reddit.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/awesome-opencode/awesome-opencode",
+    "name": "awesome-opencode/awesome-opencode: A curated list of  - GitHub",
+    "snippet": "A curated list of plugins, themes, agents, and resources for Opencode. The AI coding agent for the terminal, built by the team at Anomaly. AI, Google ...",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://opencode.cafe",
+    "name": "opencode.cafe - Extensions & Plugins for OpenCode",
+    "snippet": "Discover community-built extensions and plugins to enhance your OpenCode experience. Share your own creations and collaborate with developers worldwide.",
+    "host_name": "opencode.cafe",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://marketplace.visualstudio.com/items?itemName=sst-dev.opencode",
+    "name": "opencode VS Code Extension - Visual Studio Marketplace",
+    "snippet": "opencode VS Code Extension. A Visual Studio Code extension that integrates opencode directly into your development workflow.",
+    "host_name": "marketplace.visualstudio.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://opencode.ai/docs/ecosystem",
+    "name": "Ecosystem - OpenCode",
+    "snippet": "Ecosystem Projects and integrations built with OpenCode. A collection of community projects built on OpenCode. community that aggregates the ecosystem and ...",
+    "host_name": "opencode.ai",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://composio.dev/content/best-opencode-plugins",
+    "name": "Best OpenCode Plugins to improve flow state coding in 2026",
+    "snippet": "The Awesome Opencode list describes the broader ecosystem as a curated list of OpenCode plugins, themes, agents, projects, and resources.",
+    "host_name": "composio.dev",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=Wu3G1QwM81M",
+    "name": "Opencode Plugins Tutorial: Build Custom AI Features - YouTube",
+    "snippet": "Links: https://github.com/darrenhinde/OpenAgents https://github.com/darrenhinde/OpenCode-plugin-starter Explore Open Code Plugins, ...",
+    "host_name": "www.youtube.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://mcpmarket.com/tools/skills/opencode-plugin-agent-developer",
+    "name": "OpenCode Extension Developer | Claude Code Skill - MCP Market",
+    "snippet": "Build powerful OpenCode plugins, agents, and hooks. Streamline AI assistant customization with expert guidance on architecture, tools, and lifecycle hooks.",
+    "host_name": "mcpmarket.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://plugins.jetbrains.com/plugin/30681-opencode",
+    "name": "OpenCode Plugin for JetBrains IDEs",
+    "snippet": "Simplify plugin installation. Grant Marketplace access to the local network and install plugins directly to your running IDE. Grant. Deny. OpenCode. rating 4.5.",
+    "host_name": "plugins.jetbrains.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

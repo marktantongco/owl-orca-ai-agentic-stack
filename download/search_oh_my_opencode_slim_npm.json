@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.npmjs.com/package/oh-my-opencode-slim",
+    "name": "oh-my-opencode-slim - NPM",
+    "snippet": "oh-my-opencode-slim is an agent orchestration plugin for OpenCode. It includes a built-in team of specialized agents that can scout a codebase, ...",
+    "host_name": "www.npmjs.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim/releases",
+    "name": "Releases · alvinunreal/oh-my-opencode-slim - GitHub",
+    "snippet": "Slimmed, cleaned and fine-tuned oh-my-opencode fork, consumes much less tokens - Releases · alvinunreal/oh-my-opencode-slim.",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.npmjs.com/package/oh-my-opencode?activeTab=versions",
+    "name": "oh-my-opencode - NPM",
+    "snippet": "The Best AI Agent Harness - Batteries-Included OpenCode Plugin with Multi-Model Orchestration, Parallel Background Agents, ...",
+    "host_name": "www.npmjs.com",
+    "rank": 2,
+    "date": "May 29, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.dataleadsfuture.com/how-i-use-opencode-oh-my-opencode-slim-and-openspec-to-build-my-own-ai-coding-environment",
+    "name": "How I Use OpenCode, Oh-My-OpenCode-Slim, and OpenSpec to",
+    "snippet": "Oh-My-OpenCode-Slim plugin points to a local entry file instead of an npm package. So for future updates, you will need to update it manually.",
+    "host_name": "www.dataleadsfuture.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/opencodeCLI/comments/1ss1nv2/ohmyopencodeslim_reached_v100",
+    "name": "oh-my-opencode-slim reached v1.0.0 : r/opencodeCLI - Reddit",
+    "snippet": "We fixed few bugs and slimmed the repo. And have some new features: custom dynamic agents (janitor inspired). new optional agent, observer if ...",
+    "host_name": "www.reddit.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim/blob/master/package.json",
+    "name": "package.json - alvinunreal/oh-my-opencode-slim · GitHub",
+    "snippet": "Slimmed, cleaned and fine-tuned oh-my-opencode fork, consumes much less tokens. OpenCode - a slimmed-down fork of oh-my-opencode\",",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=G_Snfh2M41M&vl=en",
+    "name": "Oh My OpenCode Is Actually Insane - YouTube",
+    "snippet": "Discover Oh My Open Code – the ultimate plugin that orchestrates seven specialized AI agents working in parallel to accomplish what a single ...",
+    "host_name": "www.youtube.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://opencode.im/plugin/oh-my-opencode",
+    "name": "oh-my-opencode",
+    "snippet": "Discover, explore, and install the best OpenCode plugins. The community-driven hub for OpenCode.ai plugins.",
+    "host_name": "opencode.im",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim/blob/master/docs/installation.md",
+    "name": "Installation Guide - alvinunreal/oh-my-opencode-slim - GitHub",
+    "snippet": "The installer generates both OpenAI and OpenCode Go presets, with OpenAI active by default (using gpt-5.5 and gpt-5.4-mini models). To make OpenCode Go active ...",
+    "host_name": "github.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://intel.aikido.dev/packages/npm/oh-my-opencode",
+    "name": "oh-my-opencode - npm package - Aikido Intel",
+    "snippet": "The Best AI Agent Harness - Batteries-Included OpenCode Plugin with Multi-Model Orchestration, Parallel Background Agents, and Crafted LSP/AST Tools Latest: ...",
+    "host_name": "intel.aikido.dev",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

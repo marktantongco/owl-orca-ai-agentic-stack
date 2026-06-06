@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent",
+    "name": "GitHub - code-yeongyu/oh-my-openagent: omo/lazycodex",
+    "snippet": "We are restructuring the codebase to support multiple agent harnesses (OpenCode, Codex, Pi, and others). If you are interested in contributing, ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "Jun 4, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/opencodeCLI/comments/1ro6xwu/why_is_there_so_little_discussion_about_the",
+    "name": "Why is there so little discussion about the oh-my-opencode plugin?",
+    "snippet": "It's one of the most bloated garbage plugins I've ever used. I honestly can't understand why it has so many stars. It's also way too opinionated ...",
+    "host_name": "www.reddit.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/opensoft/oh-my-opencode",
+    "name": "opensoft/oh-my-opencode: #1 OpenCode Plugin- Battery  - GitHub",
+    "snippet": "Oh My OpenCode 3.0 is now stable! Use oh-my-opencode@latest to install it. Be with us! Discord link, Join our Discord ...",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent/releases",
+    "name": "Releases · code-yeongyu/oh-my-openagent - GitHub",
+    "snippet": "This patch makes the LazyCodex context cleanup from v4.7.3 safe to ship as the final latest release. Rules source selection now matches the current agent-doc ...",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/opensoft/oh-my-opencode/blob/dev/docs/guide/overview.md",
+    "name": "oh-my-opencode/docs/guide/overview.md at dev - GitHub",
+    "snippet": "Learn about Oh My OpenCode, a plugin that transforms OpenCode into the best agent harness. TL;DR. Sisyphus agent strongly recommends Opus 4.5 model. Using ...",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

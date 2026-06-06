@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=JRwTCKjc37o",
+    "name": "Here's The Secret How To Create These Animated Diagrams",
+    "snippet": "Recently animated diagrams have been popular. They let you explain concepts in a coo visual way. In this video I am going to show you to ...",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=WZAL4SiW9e0",
+    "name": "Create Animated Architecture Diagrams for free - YouTube",
+    "snippet": "Free Step-by-Step AWS hands-on projects https://link.nextwork.org/projects/youtube If you're looking for all the projects mentioned in the ...",
+    "host_name": "www.youtube.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://dev.to/sacha/easy-animations-for-architecture-diagrams-9ca",
+    "name": "Easy Animations for Architecture Diagrams - DEV Community",
+    "snippet": "Remotion is a tool that allows to create animation from react components. using After Effects or any other animation tools! architectural ...",
+    "host_name": "dev.to",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/aws/comments/155gj5t/which_tool_is_used_to_make_deployment_diagrams",
+    "name": "Which tool is used to make deployment diagrams animated? - Reddit",
+    "snippet": "Recently there are many animated gif-based architecture diagrams floating around. the first example from 2025? images and animation as a website",
+    "host_name": "www.reddit.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.instagram.com/reel/C8y4AI_O4l1",
+    "name": "Diagram to interactive learning app in less than 30 seconds I",
+    "snippet": "... architecture diagram and asked Claude 3.5 Sonnet to build an interactive app. It transformed the diagram into a React web app with clickable ...",
+    "host_name": "www.instagram.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://reactflow.dev",
+    "name": "React Flow: Node-Based UIs in React",
+    "snippet": "Wire your ideas with React Flow. A customizable React component for building node-based editors and interactive diagrams.",
+    "host_name": "reactflow.dev",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://classic.yarnpkg.com/en/package/react-animated-flow-diagram",
+    "name": "react-animated-flow-diagram - Yarn 1",
+    "snippet": "Create flowcharts, process diagrams, and system architecture diagrams with ease. Supports multiple shape types, animated connections, and customizable styling.",
+    "host_name": "classic.yarnpkg.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://stackoverflow.com/questions/78810633/how-create-interactive-infographics-and-flowchart-with-motion",
+    "name": "How create interactive infographics and flowchart with motion?",
+    "snippet": "I want to create attractive infographics or flowchart similar below image? Could introduce me software , tools, AI, Online websites for doing that?",
+    "host_name": "stackoverflow.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.syncfusion.com/react-components/react-diagram",
+    "name": "Build Interactive Diagrams - React - Syncfusion",
+    "snippet": "The React Diagram is a feature-rich architecture diagram library for visualizing, creating, and editing interactive diagrams.",
+    "host_name": "www.syncfusion.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/@louisemoxy/building-an-interactive-arc-diagram-in-react-and-d3-js-0d7bc0f96231",
+    "name": "Building an Interactive Arc Diagram in React and D3.js - Medium",
+    "snippet": "How I use React and D3.js together; Creating the nodes; Creating the node labels; Creating the links between the nodes. What & Why Arc Diagram.",
+    "host_name": "medium.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

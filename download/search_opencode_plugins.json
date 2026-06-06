@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/obra/superpowers/blob/main/docs/README.opencode.md",
+    "name": "superpowers/docs/README.opencode.md at main - GitHub",
+    "snippet": "Restart OpenCode. The plugin installs through OpenCode's plugin manager and registers all skills. Verify by asking: \"Tell me about your superpowers\".",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/opencodeCLI/comments/1roe3m4/how_is_your_experience_with_superpowers_in",
+    "name": "How is your experience with Superpowers in OpenCode? - Reddit",
+    "snippet": "It works really good with Claude code . But with opencode superpowers just runs every prompt which causes clashes with what I want it to do. It ...",
+    "host_name": "www.reddit.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=_BLcKahtIKA&vl=en",
+    "name": "This Plugin Gives OpenCode Superpowers, Here's How - YouTube",
+    "snippet": "Join My Skool → https://clickmoney.io/gzkqjw9n-lnk-1pbk9u96 This plugin is a complete game-changer for anyone using AI coding tools.",
+    "host_name": "www.youtube.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://obra-superpowers.mintlify.app/installation/opencode",
+    "name": "Install on OpenCode - Superpowers - Introduction - Starter Kit",
+    "snippet": "Install Superpowers on OpenCode using the plugin system and native skill discovery. OpenCode loads plugins at startup and discovers skills from ~/.config/ ...",
+    "host_name": "obra-superpowers.mintlify.app",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://dev.to/chand1012/the-best-way-to-do-agentic-development-in-2026-14mn",
+    "name": "The best way to do agentic development in 2026 - DEV Community",
+    "snippet": "TLDR; I tried Claude Code, switched to OpenCode + Oh-My-Code, then finally switched to Conductor + Claude Code + Lots of Plugins and Skills.",
+    "host_name": "dev.to",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/awesome-opencode/awesome-opencode",
+    "name": "awesome-opencode/awesome-opencode: A curated list of  - GitHub",
+    "snippet": "A curated list of plugins, themes, agents, and resources for Opencode. · The AI coding agent for the terminal, built by the team at Anomaly. · ⭐️ Official ...",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://composio.dev/content/best-opencode-plugins",
+    "name": "Best OpenCode Plugins to improve flow state coding in 2026",
+    "snippet": "The Awesome Opencode list describes the broader ecosystem as a curated list of OpenCode plugins, themes, agents, projects, and resources.",
+    "host_name": "composio.dev",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://opencode.ai/docs/ecosystem",
+    "name": "Ecosystem - OpenCode",
+    "snippet": "Modular AI agents and commands for structured development. opencode-agents, Configs, prompts, agents, and plugins for enhanced workflows. Edit page Found a bug ...",
+    "host_name": "opencode.ai",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=Wu3G1QwM81M",
+    "name": "Opencode Plugins Tutorial: Build Custom AI Features - YouTube",
+    "snippet": "Links: https://github.com/darrenhinde/OpenAgents https://github.com/darrenhinde/OpenCode-plugin-starter Explore Open Code Plugins, ...",
+    "host_name": "www.youtube.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.instagram.com/reel/DYrzhxpIDsE",
+    "name": "Awesome Opencode adds plugins, agents, memory, and  - Instagram",
+    "snippet": "Power users of OpenCode aren't just typing prompts. They're running 60 plus plugins in the background. A free GitHub repo just consolidate ...",
+    "host_name": "www.instagram.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

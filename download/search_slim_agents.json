@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim",
+    "name": "alvinunreal/oh-my-opencode-slim - GitHub",
+    "snippet": "Default Setup: Config-driven — councillors come from council.presets and the Council agent model comes from your normal council agent config.",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "Jun 5, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.dataleadsfuture.com/how-i-use-opencode-oh-my-opencode-slim-and-openspec-to-build-my-own-ai-coding-environment",
+    "name": "How I Use OpenCode, Oh-My-OpenCode-Slim, and OpenSpec to",
+    "snippet": "The method is simple. Since Council itself is a primary agent you can select from the agent list, just select Council , then type \"test Council connectivity\" ...",
+    "host_name": "www.dataleadsfuture.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://lobehub.com/es/skills/jbrandons-agent-skills-oh-my-opencode-slim",
+    "name": "oh-my-opencode-slim | Skills Marketp - LobeHub",
+    "snippet": "Use when delegating coding tasks, reviewing architecture, researching codebases, implementing bounded changes, or running multi-model consensus.",
+    "host_name": "lobehub.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/opencodeCLI/comments/1rz44y1/am_i_wrong_about_oh_my_opencode_omo_being",
+    "name": "Am I wrong about Oh My OpenCode (OmO) being overkill  - Reddit",
+    "snippet": "Been doing AI-assisted coding for a while now and I genuinely love it, but not in the \"generate my entire app in one shot\" kind of way.",
+    "host_name": "www.reddit.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://ohmyopencodeslim.com",
+    "name": "Oh My Opencode Slim | Agenting Development",
+    "snippet": "A lightweight, powerful agent orchestration plugin for OpenCode. Transform your AI assistant into a manager capable of delegating complex tasks to ...",
+    "host_name": "ohmyopencodeslim.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=uuV1DcvObsg",
+    "name": "Oh My OpenCode (5 SUPER Agent/MCP/Prompt Config) - YouTube",
+    "snippet": "In this video, I introduce \"Oh My OpenCode,\" an AI coding agent framework that orchestrates multiple specialized AI models for complex ...",
+    "host_name": "www.youtube.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.glukhov.org/ai-devtools/opencode/oh-my-opencode-agents",
+    "name": "Oh My Opencode Specialised Agents Deep Dive and Model Guide",
+    "snippet": "Deep dive into Oh My Opencode specialised agents for OpenCode. Learn Sisyphus orchestration, Prometheus planning, Librarian research, Oracle review, ...",
+    "host_name": "www.glukhov.org",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=G_Snfh2M41M&vl=en",
+    "name": "Oh My OpenCode Is Actually Insane - YouTube",
+    "snippet": "Discover Oh My Open Code – the ultimate plugin that orchestrates seven specialized AI agents working in parallel to accomplish what a single ...",
+    "host_name": "www.youtube.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/@rosgluk/i-built-a-multi-agent-coding-workflow-with-oh-my-opencode-heres-what-happened-0f1662818461",
+    "name": "I Built a Multi-Agent Coding Workflow with Oh My Opencode - Medium",
+    "snippet": "Oh My Opencode is a plugin that turns OpenCode into a multi-agent harness. The orchestrator (called Sisyphus) delegates work to specialist ...",
+    "host_name": "medium.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim/blob/master/docs/council.md",
+    "name": "council.md - alvinunreal/oh-my-opencode-slim - GitHub",
+    "snippet": "The Council agent runs several councillors in parallel, then the Council agent itself synthesizes their outputs into one answer. What you get. Higher confidence ...",
+    "host_name": "github.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

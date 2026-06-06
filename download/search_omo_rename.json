@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent",
+    "name": "GitHub - code-yeongyu/oh-my-openagent: omo/lazycodex",
+    "snippet": "the compatibility layer prefers the plugin entry oh-my-openagent , while legacy oh-my-opencode entries still load with a warning. both legacy and renamed ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent/issues/2823",
+    "name": "Package rename from oh-my-opencode to oh-my-openagent breaks",
+    "snippet": "After the package was renamed from oh-my-opencode to oh-my-openagent existing OpenCode configurations that reference the old package name ...",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/ClaudeCode/comments/1pp2tyw/ohmyopencode_has_been_a_gamechanger",
+    "name": "oh-my-opencode has been a gamechanger : r/ClaudeCode - Reddit",
+    "snippet": "oh-my-opencode makes your current claude settings, skills, hooks, commands, agents... everything work in OpenCode. It's hooks and agent design is ...",
+    "host_name": "www.reddit.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=G_Snfh2M41M&vl=en",
+    "name": "Oh My OpenCode Is Actually Insane - YouTube",
+    "snippet": "Discover Oh My Open Code – the ultimate plugin that orchestrates seven specialized AI agents working in parallel to accomplish what a single ...",
+    "host_name": "www.youtube.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.glukhov.org/ai-devtools/opencode/oh-my-opencode",
+    "name": "Oh My Opencode QuickStart for OpenCode: Install, Configure, Run",
+    "snippet": "Oh My Opencode turns OpenCode into a multi-agent coding harness: an orchestrator delegates work to specialist agents that run in parallel. Both names float ...",
+    "host_name": "www.glukhov.org",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.npmjs.com/~code-yeongyu",
+    "name": "code-yeongyu - NPM",
+    "snippet": "The Best AI Agent Harness - Batteries-Included OpenCode Plugin with Multi-Model Orchestration, Parallel Background Agents, and Crafted LSP/AST Tools.",
+    "host_name": "www.npmjs.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=NOmZ3iQ774U",
+    "name": "Oh My OpenCode Review: Better than Claude Code? - YouTube",
+    "snippet": "In this Oh My OpenCode review I compare this AI coding agent against both opencode and claude code. In this guide I look at opencode vs ...",
+    "host_name": "www.youtube.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/LocalLLM/comments/1q7i9rl/ohmyopencode_experiences_or_better_competitors",
+    "name": "oh-my-opencode experiences or better competitors? : r/LocalLLM",
+    "snippet": "Big Claude Code user here. Oh my is great. The CC compatibility is awesome. 90% of my adjustment was OpenCode itself.",
+    "host_name": "www.reddit.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent/issues/3188",
+    "name": "[Bug]: Opencode hangs when start-up with new version of oh-my",
+    "snippet": "Deleting \"oh-my-openagent\" from the opencode plugin list and Opencode can start-up. Changing the plugin name to 'oh-my-opencode' is also fine, ...",
+    "host_name": "github.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://lzw.me/docs/opencodedocs/code-yeongyu/oh-my-opencode/faq/faq",
+    "name": "FAQ: Common Questions | oh-my-opencode | OpenCodeDocs",
+    "snippet": "Find answers to oh-my-opencode questions. Includes installation, ultrawork usage, agent delegation, background tasks, and security warnings.",
+    "host_name": "lzw.me",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

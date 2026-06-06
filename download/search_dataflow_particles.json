@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=qNX1-T74kLI",
+    "name": "Awwwards Winning SVG Line Animations with Motion for React",
+    "snippet": "Animated UI components for React, Tailwind CSS, Framer Motion & More ✨ https://www.hover.dev Underlines are lame!",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://reactflow.dev/examples/edges/animating-edges",
+    "name": "Animating Edges - React Flow",
+    "snippet": "It is possible to animate an SVG element along a path using the <animateMotion /> element. This example creates a custom edge that animates a ...",
+    "host_name": "reactflow.dev",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://tympanus.net/codrops/2022/01/19/animate-anything-along-an-svg-path",
+    "name": "Animate Anything Along an SVG Path - Codrops",
+    "snippet": "Animate Anything Along an SVG Path. Learn how to code creative animations using SVG paths and the getPointAtLength() function. particles svg.",
+    "host_name": "tympanus.net",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.svgator.com/blog/automatic-motion-path-when-and-why-to-use-it-in-svg-animation",
+    "name": "Automatic Motion-Path: When And Why To Use It In SVG Animation",
+    "snippet": "Discover our guide to automatic motion-path animation and learn how to create smooth, engaging SVG animations with ease.",
+    "host_name": "www.svgator.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.aaron-powell.com/posts/2017-08-10-react-svg-chart-animation",
+    "name": "React SVG Chart Animation - Aaron Powell",
+    "snippet": "A small bit of code and React components can make a very easy to read animated SVG without any external dependencies.",
+    "host_name": "www.aaron-powell.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://motion.dev/docs/react-svg-animation",
+    "name": "SVG Animation in React | Paths, Morph & Line Drawing - Motion.dev",
+    "snippet": "Motion makes React SVG animation straightforward. In this guide, we'll learn how to make line drawing animations, path morphing animations, animate viewBox and ...",
+    "host_name": "motion.dev",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://levelup.gitconnected.com/elegant-animated-line-charts-using-react-react-spring-and-svg-ae9a6051cf8e",
+    "name": "Elegant animated line charts using react, react-spring, and SVG",
+    "snippet": "Two key SVG properties to make this animation happen. To animate our line, we need to animate the <path /> element to “draw” itself. How do we ...",
+    "host_name": "levelup.gitconnected.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=SrmTDrN1lkU",
+    "name": "The Right Way to Animate SVG in React - YouTube",
+    "snippet": "... SVG 01:34 Optimizing & Exporting SVG in Figma 06:03 Converting SVG into a React Component 10:05 Animation -- Special Links ✨ Join Figma for ...",
+    "host_name": "www.youtube.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://tomdohnal.com/posts/react-svg-animation-with-react-spring-4",
+    "name": "React SVG Animation (with React Spring) #4 - Tom Dohnal",
+    "snippet": "In the fourth edition of the React SVG Animation series, we'll learn how to create this a face animating from disappointed to neutral and then to excited.",
+    "host_name": "tomdohnal.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/aws/comments/155gj5t/which_tool_is_used_to_make_deployment_diagrams",
+    "name": "Which tool is used to make deployment diagrams animated? - Reddit",
+    "snippet": "You can do it on draw.io. Just install the animation plugin, click the arrow and apply Flow animation property from the right side panel.",
+    "host_name": "www.reddit.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

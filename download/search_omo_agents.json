@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent",
+    "name": "GitHub - code-yeongyu/oh-my-openagent: omo/lazycodex",
+    "snippet": "Sisyphus orchestrates Hephaestus, Oracle, Librarian, Explore. Agents: Sisyphus (the main agent), Prometheus (planner), Oracle (architecture/debugging), ...\nAgents: Sisyphus (the main agent), Prometheus (planner), Oracle (architecture/debugging), Librarian (docs/code search), Explore (fast ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "Jun 4, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://lobehub.com/skills/metamask-openclaw-skills-oh-my-opencode",
+    "name": "oh-my-opencode | Skills Marketplace - LobeHub",
+    "snippet": "Use it to deploy and manage all built-in agents (Sisyphus, Oracle, Librarian, Explore, Atlas, Prometheus, Metis, Momus), configure ultrawork and ...",
+    "host_name": "lobehub.com",
+    "rank": 1,
+    "date": "May 29, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.glukhov.org/ai-devtools/opencode/oh-my-opencode-agents",
+    "name": "Oh My Opencode Specialised Agents Deep Dive and Model Guide",
+    "snippet": "Deep dive into Oh My Opencode specialised agents for OpenCode. Learn Sisyphus orchestration, Prometheus planning, Librarian research, Oracle review, model",
+    "host_name": "www.glukhov.org",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.deepakkarkala.com/agentic-coding/spec-driven-development/oh-my-opencode-sisyphus-framework",
+    "name": "Oh My OpenCode Sisyphus: Multi-Agent Orchestration Framework",
+    "snippet": "Sisyphus is a sophisticated plugin for OpenCode that transforms a single AI agent into a coordinated development team through intelligent orchestration, ...\nOh My OpenCode Sisyphus is a sophisticated plugin for OpenCode that transforms a single AI agent into a coordinated development team through intelligent ...",
+    "host_name": "www.deepakkarkala.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://lzw.me/docs/opencodedocs/code-yeongyu/oh-my-opencode/start/sisyphus-orchestrator",
+    "name": "Sisyphus: Multi-Agent Coordination | oh-my-opencode",
+    "snippet": "Sisyphus is the main orchestrator agent that coordinates multiple AI experts we'll learn Ultrawork Mode to activate all features with one click ...\nSisyphus is the main orchestrator agent that coordinates multiple AI experts like a real development team. Through responsibility separation and ...",
+    "host_name": "lzw.me",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent/issues/1320",
+    "name": "Bug Report: oh-my-opencode agents not appearing in  - GitHub",
+    "snippet": "The oh-my-opencode plugin is successfully installed and loading, but its agents are not appearing in opencode agent list . Only default OpenCode ...",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/opencodeCLI/comments/1q4i91n/oh_my_opencode_local",
+    "name": "oh my opencode local : r/opencodeCLI - Reddit",
+    "snippet": "In your omo.json, the Sisyphus agent has delegate-agent: true, allowing the planner to outsource specialized tasks to the oracle or librarian ...",
+    "host_name": "www.reddit.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=uuV1DcvObsg",
+    "name": "Oh My OpenCode (5 SUPER Agent/MCP/Prompt Config) - YouTube",
+    "snippet": "... Librarian\" (Sonnet), and \"Oracle\" (GPT) based on task needs ... 🛠️ Sisyphus delegates to specialized sub-agents like a \"Frontend ...",
+    "host_name": "www.youtube.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.linkedin.com/posts/md-amanatullah12345_opencode-is-the-base-open-source-coding-agent-activity-7420294858902528000-9pA-",
+    "name": "OpenCode Agent Runtime with Oh My OpenCode Framework",
+    "snippet": "OpenCode is the base open-source coding agent (terminal-first TUI, provider-agnostic, has built-in agents like build and plan).\n... Sisyphus (main orchestrator agent) - Prometheus (planner), Oracle (architecture/debug), Librarian (docs/code search), Explore ... Oh My OpenCode ...",
+    "host_name": "www.linkedin.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://x.com/aeitroc/status/2003789446542418173",
+    "name": "What each oh-my-opencode agent is for: - Sisyphus (primary)",
+    "snippet": "What each oh-my-opencode agent is for: - Sisyphus (primary): Orchestrator for normal work. Decides when to delegate, plans, and executes.",
+    "host_name": "x.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

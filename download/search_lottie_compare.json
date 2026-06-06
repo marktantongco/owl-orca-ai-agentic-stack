@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://motion.dev/docs/gsap-vs-motion",
+    "name": "GSAP vs Motion: A detailed comparison",
+    "snippet": "It's about providing a flawless 120fps, faster start-up times, and minimal bundle sizes. This is where Motion's modern architecture provides an advantage.\nGSAP vs Motion: Which should you use? Compare Motion (formerly Framer Motion) and GSAP across bundle size, performance, and licensing.",
+    "host_name": "motion.dev",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reactlibraries.com/blog/framer-motion-vs-motion-one-mobile-animation-performance-in-2025",
+    "name": "Framer Motion vs Motion One: Mobile Animation Performance in 2025",
+    "snippet": "A technical comparison of Framer Motion and Motion One for React mobile apps, examining bundle size, performance, and API differences in ...",
+    "host_name": "www.reactlibraries.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/reactjs/comments/1lgylud/how_has_your_experience_been_with_motionframer",
+    "name": "How has your experience been with motion(framer motion prev.)",
+    "snippet": "JS based animations will always perform worse than CSS animations. If I had to pick I would go with framer-motion. I work with react and ...",
+    "host_name": "www.reddit.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/syncfusion/choosing-a-react-animation-library-performance-trade-offs-in-real-apps-5f9d6f5fa7ed",
+    "name": "Choosing a React Animation Library: Performance Trade-Offs in",
+    "snippet": "TL;DR: A comparison of seven React animation approaches, focusing on how each one behaves in real product interfaces.",
+    "host_name": "medium.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://spell.sh/blog/best-react-animation-libraries",
+    "name": "15 Best React Animation Libraries Compared (2026) - Spell UI",
+    "snippet": "A practical comparison of the top React animation libraries — Motion (formerly Framer Motion), React Spring, GSAP, and more.",
+    "host_name": "spell.sh",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://retool.com/blog/the-top-animation-libraries-for-react-in-2023",
+    "name": "Best React animation libraries for 2023 - Retool Blog",
+    "snippet": "From Framer Motion to react-spring and react-motion, we evaluated some of the best React animation libraries based on compatibility, ...",
+    "host_name": "retool.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.pkgpulse.com/compare/framer-motion-vs-lottie-web",
+    "name": "Framer-motion vs Lottie-web - PkgPulse",
+    "snippet": "Framer-motion has the smallest gzipped bundle at 59.1 KB. Lottie-web comes in at 7.3 MB. A smaller bundle size means faster page loads, which ...",
+    "host_name": "www.pkgpulse.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://semaphore.io/blog/react-framer-motion-gsap",
+    "name": "Web Animation for Your React App: Framer Motion vs GSAP",
+    "snippet": "The size of Framer Motion when minified is about 119kb, while the size of GSAP when minified is about 69kb. That's about a 50kb difference in ...\nThe article compares Framer Motion and GSAP animation libraries for React, discussing benefits, drawbacks, differences, and setup.",
+    "host_name": "semaphore.io",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://pro.lightswind.com/blogs/top-10-animated-react-libraries-ui-ux-optimization",
+    "name": "A Deep Dive into the Top 10 Animated React Libraries for Stunning",
+    "snippet": "Designed for ultra-fast, smooth transitions and micro-interactions with negligible impact on bundle size. Use Cases: Performance-critical ...\nFor Declarative & Gestures: Framer Motion is often the top choice. For Physics-Based & Performance: React Spring is highly recommended. For ...",
+    "host_name": "pro.lightswind.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://motion.dev/docs/react-reduce-bundle-size",
+    "name": "Reduce bundle size of Framer Motion | Motion React",
+    "snippet": "When measuring the gzipped and minified size of Motion for React using a bundle analysis website like Bundlephobia, you might see big numbers like 50kb or more!",
+    "host_name": "motion.dev",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

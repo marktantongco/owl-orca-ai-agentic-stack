@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim",
+    "name": "alvinunreal/oh-my-opencode-slim - GitHub",
+    "snippet": "oh-my-opencode-slim is an agent orchestration plugin for OpenCode. It includes a built-in team of specialized agents that can scout a codebase, look up fresh ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.dataleadsfuture.com/how-i-use-opencode-oh-my-opencode-slim-and-openspec-to-build-my-own-ai-coding-environment",
+    "name": "How I Use OpenCode, Oh-My-OpenCode-Slim, and OpenSpec to",
+    "snippet": "I will cover my experience in two parts: installing and configuring OpenCode and its related plugins, and my AI coding workflow. Let's start with tool ...",
+    "host_name": "www.dataleadsfuture.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=G_Snfh2M41M&vl=en",
+    "name": "Oh My OpenCode Is Actually Insane - YouTube",
+    "snippet": "Discover Oh My Open Code – the ultimate plugin that orchestrates seven specialized AI agents working in parallel to accomplish what a single ...",
+    "host_name": "www.youtube.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/opencode/comments/1txshtw/ohmyopencodeslim_v2_beta_is_all_about_background",
+    "name": "oh-my-opencode-slim v2 beta is all about background agents - Reddit",
+    "snippet": "TLDR: Create a review panel configurable like the council, but that is dispatched by the orchestrater, not a different top-level agent, after ...",
+    "host_name": "www.reddit.com",
+    "rank": 3,
+    "date": "Jun 5, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://ohmyopencodeslim.com",
+    "name": "Oh My Opencode Slim | Agenting Development",
+    "snippet": "A lightweight, powerful agent orchestration plugin for OpenCode. Transform your AI assistant into a manager capable of delegating complex tasks to ...",
+    "host_name": "ohmyopencodeslim.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

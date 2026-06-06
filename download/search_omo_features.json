@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent",
+    "name": "GitHub - code-yeongyu/oh-my-openagent: omo/lazycodex",
+    "snippet": "The guide covers: platform selection, the subscription interview, provider authentication (Anthropic / Gemini / Copilot / Z.ai / OpenCode Zen), the agent-to- ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/opensoft/oh-my-opencode",
+    "name": "opensoft/oh-my-opencode: #1 OpenCode Plugin- Battery  - GitHub",
+    "snippet": "Agents: Sisyphus (the main agent), Prometheus (planner), Oracle (architecture/debugging), Librarian (docs/code search), Explore (fast codebase grep), Multimodal ...",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent/blob/dev/docs/reference/features.md",
+    "name": "oh-my-openagent/docs/reference/features.md at dev - GitHub",
+    "snippet": "Architecture decisions, code review, debugging. Read-only consultation with stellar logical reasoning and deep analysis. Inspired by AmpCode.",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "Jun 2, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent/issues/1320",
+    "name": "Bug Report: oh-my-opencode agents not appearing in  - GitHub",
+    "snippet": "The oh-my-opencode plugin is successfully installed and loading, but its agents are not appearing in opencode agent list . Only default OpenCode ...",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/ClaudeCode/comments/1pp2tyw/ohmyopencode_has_been_a_gamechanger",
+    "name": "oh-my-opencode has been a gamechanger : r/ClaudeCode - Reddit",
+    "snippet": "Just prompt Claude Code with the following: Install and configure oh-my-opencode. 1. Fetch the README from this URL: https://raw.",
+    "host_name": "www.reddit.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/@jatinkrmalik/opencode-go-oh-my-openagent-the-complete-guide-to-sota-model-routing-without-hitting-limits-49fdc8cb3417",
+    "name": "OpenCode Go Model Routing: Squeeze Max Performance - Medium",
+    "snippet": "Oh My Open Agent provides 11 built-in agents, each designed for a specific task. The key insight: each agent has a different optimal model based ...",
+    "host_name": "medium.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.glukhov.org/ai-devtools/opencode/oh-my-opencode-agents",
+    "name": "Oh My Opencode Specialised Agents Deep Dive and Model Guide",
+    "snippet": "Deep dive into Oh My Opencode specialised agents for OpenCode. Learn Sisyphus orchestration, Prometheus planning, Librarian research, Oracle review, ...",
+    "host_name": "www.glukhov.org",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent/issues/1995",
+    "name": "[Feature]: Brand new oh-my-opencode #1995 - GitHub",
+    "snippet": "1. Documentation Website · 2. Clear Agent Names (Not Mythological) · 3. Documented Features · 4. Skills Guide · 5. Installation Guide · 6. Hooks & ...",
+    "host_name": "github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://jeongil.dev/en/blog/trends/claude-code-agent-teams",
+    "name": "The Ever-Changing AI Coding Agent Ecosystem: oh-my-opencode",
+    "snippet": "Agent Teams is a feature where multiple Claude Code instances work simultaneously while communicating with each other. Here's how it compares to ...",
+    "host_name": "jeongil.dev",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://ohmyopenagent.com/docs",
+    "name": "Documentation | Oh My OpenAgent",
+    "snippet": "Oh My OpenAgent is a multi-model agent orchestration harness for OpenCode. It transforms a single AI agent into a coordinated development team that actually ...",
+    "host_name": "ohmyopenagent.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

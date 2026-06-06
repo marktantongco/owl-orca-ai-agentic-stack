@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/code-yeongyu/oh-my-openagent",
+    "name": "GitHub - code-yeongyu/oh-my-openagent: omo/lazycodex",
+    "snippet": "omo/lazycodex; the one and only agent harness for complex codebases. the pickaxe for complex software engineering. For your Codex, for your OpenCode ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/opensoft/oh-my-opencode",
+    "name": "opensoft/oh-my-opencode: #1 OpenCode Plugin- Battery  - GitHub",
+    "snippet": "OhMyOpenCode is free and open-source. Do not download installers or enter payment details on third-party sites that claim to be \"official.\" Because ...\nAnthropic has cited this project, oh-my-opencode as justification for blocking opencode. Indeed, some plugins that spoof Claude Code's oauth request signatures exist in the community.",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/opensoft/oh-my-opencode/blob/dev/docs/guide/overview.md",
+    "name": "oh-my-opencode/docs/guide/overview.md at dev - GitHub",
+    "snippet": "Oh My OpenCode automatically configures models based on your available providers. You don't need to manually specify every model. How Models Are Determined. 1.",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim",
+    "name": "alvinunreal/oh-my-opencode-slim - GitHub",
+    "snippet": "oh-my-opencode-slim is an agent orchestration plugin for OpenCode. It includes a built-in team of specialized agents that can scout a codebase, ...",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "Jun 5, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/topics/oh-my-opencode?o=asc&s=updated",
+    "name": "oh-my-opencode · GitHub Topics",
+    "snippet": "The Ultimate OpenCode Starter Kit. Includes Oh My OpenCode config, Superpowers installation fix, MCP Setup, and Windows Crash Fix (exit_code: -1073740791).",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/topics/oh-my-opencode?l=shell",
+    "name": "oh-my-opencode · GitHub Topics",
+    "snippet": "Production-ready OpenCode + Oh-My-OpenCode configuration pack. 7 AI providers, 12 specialized agents, git safety and worktree plugins, plus a ...",
+    "host_name": "github.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blog.vfiles.no/posts/my-oh-my-opencode-setup",
+    "name": "My 'Oh My Opencode' Setup - Posts",
+    "snippet": "This post is my current “oh-my-opencode” setup: Ghostty as the terminal, opencode as the driver, and GitHub Copilot (via MCP) as the model ...",
+    "host_name": "blog.vfiles.no",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://deepwiki.com/code-yeongyu/oh-my-opencode",
+    "name": "code-yeongyu/oh-my-opencode | DeepWiki",
+    "snippet": "This page introduces oh-my-opencode, its purpose, architecture, and core components. For installation and setup instructions, see Getting Started. For detailed information about specific agents, see Agent System. For configuration options, see Configuration Reference.",
+    "host_name": "deepwiki.com",
+    "rank": 7,
+    "date": "Jun 1, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.npmjs.com/package/oh-my-opencode",
+    "name": "oh-my-opencode - npm",
+    "snippet": "The published npm package and CLI binary are still named oh-my-opencode (dual-published as oh-my-openagent during the rename transition). Inside opencode.json, the compatibility layer prefers the plugin entry oh-my-openagent, while legacy oh-my-opencode entries still load with a warning.",
+    "host_name": "www.npmjs.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://wufulin.github.io/2026/02/03/oh-my-opencode-complete-guide/index.html",
+    "name": "Oh-My-OpenCode 完全指南：多代理协作编程新范式 | Franklin爱家",
+    "snippet": "深入解析 Oh-My-OpenCode 3.2.1 的核心功能和使用方法，包括 11 个专化代理、Ultrawork 全自动模式、Prometheus 精密规划模式，帮助你构建高效的 AI 编程团队。",
+    "host_name": "wufulin.github.io",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

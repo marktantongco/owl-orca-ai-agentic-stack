@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim",
+    "name": "alvinunreal/oh-my-opencode-slim - GitHub",
+    "snippet": "oh-my-opencode-slim is an agent orchestration plugin for OpenCode. It includes a built-in team of specialized agents that can scout a codebase, look up fresh ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/alvinunreal",
+    "name": "Alvin (@alvinunreal) - GitHub",
+    "snippet": "Slimmed, cleaned and fine-tuned oh-my-opencode fork, consumes much less tokens. TypeScript 5.1k 335 · tmuxai tmuxai Public.",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim/blob/master/docs/installation.md",
+    "name": "Installation Guide - alvinunreal/oh-my-opencode-slim - GitHub",
+    "snippet": "The installer generates both OpenAI and OpenCode Go presets, with OpenAI active by default (using gpt-5.5 and gpt-5.4-mini models). To make OpenCode Go active ...",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim/issues",
+    "name": "Issues · alvinunreal/oh-my-opencode-slim - GitHub",
+    "snippet": "Slimmed, cleaned and fine-tuned oh-my-opencode fork, consumes much less tokens - Issues · alvinunreal/oh-my-opencode-slim.",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim/issues/96",
+    "name": "Antigravity option doesn't work. · Issue #96 · alvinunreal/oh  - GitHub",
+    "snippet": "I just had installation instructions bundle - but those antigravity solutions with opencode doesn't seem to work anymore. You can easily ...",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

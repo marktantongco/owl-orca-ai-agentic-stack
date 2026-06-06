@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://www.npmjs.com/package/oh-my-opencode-slim",
+    "name": "oh-my-opencode-slim - NPM",
+    "snippet": "Install and configure oh-my-opencode-slim: https://raw ... Weekly Downloads. 7,202. Version. 1.1.1. License. MIT. Last publish. 8 days ...",
+    "host_name": "www.npmjs.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim/blob/master/package.json",
+    "name": "package.json - alvinunreal/oh-my-opencode-slim · GitHub",
+    "snippet": "Slimmed, cleaned and fine-tuned oh-my-opencode fork, consumes much less tokens - oh-my-opencode-slim/package.json at master ...",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.npmjs.com/package/oh-my-opencode?activeTab=versions",
+    "name": "oh-my-opencode - NPM",
+    "snippet": "Plugin config files still commonly use oh-my-opencode.json[c] ... Weekly Downloads. 60,956. Version. 4.5.12. License. SUL-1.0. Last publish.",
+    "host_name": "www.npmjs.com",
+    "rank": 2,
+    "date": "May 29, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/opencodeCLI/comments/1ss1nv2/ohmyopencodeslim_reached_v100",
+    "name": "oh-my-opencode-slim reached v1.0.0 : r/opencodeCLI - Reddit",
+    "snippet": "We fixed few bugs and slimmed the repo. And have some new features: custom dynamic agents (janitor inspired). new optional agent, observer if ...",
+    "host_name": "www.reddit.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cdn.jsdelivr.net/npm/@ringofstorms/oh-my-opencode-slim@64.2.0/dist/mcp",
+    "name": "ringofstorms/oh-my-opencode-slim CDN by jsDelivr",
+    "snippet": "ringofstorms/oh-my-opencode-slim CDN by jsDelivr - A free, fast, and reliable Open Source CDN for npm and GitHub.",
+    "host_name": "cdn.jsdelivr.net",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

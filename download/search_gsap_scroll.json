@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=0H9aKFkBcS4",
+    "name": "Next.js + GSAP = The Block Reveal Text Animation That  - YouTube",
+    "snippet": "Build a cinematic block reveal text animation in Next.js — powered by GSAP, SplitText, and ScrollTrigger. Unlock Source Code with PRO — Get ...",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://gsap.com/community/forums/topic/44590-gsap-image-animations-in-nextjs",
+    "name": "GSAP Image Animations in NextJS",
+    "snippet": "Hey, I want to add a reveal animation for images on my nextjs website. Im using scrolltrigger to achieve this but images don't show until i ...",
+    "host_name": "gsap.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/playlist?list=PL8bX3D8aBEpmbmy8pMtW0p-noX7LH3Cwm",
+    "name": "NextJS + GSAP & ScrollTrigger - YouTube",
+    "snippet": "A Next.js Scroll Animation That Earns Its PIN (ScrollTrigger Done Right) ... Next.js + GSAP = The Block Reveal Text Animation That Stole the Spotlight.",
+    "host_name": "www.youtube.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/nextjs/comments/jx5ehn/gsap_scrolltrigger_alternatives_for_nextjs",
+    "name": "GSAP ScrollTrigger alternatives for NextJS - Reddit",
+    "snippet": "Hi. Basically I need to do Scroll reveal Animations in my Next JS project. GSAP ScrollTrigger seemed to be the best choice.",
+    "host_name": "www.reddit.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=QxVCigL1eyE",
+    "name": "React Next.js Text Reveal with Gsap ScrollTrigger - YouTube",
+    "snippet": "With this tutorial we see how to create a Text reveal animation with React, Next.js and Gsap with ScrollTrigger, that only gets triggered ...",
+    "host_name": "www.youtube.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://stackoverflow.com/questions/79315339/flickering-and-fast-scrolling-issues-with-gsap-scrolltrigger-on-safari-for-foote",
+    "name": "Flickering and Fast-Scrolling Issues with GSAP ScrollTrigger on",
+    "snippet": "I'm working on a Next.js project with GSAP free version, where I've implemented a footer reveal animation inspired by the behavior on the Raxo website.",
+    "host_name": "stackoverflow.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=UTiCHu55ECg",
+    "name": "Awwwards-Winning 3D Reveal Animation | GSAP ScrollTrigger",
+    "snippet": "Learn how to create a stunning 3D stacking reveal effect inspired by award-winning website! This advanced GSAP tutorial shows you how to ...",
+    "host_name": "www.youtube.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://gsap.com/community/forums/topic/34811-nextjs-with-scroll-trigger",
+    "name": "Next.js with Scroll Trigger - GSAP",
+    "snippet": "I am trying to get a scroll trigger background animation to work on Next.js, like the air pods example many have posted.",
+    "host_name": "gsap.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blog.olivierlarose.com/tutorials/smooth-scroll",
+    "name": "Build a Smooth Scroll Landing Page using Nextjs, GSAP",
+    "snippet": "A website tutorial on how to make a one pager landing page with a smooth scroll using Nextjs, GSAP and Locomotive Scroll v5.",
+    "host_name": "blog.olivierlarose.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://dev.to/smrpdl1991/reveal-animation-on-scroll-using-gsap-and-scrolltrigger-on-react-app-3l2f",
+    "name": "Reveal animation on Scroll using gsap and scrollTrigger on react app",
+    "snippet": "function GsapScrollTrigger(){ gsap.registerPlugin(ScrollTrigger); React.useEffect(() => { gsap.fromTo( '.item p', { autoAlpha: 0, y: -100, } ...",
+    "host_name": "dev.to",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

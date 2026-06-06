@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.reddit.com/r/reactjs/comments/dtdxiu/looking_for_a_react_component_for_panning_zooming",
+    "name": "Looking for a React component for panning & zooming : r/reactjs",
+    "snippet": "I've got an SVG (rendered by React) and I want to add pan/zoom to it. Preferably as close as possible to how Google Maps works.",
+    "host_name": "www.reddit.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://stackoverflow.com/questions/55107170/react-svg-pan-zoom-problem-with-production-version-serve-build",
+    "name": "react-svg-pan-zoom: Problem with production version (serve build)",
+    "snippet": "I'm using react-svg-pan-zoom component from an application created using create-react-app, everything works fine as long as I do not build.",
+    "host_name": "stackoverflow.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.npmjs.com/package/react-svg-pan-zoom",
+    "name": "react-svg-pan-zoom - NPM",
+    "snippet": "react-svg-pan-zoom is a React component that adds pan and zoom features to the SVG images. It helps to display big SVG images in a small space.",
+    "host_name": "www.npmjs.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/bumbu/svg-pan-zoom",
+    "name": "bumbu/svg-pan-zoom: JavaScript library that enables  - GitHub",
+    "snippet": "JavaScript library that enables panning and zooming of an SVG in an HTML document, with mouse events or custom JavaScript hooks - bumbu/svg-pan-zoom.",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=Nw-vTpUPk6s",
+    "name": "How to create a zoomable view (image zoom/pan) in React Native",
+    "snippet": "In this video I want to show how to enable zooming and moving for an image inside a Modal. I'm also going to give a recommendation for third ...",
+    "host_name": "www.youtube.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=8EEJhxiGoPo",
+    "name": "Pan and zoom animating SVG viewBox (vanilla JS) - YouTube",
+    "snippet": "You can see the live demo here https://codepen.io/thebabydino/pen/brywXv/ Cross-browser. If the work I've been putting out since early 2012 ...",
+    "host_name": "www.youtube.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://blog.logrocket.com/adding-zoom-pan-pinch-react-web-apps",
+    "name": "Adding zoom, pan, and pinch to your React web apps",
+    "snippet": "In this article, we'll explore a few libraries that you can use in your React applications to add zoom, pan, and pinch functionalities to HTML elements.",
+    "host_name": "blog.logrocket.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.svgator.com/blog/interactive-svg-examples",
+    "name": "60+ Custom Interactive SVG Examples for an Immersive User",
+    "snippet": "Check out 60+ stunning interactive SVG examples, including click, hover, scroll, tap, and multi-state animations that bring web design to life.\nDiscover 60+ stunning interactive SVG examples, including click, hover, scroll, tap, and multi-state animations that bring web design to ...",
+    "host_name": "www.svgator.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://tympanus.net/codrops/2013/02/06/interactive-infographic-with-svg-and-css-animations",
+    "name": "Interactive Infographic with SVG and CSS Animations - Codrops",
+    "snippet": "Today we will explore the possibilities of SVG and test the capabilities of modern browsers by creating an interactive vector infographic for the web.",
+    "host_name": "tympanus.net",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/@sarah_edo/rethinking-information-presentation-responsive-animated-infographics-b2831b9632b6",
+    "name": "Responsive Animated Infographics | by Sarah Drasner - Medium",
+    "snippet": "Even though we designed desktop first, our media queries are a mobile-first implementation. I used an SVG which is very easy to make fluid, ...",
+    "host_name": "medium.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

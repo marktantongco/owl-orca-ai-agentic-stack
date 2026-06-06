@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim",
+    "name": "alvinunreal/oh-my-opencode-slim - GitHub",
+    "snippet": "It includes a built-in team of specialized agents that can scout a codebase, look up fresh documentation, review architecture, handle UI work, and execute well- ...",
+    "host_name": "github.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=G_Snfh2M41M&vl=en",
+    "name": "Oh My OpenCode Is Actually Insane - YouTube",
+    "snippet": "Discover Oh My Open Code – the ultimate plugin that orchestrates seven specialized AI agents working in parallel to accomplish what a single ...",
+    "host_name": "www.youtube.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.dataleadsfuture.com/how-i-use-opencode-oh-my-opencode-slim-and-openspec-to-build-my-own-ai-coding-environment",
+    "name": "How I Use OpenCode, Oh-My-OpenCode-Slim, and OpenSpec to",
+    "snippet": "I will cover my experience in two parts: installing and configuring OpenCode and its related plugins, and my AI coding workflow. Let's start with tool ...",
+    "host_name": "www.dataleadsfuture.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/opencodeCLI/comments/1skbob6/interview_feature_in_ohmyopencodeslim",
+    "name": "/interview feature in oh-my-opencode-slim : r/opencodeCLI - Reddit",
+    "snippet": "... council session session wtih multiple parallel AI agents. Maybe a ... good, council idea/implementation was all contributions.",
+    "host_name": "www.reddit.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://ohmyopencodeslim.com",
+    "name": "Oh My Opencode Slim | Agenting Development",
+    "snippet": "A lightweight, powerful agent orchestration plugin for OpenCode. Transform your AI assistant into a manager capable of delegating complex tasks to ...",
+    "host_name": "ohmyopencodeslim.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://lobehub.com/skills/openclaw-skills-oh-my-opencode",
+    "name": "oh-my-opencode | Skills Marketplace - LobeHub",
+    "snippet": "oh-my-opencode is a multi-agent orchestration plugin for OpenCode that streamlines installation, configuration, and runtime operation of ...",
+    "host_name": "lobehub.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.glukhov.org/ai-devtools/opencode/oh-my-opencode-experience",
+    "name": "Oh My Opencode Review: Honest Results, Billing Risks, and When",
+    "snippet": "This article covers what actually happened in hands-on testing, and what the broader community has found after months of real usage. lazy agents working in ...",
+    "host_name": "www.glukhov.org",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim/blob/master/src/agents/orchestrator.ts",
+    "name": "oh-my-opencode-slim/src/agents/orchestrator.ts at master - GitHub",
+    "snippet": "Review available agents and delegation rules. Decide whether to delegate or do it yourself. !!! **Delegation efficiency:**.",
+    "host_name": "github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.linkedin.com/posts/md-amanatullah12345_opencode-is-the-base-open-source-coding-agent-activity-7420294858902528000-9pA-",
+    "name": "OpenCode Agent Runtime with Oh My OpenCode Framework",
+    "snippet": "OpenCode is the base open-source coding agent (terminal-first TUI, provider-agnostic, has built-in agents like build and plan).",
+    "host_name": "www.linkedin.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://medium.com/@jatinkrmalik/opencode-go-oh-my-openagent-the-complete-guide-to-sota-model-routing-without-hitting-limits-49fdc8cb3417",
+    "name": "OpenCode Go Model Routing: Squeeze Max Performance - Medium",
+    "snippet": "Oh My Open Agent provides 11 built-in agents, each designed for a specific task. The key insight: each agent has a different optimal model based ...",
+    "host_name": "medium.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]
