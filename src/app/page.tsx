@@ -1,20 +1,19 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import {
   LayoutDashboard, GitCompare, Network, Puzzle, Gift, Layers,
   Menu, X, Search, Star, Copy, Check, ExternalLink,
   ChevronRight, ChevronDown, Zap, Shield, Cpu, Globe,
-  Code, Terminal, Monitor, ArrowRight, BookOpen, Sparkles,
-  TrendingUp, Users, Activity, Trophy, FolderTree,
+  Code, Terminal, ArrowRight, BookOpen, Sparkles,
+  TrendingUp, Activity, Trophy, FolderTree,
   FileText, FileCode, Settings, Database, Server, Download, Eye, Filter
 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -25,7 +24,7 @@ import { SectionErrorBoundary } from '@/components/ErrorBoundary'
 import {
   ARCHITECTURE_LAYERS, TOP_PLUGINS, COMPARISON_DATA, CATEGORY_GROUPS,
   ADE_COMPATIBILITY, ULTIMATE_BLUEPRINT_STEPS, PROXY_ENDPOINTS,
-  FILE_INVENTORY,
+  FILE_INVENTORY, STANDING_OUT_CAPABILITIES,
   type ArchLayer, type ArchComponent, type PluginEntry, type CompareItem,
   type ADECompatEntry, type FileEntry
 } from '@/lib/architecture-data'
@@ -47,16 +46,6 @@ function CopyButton({ text }: { text: string }) {
       {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
       {copied ? 'Copied!' : 'Copy'}
     </button>
-  )
-}
-
-function StarRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center gap-0.5">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <Star key={i} className={`w-3.5 h-3.5 ${i <= rating ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200 dark:fill-gray-600 dark:text-gray-600'}`} />
-      ))}
-    </div>
   )
 }
 
@@ -1950,18 +1939,18 @@ function DashboardSection({ onNavigate }: { onNavigate: (section: string) => voi
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         {[
-          { label: 'ADE Tools', value: '20+', icon: Terminal, color: 'amber', stat: '9 CLI-first' },
-          { label: 'Proxy Stacks', value: '10+', icon: Globe, color: 'emerald', stat: '~1.7B free tokens/mo' },
-          { label: 'Plugins & MCP', value: '15+', icon: Puzzle, color: 'violet', stat: 'Above Mediocrity' },
-          { label: 'Architecture Layers', value: '7', icon: Layers, color: 'rose', stat: 'With OWL-ORCA Proxy' },
-          { label: 'Proxy Endpoints', value: '3', icon: Globe, color: 'cyan', stat: 'OWL-ORCA v7.1.0' },
+          { label: 'ADE Tools', value: '20+', icon: Terminal, border: 'border-l-amber-500', bg: 'bg-amber-100 dark:bg-amber-900/30', text: 'text-amber-600 dark:text-amber-400', stat: '9 CLI-first' },
+          { label: 'Proxy Stacks', value: '10+', icon: Globe, border: 'border-l-emerald-500', bg: 'bg-emerald-100 dark:bg-emerald-900/30', text: 'text-emerald-600 dark:text-emerald-400', stat: '~1.7B free tokens/mo' },
+          { label: 'Plugins & MCP', value: '15+', icon: Puzzle, border: 'border-l-violet-500', bg: 'bg-violet-100 dark:bg-violet-900/30', text: 'text-violet-600 dark:text-violet-400', stat: 'Above Mediocrity' },
+          { label: 'Architecture Layers', value: '7', icon: Layers, border: 'border-l-rose-500', bg: 'bg-rose-100 dark:bg-rose-900/30', text: 'text-rose-600 dark:text-rose-400', stat: 'With OWL-ORCA Proxy' },
+          { label: 'Proxy Endpoints', value: '3', icon: Globe, border: 'border-l-cyan-500', bg: 'bg-cyan-100 dark:bg-cyan-900/30', text: 'text-cyan-600 dark:text-cyan-400', stat: 'OWL-ORCA v7.1.0' },
         ].map((stat) => (
           <motion.div key={stat.label} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
-            <Card className={`border-l-4 border-l-${stat.color}-500`}>
+            <Card className={`border-l-4 ${stat.border}`}>
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg bg-${stat.color}-100 dark:bg-${stat.color}-900/30`}>
-                    <stat.icon className={`w-5 h-5 text-${stat.color}-600 dark:text-${stat.color}-400`} />
+                  <div className={`p-2 rounded-lg ${stat.bg}`}>
+                    <stat.icon className={`w-5 h-5 ${stat.text}`} />
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
@@ -1973,6 +1962,95 @@ function DashboardSection({ onNavigate }: { onNavigate: (section: string) => voi
           </motion.div>
         ))}
       </div>
+
+      {/* Standing Out — Why OWL-ORCA Wins */}
+      <Card className="relative overflow-hidden border-2 border-amber-300 dark:border-amber-700">
+        {/* Decorative ambient glow */}
+        <div className="absolute -top-16 -right-16 w-48 h-48 bg-gradient-to-br from-amber-200/30 to-violet-200/30 dark:from-amber-900/20 dark:to-violet-900/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-12 -left-12 w-36 h-36 bg-gradient-to-br from-emerald-200/20 to-cyan-200/20 dark:from-emerald-900/10 dark:to-cyan-900/10 rounded-full blur-3xl pointer-events-none" />
+        <CardHeader className="relative">
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Trophy className="w-5 h-5 text-amber-500" />
+              Standing Out
+            </CardTitle>
+            <Badge className="bg-gradient-to-r from-amber-500 to-violet-500 text-white border-0 text-[10px]">
+              5 Unique Capabilities
+            </Badge>
+          </div>
+          <CardDescription className="text-sm">
+            Why OWL-ORCA uniquely combines 5 capabilities that no other single proxy offers
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="relative">
+          <div className="space-y-2.5">
+            {STANDING_OUT_CAPABILITIES.map((cap, idx) => {
+              const IconMap: Record<string, React.ElementType> = {
+                Zap, ArrowRight, Shield, Terminal, Globe,
+              }
+              const IconComponent = IconMap[cap.icon]
+              return (
+                <motion.div
+                  key={cap.id}
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.08, duration: 0.35 }}
+                  className="group flex items-start gap-3 p-3 rounded-lg border border-transparent hover:border-gray-200 dark:hover:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                >
+                  {/* Icon badge */}
+                  <div
+                    className="shrink-0 p-2 rounded-lg"
+                    style={{ backgroundColor: `${cap.color}15` }}
+                  >
+                    {IconComponent && (
+                      <IconComponent className="w-4 h-4" style={{ color: cap.color }} />
+                    )}
+                  </div>
+
+                  {/* Text content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="font-semibold text-sm text-gray-900 dark:text-white">{cap.title}</p>
+                      <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full" style={{ backgroundColor: `${cap.color}15`, color: cap.color }}>
+                        {cap.headline}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{cap.description}</p>
+                  </div>
+
+                  {/* Interconnected navigation link */}
+                  <motion.button
+                    whileHover={{ x: 3 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => onNavigate(cap.linkTo)}
+                    className="shrink-0 flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors mt-1 whitespace-nowrap"
+                  >
+                    {cap.linkLabel}
+                    <ChevronRight className="w-3 h-3" />
+                  </motion.button>
+                </motion.div>
+              )
+            })}
+          </div>
+
+          {/* Bottom convergence summary */}
+          <div className="mt-4 p-3 rounded-lg bg-gradient-to-r from-amber-50 via-emerald-50 to-violet-50 dark:from-amber-900/10 dark:via-emerald-900/10 dark:to-violet-900/10 border border-amber-200 dark:border-amber-800/30">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+              <p className="text-xs text-muted-foreground text-center sm:text-left">
+                <strong className="text-gray-900 dark:text-white">5 capabilities. 0 competitors with all 5.</strong> Stream Racing + Protocol Translation + Circuit Breaking + Zero-Config Injection + Multi-Gateway Fleet — converged in one <code className="px-1 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-[10px] font-mono">install.sh</code>
+              </p>
+              <div className="flex items-center gap-2 shrink-0">
+                <Button variant="outline" size="sm" className="text-xs h-7" onClick={() => onNavigate('topics')}>
+                  <BookOpen className="w-3 h-3 mr-1" /> Deep Comparison
+                </Button>
+                <Button variant="outline" size="sm" className="text-xs h-7" onClick={() => onNavigate('blueprint')}>
+                  <Zap className="w-3 h-3 mr-1" /> Blueprint
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* A/B Quick Preview */}
       <Card>
@@ -2160,7 +2238,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-muted-foreground">
             <p>AI Agentic Stack — Interactive Knowledge Base & Wiki</p>
-            <p>Ubuntu Free & Unlimited | 6 Layers | 20+ ADE Tools | 15 Plugins</p>
+            <p>Ubuntu Free & Unlimited | 7 Layers | 20+ ADE Tools | 15 Plugins</p>
           </div>
         </div>
       </footer>

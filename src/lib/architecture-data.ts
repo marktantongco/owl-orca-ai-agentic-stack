@@ -385,6 +385,78 @@ export const CATEGORY_GROUPS = [
   },
 ]
 
+// ==================== STANDING OUT — 5 UNIQUE CAPABILITIES ====================
+
+export interface StandingOutCapability {
+  id: string
+  title: string
+  headline: string
+  description: string
+  icon: string
+  color: string
+  linkTo: string
+  linkLabel: string
+  competitorGap: string
+}
+
+export const STANDING_OUT_CAPABILITIES: StandingOutCapability[] = [
+  {
+    id: 'stream-racing',
+    title: 'Stream Racing',
+    headline: 'Parallel Speed Competition',
+    description: 'Races multiple free-tier providers simultaneously and returns the fastest response. No other proxy does parallel stream competition — LiteLLM and OpenRouter use sequential fallback only.',
+    icon: 'Zap',
+    color: '#f59e0b',
+    linkTo: 'architecture',
+    linkLabel: 'See routing flow',
+    competitorGap: 'LiteLLM: sequential fallback only. OpenRouter: single provider per request.',
+  },
+  {
+    id: 'protocol-translation',
+    title: 'Protocol Translation',
+    headline: 'Copilot & Gemini to OpenAI',
+    description: 'Translates between proprietary API protocols on the fly — Copilot to OpenAI, Gemini to OpenAI — so every ADE speaks one standard language. No other proxy bridges non-standard protocols.',
+    icon: 'ArrowRight',
+    color: '#06b6d4',
+    linkTo: 'compatibility',
+    linkLabel: 'ADE compatibility',
+    competitorGap: 'No competitor translates proprietary Copilot/Gemini protocols into OpenAI format.',
+  },
+  {
+    id: 'circuit-breaking',
+    title: 'Circuit Breaking',
+    headline: 'Transparent Failover + Local Fallback',
+    description: 'Automatic failover when a provider goes down — transparent to the ADE. Cascades from cloud free-tier to premium free-tier to local Ollama fallback. Your agent never sees a 429 or 503.',
+    icon: 'Shield',
+    color: '#e11d48',
+    linkTo: 'topics',
+    linkLabel: 'Proxy comparisons',
+    competitorGap: 'Only 9Router has circuit breaking, but lacks the other 4 capabilities.',
+  },
+  {
+    id: 'zero-config-injection',
+    title: 'Zero-Config Injection',
+    headline: 'Atomic Auto-Config for OpenCode',
+    description: 'install.sh atomically injects providers into OpenCode/Kilo config files. Zero manual setup — just open your ADE and it works. No other proxy auto-configures ADE config files.',
+    icon: 'Terminal',
+    color: '#10b981',
+    linkTo: 'blueprint',
+    linkLabel: 'Setup guide',
+    competitorGap: 'All competitors require manual YAML/JSON config. None auto-inject into ADE files.',
+  },
+  {
+    id: 'multi-gateway-fleet',
+    title: 'Multi-Gateway Fleet',
+    headline: '3 Endpoints, 3 Roles, 1 Install',
+    description: 'Single install creates 3 local endpoints — Racer :60001 for speed, Premium :8333 for quality, Tunnel :60000 for bypass. Each optimized for a different use case. No other proxy segments traffic by role into dedicated ports.',
+    icon: 'Globe',
+    color: '#8b5cf6',
+    linkTo: 'architecture',
+    linkLabel: 'All 3 endpoints',
+    competitorGap: 'No competitor provides 3 role-specific endpoints from a single install.',
+  },
+]
+
 // ==================== FILE INVENTORY ====================
 
 export interface FileEntry {
