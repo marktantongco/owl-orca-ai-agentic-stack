@@ -457,6 +457,84 @@ export const STANDING_OUT_CAPABILITIES: StandingOutCapability[] = [
   },
 ]
 
+// ==================== ELEPHANT MEMORY — CROSS-FIELD CONNECTIONS ====================
+
+export interface CrossFieldEntry {
+  id: string
+  proxy: string
+  proxyColor: string
+  economics: string
+  economicsShort: string
+  psychology: string
+  psychologyShort: string
+  networkScience: string
+  networkScienceShort: string
+  history: string
+  historyShort: string
+}
+
+export const CROSS_FIELD_CONNECTIONS: CrossFieldEntry[] = [
+  {
+    id: 'owl-orca',
+    proxy: 'OWL-ORCA',
+    proxyColor: '#10b981',
+    economics: 'Race theory: like high-frequency trading, speed wins. OWL-ORCA races multiple free tiers simultaneously and returns the fastest response. This is "arbitrage of free tiers" — the economic value comes from the delta between what you pay ($0) and what you receive (premium model outputs).',
+    economicsShort: 'Free-tier arbitrage',
+    psychology: 'Reduces choice overload. Instead of picking one provider, you get "auto-racer" that picks for you. Paradox of choice (Schwartz, 2004): more options = more anxiety. OWL-ORCA eliminates the decision by racing all options.',
+    psychologyShort: 'Eliminates choice overload',
+    networkScience: 'Like BGP (Border Gateway Protocol) for AI models. Circuit breaking = failover routing. Stream racing = anycast. The Forward Proxy = a VPN tunnel. This is essentially internet routing applied to LLM API calls.',
+    networkScienceShort: 'BGP for AI models',
+    history: 'Reminiscent of early telephone exchanges (1880s): human operators manually connected calls. OWL-ORCA automates the "connection" between ADEs and providers, just as automatic exchanges replaced human operators.',
+    historyShort: 'Automatic telephone exchange',
+  },
+  {
+    id: 'litellm',
+    proxy: 'LiteLLM',
+    proxyColor: '#3b82f6',
+    economics: 'Translation theory: LiteLLM is a market maker, not a provider. Like a currency exchange, it doesn\'t create value — it facilitates access. The economic value is in reducing integration cost (one API vs 100), but you still pay per-token to providers.',
+    economicsShort: 'Market maker / currency exchange',
+    psychology: 'Reduced cognitive load via standardization. One API format for 100 providers = one mental model. However, the paradox: 100 options creates choice overload for model selection. LiteLLM solves the "how to connect" but not "which model to use."',
+    psychologyShort: 'One mental model, 100 providers',
+    networkScience: 'Like a CDN (Content Delivery Network) for LLM APIs. LiteLLM is the edge node that caches, routes, and load-balances. Fallback chains = redundant paths. But unlike OWL-ORCA, there\'s no "racing" — it\'s sequential failover.',
+    networkScienceShort: 'CDN for LLM APIs',
+    history: 'Like the Rosetta Stone (196 BC): a universal translation layer. LiteLLM does for LLM APIs what the Rosetta Stone did for languages — makes every provider understandable through one common format.',
+    historyShort: 'Rosetta Stone',
+  },
+  {
+    id: 'openrouter',
+    proxy: 'OpenRouter',
+    proxyColor: '#8b5cf6',
+    economics: 'Marketplace theory: OpenRouter is like Amazon for LLMs. It aggregates supply (providers) and demand (developers), taking a small margin. Free models are the "loss leaders" that attract users to paid models. Classic two-sided market (Rochet & Tirole, 2003).',
+    economicsShort: 'Two-sided marketplace (Amazon)',
+    psychology: 'The IKEA effect in reverse: less setup effort = less perceived value. OpenRouter is "too easy" — developers may not appreciate the complexity it abstracts. However, the 300+ model count creates a "paradox of abundance" where having more choices can lead to decision paralysis.',
+    psychologyShort: 'Paradox of abundance',
+    networkScience: 'Like DNS (Domain Name System) for AI models. You give it a model name, it resolves to the correct provider. But unlike DNS, there\'s a middleman tax (latency, cost, dependency).',
+    networkScienceShort: 'DNS for AI models',
+    history: 'Like the early telegraph networks (1840s): centralized relay stations. OpenRouter is the "central station" that all messages pass through. This was efficient but created a single point of failure — just as the telegraph monopolies did.',
+    historyShort: 'Central telegraph station',
+  },
+  {
+    id: 'freellmapi',
+    proxy: 'FreeLLMAPI',
+    proxyColor: '#f59e0b',
+    economics: 'Commons theory: FreeLLMAPI is a digital commons (Ostrom, 1990). Multiple free providers are pooled like shared grazing land. The tragedy: when one provider becomes popular, its free tier gets exhausted faster. FreeLLMAPI manages this through failover, but the underlying scarcity remains.',
+    economicsShort: 'Digital commons (Ostrom)',
+    psychology: 'Scarcity mindset vs abundance mindset. FreeLLMAPI creates an illusion of abundance (1.7B tokens!) but the reality is scarcity (rate limits, model quality). The psychological tension between "free" and "limited" creates anxiety about running out.',
+    psychologyShort: 'Scarcity vs abundance tension',
+    networkScience: 'Like mesh networking: multiple redundant paths, no central authority. If one provider fails, traffic routes to another. But mesh networks have higher latency than star topologies (like OWL-ORCA\'s centralized proxy).',
+    networkScienceShort: 'Mesh networking',
+    history: 'Like the early internet (ARPANET, 1969): built on the principle of redundancy and free access. ARPANET connected universities for free, just as FreeLLMAPI connects free-tier providers. The lesson: free infrastructure eventually gets commercialized.',
+    historyShort: 'ARPANET',
+  },
+]
+
+export const CROSS_FIELD_DIMENSIONS = [
+  { id: 'economics', label: 'Economics', icon: 'TrendingUp', color: '#10b981', description: 'How value flows, who captures it, and what market dynamics drive the proxy' },
+  { id: 'psychology', label: 'Psychology', icon: 'Users', color: '#8b5cf6', description: 'Cognitive load, choice architecture, and behavioral effects on developers' },
+  { id: 'networkScience', label: 'Network Science', icon: 'Globe', color: '#06b6d4', description: 'Routing topology, failover patterns, and network architecture analogies' },
+  { id: 'history', label: 'History', icon: 'BookOpen', color: '#f59e0b', description: 'Historical precedents that mirror the proxy\'s role in the AI ecosystem' },
+]
+
 // ==================== FILE INVENTORY ====================
 
 export interface FileEntry {

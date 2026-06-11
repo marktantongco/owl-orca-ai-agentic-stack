@@ -8,7 +8,8 @@ import {
   ChevronRight, ChevronDown, Zap, Shield, Cpu, Globe,
   Code, Terminal, ArrowRight, BookOpen, Sparkles,
   TrendingUp, Activity, Trophy, FolderTree,
-  FileText, FileCode, Settings, Database, Server, Download, Eye, Filter
+  FileText, FileCode, Settings, Database, Server, Download, Eye, Filter,
+  Users, Info
 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -25,6 +26,7 @@ import {
   ARCHITECTURE_LAYERS, TOP_PLUGINS, COMPARISON_DATA, CATEGORY_GROUPS,
   ADE_COMPATIBILITY, ULTIMATE_BLUEPRINT_STEPS, PROXY_ENDPOINTS,
   FILE_INVENTORY, STANDING_OUT_CAPABILITIES,
+  CROSS_FIELD_CONNECTIONS, CROSS_FIELD_DIMENSIONS,
   type ArchLayer, type ArchComponent, type PluginEntry, type CompareItem,
   type ADECompatEntry, type FileEntry
 } from '@/lib/architecture-data'
@@ -2083,6 +2085,139 @@ function DashboardSection({ onNavigate }: { onNavigate: (section: string) => voi
           </div>
           <div className="mt-4 p-3 rounded-lg bg-muted/50 text-xs text-muted-foreground text-center">
             It&apos;s a 10-10 tie across 20 dimensions — <strong>Full wins on features</strong>, <strong>Slim wins on efficiency</strong>. See A/B Compare tab for details.
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Elephant Memory — Cross-Field Connections */}
+      <Card className="relative overflow-hidden">
+        {/* Decorative diagonal gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-violet-500/5 pointer-events-none" />
+        <CardHeader className="relative">
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Cpu className="w-5 h-5 text-emerald-500" />
+              Elephant Memory
+            </CardTitle>
+            <Badge variant="outline" className="text-[10px] border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300">
+              Cross-Field Connections
+            </Badge>
+          </div>
+          <CardDescription className="text-sm">
+            4 proxy stacks analyzed across 4 disciplines — knowledge synthesis, interdisciplinary bridging, and pattern transfer
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="relative">
+          {/* Dimension pills */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {CROSS_FIELD_DIMENSIONS.map((dim) => {
+              const DimIconMap: Record<string, React.ElementType> = {
+                TrendingUp, Users, Globe, BookOpen,
+              }
+              const DimIcon = DimIconMap[dim.icon]
+              return (
+                <div
+                  key={dim.id}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border"
+                  style={{
+                    borderColor: `${dim.color}40`,
+                    backgroundColor: `${dim.color}10`,
+                    color: dim.color,
+                  }}
+                >
+                  {DimIcon && <DimIcon className="w-3 h-3" />}
+                  {dim.label}
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Cross-field matrix */}
+          <div className="overflow-x-auto -mx-1">
+            <table className="w-full text-xs border-collapse min-w-[540px]">
+              <thead>
+                <tr>
+                  <th className="text-left p-2 font-semibold text-muted-foreground w-24">Proxy</th>
+                  {CROSS_FIELD_DIMENSIONS.map(dim => (
+                    <th key={dim.id} className="text-left p-2 font-semibold" style={{ color: dim.color }}>
+                      {dim.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {CROSS_FIELD_CONNECTIONS.map((entry, idx) => (
+                  <motion.tr
+                    key={entry.id}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.08, duration: 0.3 }}
+                    className="group border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                  >
+                    <td className="p-2">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-2.5 h-2.5 rounded-full shrink-0"
+                          style={{ backgroundColor: entry.proxyColor }}
+                        />
+                        <span className="font-semibold text-gray-900 dark:text-white whitespace-nowrap">{entry.proxy}</span>
+                      </div>
+                    </td>
+                    <td className="p-2">
+                      <span className="font-medium text-emerald-700 dark:text-emerald-300">{entry.economicsShort}</span>
+                    </td>
+                    <td className="p-2">
+                      <span className="font-medium text-violet-700 dark:text-violet-300">{entry.psychologyShort}</span>
+                    </td>
+                    <td className="p-2">
+                      <span className="font-medium text-cyan-700 dark:text-cyan-300">{entry.networkScienceShort}</span>
+                    </td>
+                    <td className="p-2">
+                      <span className="font-medium text-amber-700 dark:text-amber-300">{entry.historyShort}</span>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Expandable detail rows */}
+          <div className="mt-3 space-y-2">
+            {CROSS_FIELD_CONNECTIONS.map((entry) => (
+              <details key={entry.id} className="group/details">
+                <summary className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer text-xs font-medium text-gray-700 dark:text-gray-300 transition-colors list-none">
+                  <ChevronRight className="w-3 h-3 transition-transform group-open/details:rotate-90" style={{ color: entry.proxyColor }} />
+                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.proxyColor }} />
+                  <span style={{ color: entry.proxyColor }}>{entry.proxy}</span>
+                  <span className="text-muted-foreground">— expand cross-field analysis</span>
+                </summary>
+                <div className="ml-5 mt-1 space-y-2 pb-2">
+                  {CROSS_FIELD_DIMENSIONS.map(dim => (
+                    <div key={dim.id} className="flex items-start gap-2 p-2 rounded-lg border" style={{ borderColor: `${dim.color}20`, backgroundColor: `${dim.color}05` }}>
+                      <div className="shrink-0 mt-0.5">
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: dim.color }} />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[11px]" style={{ color: dim.color }}>{dim.label}</p>
+                        <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">{(entry as Record<string, string>)[dim.id]}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            ))}
+          </div>
+
+          {/* Bottom interconnection summary */}
+          <div className="mt-4 p-3 rounded-lg bg-gradient-to-r from-emerald-50 via-violet-50 to-amber-50 dark:from-emerald-900/10 dark:via-violet-900/10 dark:to-amber-900/10 border border-emerald-200 dark:border-emerald-800/30">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+              <p className="text-xs text-muted-foreground text-center sm:text-left">
+                <strong className="text-gray-900 dark:text-white">Cross-field pattern:</strong> Each proxy maps to a distinct archetype across all 4 disciplines — OWL-ORCA is the <span className="text-emerald-600 dark:text-emerald-400 font-medium">arbitrage-BGP-exchange</span> convergence, while others occupy <span className="text-violet-600 dark:text-violet-400 font-medium">translator</span>, <span className="text-purple-600 dark:text-purple-400 font-medium">marketplace</span>, or <span className="text-amber-600 dark:text-amber-400 font-medium">commons</span> archetypes.
+              </p>
+              <Button variant="outline" size="sm" className="text-xs h-7 shrink-0" onClick={() => onNavigate('topics')}>
+                <BookOpen className="w-3 h-3 mr-1" /> Deep Analysis
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
