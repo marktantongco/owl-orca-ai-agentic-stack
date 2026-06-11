@@ -384,3 +384,30 @@ export const CATEGORY_GROUPS = [
     description: 'Container configs, reverse proxy, service management, deployment.',
   },
 ]
+
+// ==================== FILE INVENTORY ====================
+
+export interface FileEntry {
+  id: string
+  name: string
+  type: 'pdf' | 'png' | 'md' | 'json' | 'py' | 'html'
+  category: 'document' | 'image' | 'research' | 'data' | 'script'
+  description: string
+  path: string
+  size: string
+  date: string
+  preview?: string
+}
+
+export const FILE_INVENTORY: FileEntry[] = [
+  { id: 'blueprint-pdf', name: 'AI Agentic Stack Blueprint', type: 'pdf', category: 'document', description: 'Complete 20-page guide covering all 5 implementation phases, schematic diagrams, and creative table matrices.', path: '/files/AI_Agentic_Stack_Blueprint.pdf', size: '655 KB', date: '2025-07', preview: 'The definitive reference for building a free unlimited AI agentic development stack on Ubuntu.' },
+  { id: 'arch-png', name: 'Architecture Diagram', type: 'png', category: 'image', description: 'High-resolution schematic of the 7-layer agentic stack architecture with OWL-ORCA proxy integration.', path: '/files/ai_agentic_architecture.png', size: '256 KB', date: '2025-07' },
+  { id: 'provider-png', name: 'Provider Comparison Matrix', type: 'png', category: 'image', description: 'Visual comparison of free-tier LLM providers: rate limits, context windows, and model availability.', path: '/files/provider_comparison_matrix.png', size: '106 KB', date: '2025-07' },
+  { id: 'wiki-dashboard', name: 'Wiki Dashboard Screenshot', type: 'png', category: 'image', description: 'Screenshot of the interactive web app dashboard view with stats and quick previews.', path: '/files/wiki-dashboard.png', size: '~200 KB', date: '2025-07' },
+  { id: 'wiki-agents', name: 'Wiki Agents View', type: 'png', category: 'image', description: 'Screenshot of the multi-agent orchestration view.', path: '/files/wiki-agents.png', size: '~200 KB', date: '2025-07' },
+  { id: 'wiki-ade', name: 'ADE Tools View', type: 'png', category: 'image', description: 'Screenshot of the ADE compatibility tools display.', path: '/files/wiki-ade-tools.png', size: '~200 KB', date: '2025-07' },
+  { id: 'tools-research', name: 'AI Agentic Tools Research', type: 'md', category: 'research', description: 'Comprehensive research covering Top 20 ADE tools, Top 10 Proxy Stacks, Top 15 OpenCode Plugins, Top 10 Free AI Tools, and Top 10 Agent Orchestration Frameworks.', path: '/files/ai_agentic_tools_research.md', size: '~45 KB', date: '2025-07', preview: '18+ web search queries aggregated into 5 ranked categories with comparison tables, stack recommendations, and market trend analysis.' },
+  { id: 'omo-research', name: 'Oh-My-OpenCode Variants Report', type: 'md', category: 'research', description: 'Deep-dive research on oh-my-opencode vs oh-my-opencode-slim: 20-dimension comparison, agent details, controversies, and community analysis.', path: '/files/oh-my-opencode_research_report.md', size: '~30 KB', date: '2025-07', preview: '14 web searches across GitHub, npm, Reddit, Medium. Full agent breakdowns, token benchmarks, and license analysis.' },
+  { id: 'opencode-enhancements', name: 'OpenCode Enhancement Tools', type: 'md', category: 'research', description: 'Research on plugins, MCP servers, skills ecosystem, and the curated "Above Mediocrity" 3-tier enhancement stack.', path: '/files/opencode_enhancements_research.md', size: '~35 KB', date: '2025-07', preview: '15 enhancement tools across 3 tiers. Plugin development guide, MCP configuration examples, and community recommendations from Reddit, HN, and YouTube.' },
+  { id: 'infographic-research', name: 'Interactive Infographic Research', type: 'md', category: 'research', description: 'Animation library comparison (Framer Motion vs GSAP vs React Spring vs D3 vs Lottie vs React Flow) with code snippets and decision matrix.', path: '/files/interactive_infographic_research.md', size: '~40 KB', date: '2025-07', preview: '6 animation libraries compared across 12 dimensions. Recommended stack: Framer Motion + React Flow. Complete code snippets for SVG path drawing, node glow, and particle flow.' },
+]

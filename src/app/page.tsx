@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import {
   LayoutDashboard, GitCompare, Network, Puzzle, Gift, Layers,
@@ -8,7 +8,7 @@ import {
   ChevronRight, ChevronDown, Zap, Shield, Cpu, Globe,
   Code, Terminal, Monitor, ArrowRight, BookOpen, Sparkles,
   TrendingUp, Users, Activity, Trophy, FolderTree,
-  FileText, FileCode, Settings, Database, Server
+  FileText, FileCode, Settings, Database, Server, Download, Eye, Filter
 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -17,11 +17,17 @@ import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import { toast } from 'sonner'
+import ReactMarkdown from 'react-markdown'
+import { SectionErrorBoundary } from '@/components/ErrorBoundary'
 import {
   ARCHITECTURE_LAYERS, TOP_PLUGINS, COMPARISON_DATA, CATEGORY_GROUPS,
   ADE_COMPATIBILITY, ULTIMATE_BLUEPRINT_STEPS, PROXY_ENDPOINTS,
+  FILE_INVENTORY,
   type ArchLayer, type ArchComponent, type PluginEntry, type CompareItem,
-  type ADECompatEntry
+  type ADECompatEntry, type FileEntry
 } from '@/lib/architecture-data'
 
 // ==================== HELPERS ====================
@@ -62,6 +68,8 @@ const NAV_ITEMS = [
   { id: 'plugins', label: 'Plugins & MCP', icon: Puzzle },
   { id: 'blueprint', label: 'Blueprint', icon: Zap },
   { id: 'categories', label: 'Categories', icon: FolderTree },
+  { id: 'files', label: 'Files', icon: FileText },
+  { id: 'topics', label: 'Proxy Topics', icon: BookOpen },
 ]
 
 // ==================== ANIMATED ARCHITECTURE INFOGRAPHIC ====================
@@ -1366,12 +1374,577 @@ function CategoriesSection() {
 
 // ==================== DASHBOARD SECTION ====================
 
-function DashboardSection() {
+// ==================== FILE BROWSER SECTION ====================
+
+function FileBrowserSection() {
+  const [categoryFilter, setCategoryFilter] = useState<string>('all')
+  const [typeFilter, setTypeFilter] = useState<string>('all')
+  const [search, setSearch] = useState('')
+  const [selectedFile, setSelectedFile] = useState<FileEntry | null>(null)
+  const [mdContent, setMdContent] = useState<string | null>(null)
+  const [mdLoading, setMdLoading] = useState(false)
+
+  const filtered = FILE_INVENTORY.filter(f => {
+    const matchSearch = f.name.toLowerCase().includes(search.toLowerCase()) || f.description.toLowerCase().includes(search.toLowerCase())
+    const matchCategory = categoryFilter === 'all' || f.category === categoryFilter
+    const matchType = typeFilter === 'all' || f.type === typeFilter
+    return matchSearch && matchCategory && matchType
+  })
+
+  const handleFileClick = useCallback((file: FileEntry) => {
+    setSelectedFile(file)
+    if (file.type === 'md') {
+      setMdLoading(true)
+      setMdContent(null)
+      fetch(file.path)
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch')
+          return res.text()
+        })
+        .then(text => {
+          setMdContent(text)
+          setMdLoading(false)
+        })
+        .catch(() => {
+          setMdContent('Unable to load markdown content. The file may not exist in the public directory yet.')
+          setMdLoading(false)
+        })
+    }
+  }, [])
+
+  const fileTypeIcon = (type: string) => {
+    switch (type) {
+      case 'pdf': return '📄'
+      case 'png': return '🖼️'
+      case 'md': return '📝'
+      case 'json': return '📊'
+      case 'py': return '🐍'
+      case 'html': return '🌐'
+      default: return '📎'
+    }
+  }
+
+  const categoryColor: Record<string, string> = {
+    document: '#f59e0b',
+    image: '#8b5cf6',
+    research: '#10b981',
+    data: '#3b82f6',
+    script: '#ef4444',
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <FileText className="w-6 h-6 text-amber-500" />
+          File Browser
+        </h2>
+        <p className="text-muted-foreground mt-1">
+          Browse and preview the complete inventory of documents, images, research reports, and data files in the AI Agentic Stack knowledge base.
+        </p>
+      </div>
+
+      {/* Filters */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2 flex-wrap">
+          <Filter className="w-4 h-4 text-muted-foreground" />
+          <span className="text-sm text-muted-foreground">Category:</span>
+          {['all', 'document', 'image', 'research', 'data', 'script'].map(cat => (
+            <button
+              key={cat}
+              onClick={() => setCategoryFilter(cat)}
+              className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                categoryFilter === cat
+                  ? 'bg-amber-500 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400'
+              }`}
+            >
+              {cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-sm text-muted-foreground">Type:</span>
+          {['all', 'pdf', 'png', 'md', 'json'].map(t => (
+            <button
+              key={t}
+              onClick={() => setTypeFilter(t)}
+              className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                typeFilter === t
+                  ? 'bg-violet-500 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400'
+              }`}
+            >
+              {t === 'all' ? 'All' : t.toUpperCase()}
+            </button>
+          ))}
+        </div>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Search files by name or description..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+      </div>
+
+      {/* File Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filtered.map((file, idx) => (
+          <motion.div
+            key={file.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.05 }}
+            whileHover={{ scale: 1.02, y: -2 }}
+            className="cursor-pointer"
+            onClick={() => handleFileClick(file)}
+          >
+            <Card className="h-full border-l-4 hover:shadow-lg transition-shadow" style={{ borderLeftColor: categoryColor[file.category] || '#6b7280' }}>
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{fileTypeIcon(file.type)}</span>
+                    <CardTitle className="text-sm line-clamp-1">{file.name}</CardTitle>
+                  </div>
+                  <Badge variant="outline" className="text-[10px]">{file.type.toUpperCase()}</Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <p className="text-xs text-muted-foreground line-clamp-2 mb-2">{file.description}</p>
+                {file.preview && (
+                  <p className="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-2 italic mb-2">{file.preview}</p>
+                )}
+                <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                  <span>{file.size}</span>
+                  <span>{file.date}</span>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {filtered.length === 0 && (
+        <div className="text-center py-12 text-muted-foreground">
+          <FileText className="w-12 h-12 mx-auto mb-3 opacity-30" />
+          <p className="text-sm">No files match your filters.</p>
+        </div>
+      )}
+
+      {/* File Preview Dialog */}
+      <Dialog open={!!selectedFile} onOpenChange={(open) => { if (!open) setSelectedFile(null) }}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {selectedFile && <span className="text-xl">{fileTypeIcon(selectedFile.type)}</span>}
+              {selectedFile?.name}
+            </DialogTitle>
+            <DialogDescription>{selectedFile?.description}</DialogDescription>
+          </DialogHeader>
+          {selectedFile && (
+            <div className="space-y-4">
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="outline">{selectedFile.type.toUpperCase()}</Badge>
+                <Badge variant="secondary">{selectedFile.category}</Badge>
+                <Badge variant="secondary">{selectedFile.size}</Badge>
+                <Badge variant="secondary">{selectedFile.date}</Badge>
+              </div>
+
+              {selectedFile.type === 'png' && (
+                <div className="rounded-lg border overflow-hidden bg-muted/30 flex items-center justify-center p-4">
+                  <img
+                    src={selectedFile.path}
+                    alt={selectedFile.name}
+                    className="max-w-full max-h-96 object-contain rounded"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                  />
+                </div>
+              )}
+
+              {selectedFile.type === 'pdf' && (
+                <div className="space-y-3">
+                  <div className="p-6 rounded-lg border bg-muted/20 text-center">
+                    <span className="text-4xl">📄</span>
+                    <p className="text-sm text-muted-foreground mt-2">PDF preview requires the file in the public directory.</p>
+                  </div>
+                  <Button variant="outline" size="sm" asChild className="w-full">
+                    <a href={selectedFile.path} target="_blank" rel="noopener noreferrer">
+                      <Download className="w-4 h-4 mr-2" />
+                      Open / Download PDF
+                    </a>
+                  </Button>
+                </div>
+              )}
+
+              {selectedFile.type === 'md' && (
+                <div className="rounded-lg border p-4 bg-muted/10 max-h-96 overflow-y-auto">
+                  {mdLoading ? (
+                    <div className="flex items-center justify-center py-8">
+                      <div className="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
+                      <span className="ml-2 text-sm text-muted-foreground">Loading markdown...</span>
+                    </div>
+                  ) : mdContent ? (
+                    <div className="prose prose-sm dark:prose-invert max-w-none">
+                      <ReactMarkdown>{mdContent}</ReactMarkdown>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground text-center py-4">Click to load preview</p>
+                  )}
+                </div>
+              )}
+
+              {selectedFile.type === 'json' && (
+                <pre className="p-4 rounded-lg border bg-gray-50 dark:bg-gray-900 text-xs font-mono overflow-auto max-h-96">
+                  {'{ "message": "JSON preview — file not yet available in public directory" }'}
+                </pre>
+              )}
+
+              <div className="flex gap-2 pt-2">
+                <Button variant="outline" size="sm" asChild>
+                  <a href={selectedFile.path} target="_blank" rel="noopener noreferrer" download>
+                    <Download className="w-4 h-4 mr-2" />
+                    Download
+                  </a>
+                </Button>
+                <Button variant="outline" size="sm" asChild>
+                  <a href={selectedFile.path} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Open in New Tab
+                  </a>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    navigator.clipboard.writeText(selectedFile.path)
+                    toast.success('Path copied to clipboard!')
+                  }}
+                >
+                  <Copy className="w-4 h-4 mr-2" />
+                  Copy Path
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
+
+// ==================== PROXY COMPARISON TOPICS SECTION ====================
+
+const PROXY_COMPARISONS = [
+  {
+    id: 'owl-orca',
+    name: 'OWL-ORCA v7.1.0',
+    approach: 'Local Install + Protocol Translation',
+    tagline: 'The Kitchen Sink — install once, race forever',
+    color: '#10b981',
+    architecture: '3 local endpoints (Orca Router :60001, Kiro Gateway :8333, Forward Proxy :60000). Stream racing across GitHub Copilot Free + Antigravity Free. Protocol translation on-the-fly. Circuit breaking built-in.',
+    freeTokens: '~2B+/mo (pooled Copilot + Antigravity + AWS Builder ID)',
+    setupComplexity: 'One command (install.sh)',
+    openSource: true,
+    strengths: ['Zero config for OpenCode/Kilo CLI (auto-injection)', '3 distinct proxy roles in one install', 'Premium models free via AWS Builder ID', 'Circuit breaking prevents cascading failures', 'Protocol translation (Copilot/Antigravity → OpenAI format)', 'Works with ANY ADE via custom base URL'],
+    weaknesses: ['Ubuntu-only (Linux dependency)', 'Newer project — less battle-tested', 'Requires GitHub Copilot Free + Antigravity accounts', 'Forward proxy can be a security concern if misconfigured'],
+    economics: 'Race theory: like high-frequency trading, speed wins. OWL-ORCA races multiple free tiers simultaneously and returns the fastest response. This is "arbitrage of free tiers" — the economic value comes from the delta between what you pay ($0) and what you receive (premium model outputs).',
+    psychology: 'Reduces choice overload. Instead of picking one provider, you get "auto-racer" that picks for you. Paradox of choice (Schwartz, 2004): more options = more anxiety. OWL-ORCA eliminates the decision by racing all options.',
+    networkScience: 'Like BGP (Border Gateway Protocol) for AI models. Circuit breaking = failover routing. Stream racing = anycast. The Forward Proxy = a VPN tunnel. This is essentially internet routing applied to LLM API calls.',
+    history: 'Reminiscent of early telephone exchanges (1880s): human operators manually connected calls. OWL-ORCA automates the "connection" between ADEs and providers, just as automatic exchanges replaced human operators.',
+  },
+  {
+    id: 'litellm',
+    name: 'LiteLLM',
+    approach: 'Unified OpenAI-Compatible Proxy',
+    tagline: 'The Universal Translator — 100+ providers, one API',
+    color: '#3b82f6',
+    architecture: 'Python proxy server. Translates OpenAI-format requests to 100+ provider APIs. Load balancing, fallbacks, budget controls, key management. Self-hosted or cloud.',
+    freeTokens: 'Depends on your own provider keys (0 without BYOK)',
+    setupComplexity: 'pip install litellm[proxy] + config YAML',
+    openSource: true,
+    strengths: ['Largest provider support (100+ LLMs)', 'Mature project with enterprise features', 'Budget controls and spend tracking', 'Load balancing and fallback chains', 'Key management and rotation', 'Both self-hosted and cloud options'],
+    weaknesses: ['No free-tier aggregation — BYOK only', 'Python dependency (heavier than Go/Rust alternatives)', 'No stream racing (sequential fallback, not parallel)', 'Configuration complexity for 100+ providers', 'No protocol translation for Copilot/Antigravity'],
+    economics: 'Translation theory: LiteLLM is a market maker, not a provider. Like a currency exchange, it doesn\'t create value — it facilitates access. The economic value is in reducing integration cost (one API vs 100), but you still pay per-token to providers.',
+    psychology: 'Reduced cognitive load via standardization. One API format for 100 providers = one mental model. However, the paradox: 100 options creates choice overload for model selection. LiteLLM solves the "how to connect" but not "which model to use."',
+    networkScience: 'Like a CDN (Content Delivery Network) for LLM APIs. LiteLLM is the edge node that caches, routes, and load-balances. Fallback chains = redundant paths. But unlike OWL-ORCA, there\'s no "racing" — it\'s sequential failover.',
+    history: 'Like the Rosetta Stone (196 BC): a universal translation layer. LiteLLM does for LLM APIs what the Rosetta Stone did for languages — makes every provider understandable through one common format.',
+  },
+  {
+    id: 'openrouter',
+    name: 'OpenRouter',
+    approach: 'Cloud API Aggregator',
+    tagline: 'The Marketplace — 300+ models, one endpoint',
+    color: '#8b5cf6',
+    architecture: 'Cloud-hosted API gateway. Single endpoint routes to 300+ models. Free models available. Automatic provider failover. Streaming support. Usage tracking.',
+    freeTokens: 'Free tier models available (~30+ free models)',
+    setupComplexity: 'API key + base URL change',
+    openSource: false,
+    strengths: ['Largest model selection (300+ models)', 'Free models available at zero cost', 'Zero infrastructure — fully cloud-hosted', 'Simple setup (just change base URL)', 'Built-in OpenCode support', 'Usage statistics and cost tracking'],
+    weaknesses: ['Not self-hosted — dependency on OpenRouter cloud', 'Rate limits on free models', 'No local proxy for Copilot/Antigravity', 'Privacy concerns (all traffic routes through OpenRouter)', 'No stream racing across providers'],
+    economics: 'Marketplace theory: OpenRouter is like Amazon for LLMs. It aggregates supply (providers) and demand (developers), taking a small margin. Free models are the "loss leaders" that attract users to paid models. Classic two-sided market (Rochet & Tirole, 2003).',
+    psychology: 'The IKEA effect in reverse: less setup effort = less perceived value. OpenRouter is "too easy" — developers may not appreciate the complexity it abstracts. However, the 300+ model count creates a "paradox of abundance" where having more choices can lead to decision paralysis.',
+    networkScience: 'Like DNS (Domain Name System) for AI models. You give it a model name, it resolves to the correct provider. But unlike DNS, there\'s a middleman tax (latency, cost, dependency).',
+    history: 'Like the early telegraph networks (1840s): centralized relay stations. OpenRouter is the "central station" that all messages pass through. This was efficient but created a single point of failure — just as the telegraph monopolies did.',
+  },
+  {
+    id: 'freellmapi',
+    name: 'FreeLLMAPI',
+    approach: 'Free-Tier Aggregation',
+    tagline: 'The Free Pool — 1.7B tokens/month from 16 providers',
+    color: '#f59e0b',
+    architecture: 'Python proxy that aggregates 16 free-tier LLM providers behind one /v1 endpoint. Automatic failover. OpenAI-compatible. Pure free-tier pooling.',
+    freeTokens: '~1.7 billion tokens/month',
+    setupComplexity: 'pip install + configure free-tier keys',
+    openSource: true,
+    strengths: ['Maximum free tokens (~1.7B/mo)', 'Pure free-tier aggregation — no paid providers needed', 'OpenAI-compatible API', 'Automatic failover between providers', 'Lightweight Python proxy', 'Community-maintained free provider list'],
+    weaknesses: ['No premium models (free-tier only)', 'Rate limits vary per provider', 'Quality varies (free models = lower capability)', 'No stream racing (sequential, not parallel)', 'Maintenance burden: free providers change frequently', 'No Copilot/Antigravity/AWS integration'],
+    economics: 'Commons theory: FreeLLMAPI is a digital commons (Ostrom, 1990). Multiple free providers are pooled like shared grazing land. The tragedy: when one provider becomes popular, its free tier gets exhausted faster. FreeLLMAPI manages this through failover, but the underlying scarcity remains.',
+    psychology: 'Scarcity mindset vs abundance mindset. FreeLLMAPI creates an illusion of abundance (1.7B tokens!) but the reality is scarcity (rate limits, model quality). The psychological tension between "free" and "limited" creates anxiety about running out.',
+    networkScience: 'Like mesh networking: multiple redundant paths, no central authority. If one provider fails, traffic routes to another. But mesh networks have higher latency than star topologies (like OWL-ORCA\'s centralized proxy).',
+    history: 'Like the early internet (ARPANET, 1969): built on the principle of redundancy and free access. ARPANET connected universities for free, just as FreeLLMAPI connects free-tier providers. The lesson: free infrastructure eventually gets commercialized.',
+  },
+]
+
+function ProxyComparisonTopicsSection() {
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <BookOpen className="w-6 h-6 text-amber-500" />
+          Proxy Stacks — The Deep Comparison
+        </h2>
+        <p className="text-muted-foreground mt-1">
+          How OWL-ORCA stands out against LiteLLM, OpenRouter, FreeLLMAPI, and the rest. Analyzed through economics, psychology, and network science.
+        </p>
+      </div>
+
+      {/* 2x2 Comparison Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {PROXY_COMPARISONS.map((proxy, idx) => (
+          <motion.div
+            key={proxy.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.1 }}
+          >
+            <Card
+              className="border-2 cursor-pointer hover:shadow-lg transition-all h-full"
+              style={{ borderColor: expandedId === proxy.id ? proxy.color : `${proxy.color}40` }}
+              onClick={() => setExpandedId(expandedId === proxy.id ? null : proxy.id)}
+            >
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <motion.div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: proxy.color }}
+                      animate={{ scale: expandedId === proxy.id ? [1, 1.3, 1] : 1 }}
+                      transition={{ duration: 0.5 }}
+                    />
+                    <div>
+                      <CardTitle className="text-base" style={{ color: proxy.color }}>{proxy.name}</CardTitle>
+                      <CardDescription className="text-xs">{proxy.tagline}</CardDescription>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {proxy.openSource && (
+                      <Badge variant="outline" className="text-[10px] border-emerald-400 text-emerald-600 dark:text-emerald-400">OSS</Badge>
+                    )}
+                    <motion.div animate={{ rotate: expandedId === proxy.id ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                      <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                    </motion.div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="space-y-1.5 mb-3">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-muted-foreground">Approach</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.approach}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-muted-foreground">Free Tokens</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.freeTokens}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-muted-foreground">Setup</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.setupComplexity}</span>
+                  </div>
+                </div>
+
+                <AnimatePresence>
+                  {expandedId === proxy.id && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      className="overflow-hidden"
+                    >
+                      <div className="mb-3 p-3 rounded-lg border" style={{ borderColor: `${proxy.color}30`, backgroundColor: `${proxy.color}05` }}>
+                        <p className="text-xs font-semibold mb-1" style={{ color: proxy.color }}>Architecture</p>
+                        <p className="text-xs text-muted-foreground">{proxy.architecture}</p>
+                      </div>
+
+                      <div className="mb-3">
+                        <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-1.5">Strengths</p>
+                        <div className="flex flex-wrap gap-1">
+                          {proxy.strengths.map(s => (
+                            <Badge key={s} variant="outline" className="text-[10px] border-emerald-300 text-emerald-700 dark:border-emerald-700 dark:text-emerald-400">✓ {s}</Badge>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mb-4">
+                        <p className="text-xs font-semibold text-red-600 dark:text-red-400 mb-1.5">Weaknesses</p>
+                        <div className="flex flex-wrap gap-1">
+                          {proxy.weaknesses.map(w => (
+                            <Badge key={w} variant="outline" className="text-[10px] border-red-300 text-red-700 dark:border-red-700 dark:text-red-400">✗ {w}</Badge>
+                          ))}
+                        </div>
+                      </div>
+
+                      <Accordion type="multiple" className="w-full">
+                        <AccordionItem value="economics">
+                          <AccordionTrigger className="text-xs py-2">
+                            <span className="flex items-center gap-2">💰 Economics Lens</span>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <p className="text-xs text-muted-foreground leading-relaxed">{proxy.economics}</p>
+                          </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="psychology">
+                          <AccordionTrigger className="text-xs py-2">
+                            <span className="flex items-center gap-2">🧠 Psychology Lens</span>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <p className="text-xs text-muted-foreground leading-relaxed">{proxy.psychology}</p>
+                          </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="network">
+                          <AccordionTrigger className="text-xs py-2">
+                            <span className="flex items-center gap-2">🌐 Network Science Lens</span>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <p className="text-xs text-muted-foreground leading-relaxed">{proxy.networkScience}</p>
+                          </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="history">
+                          <AccordionTrigger className="text-xs py-2">
+                            <span className="flex items-center gap-2">📜 Historical Parallels</span>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <p className="text-xs text-muted-foreground leading-relaxed">{proxy.history}</p>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Standing Out Summary */}
+      <Card className="border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/10 dark:to-teal-900/10">
+        <CardHeader>
+          <CardTitle className="text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
+            <Sparkles className="w-5 h-5" />
+            Standing Out — Why OWL-ORCA Wins the Combination Game
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            <p className="text-sm text-emerald-700 dark:text-emerald-400">
+              No single proxy wins every category. But <strong className="text-emerald-800 dark:text-emerald-300">OWL-ORCA</strong> is the ONLY proxy that combines all five critical capabilities in one install:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {[
+                { label: 'Stream Racing', desc: 'Parallel requests across providers — fastest wins', icon: '⚡' },
+                { label: 'Protocol Translation', desc: 'Copilot/Antigravity → OpenAI format on-the-fly', icon: '🔄' },
+                { label: 'Premium Models Free', desc: 'AWS Builder ID gives Claude Sonnet 4.5 at $0', icon: '🎁' },
+                { label: 'Zero-Config for OpenCode', desc: 'Auto-injected by install.sh — no manual setup', icon: '🚀' },
+                { label: 'Circuit Breaking', desc: 'Prevents cascading failures across providers', icon: '🛡️' },
+              ].map(item => (
+                <div key={item.label} className="p-2.5 rounded-lg bg-emerald-100/50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">{item.icon}</span>
+                    <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">{item.label}</span>
+                  </div>
+                  <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
+              {[
+                { name: 'LiteLLM', win: 'Provider Count (100+)' },
+                { name: 'OpenRouter', win: 'Convenience (cloud)' },
+                { name: 'FreeLLMAPI', win: 'Free Volume (1.7B/mo)' },
+                { name: 'OWL-ORCA', win: 'Free + Premium + Racing + Zero-Config' },
+              ].map(item => (
+                <div key={item.name} className={`p-2 rounded-lg text-center border ${item.name === 'OWL-ORCA' ? 'border-emerald-400 bg-emerald-200/50 dark:bg-emerald-800/30' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900'}`}>
+                  <p className={`text-xs font-bold ${item.name === 'OWL-ORCA' ? 'text-emerald-800 dark:text-emerald-300' : 'text-gray-600 dark:text-gray-400'}`}>{item.name}</p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">Wins: {item.win}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
+// ==================== DASHBOARD SECTION ====================
+
+function DashboardSection({ onNavigate }: { onNavigate: (section: string) => void }) {
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h2>
         <p className="text-muted-foreground mt-1">AI Agentic Development Stack — Overview</p>
+      </div>
+
+      {/* Quick Access - Key Images */}
+      <div>
+        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+          <Eye className="w-3.5 h-3.5" /> Quick Access
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {[
+            { title: 'Architecture Diagram', desc: '7-layer stack with OWL-ORCA', gradient: 'from-emerald-400 to-teal-500', emoji: '🖼️' },
+            { title: 'Provider Matrix', desc: 'Free-tier LLM comparison', gradient: 'from-violet-400 to-purple-500', emoji: '📊' },
+            { title: 'Wiki Dashboard', desc: 'Interactive app preview', gradient: 'from-amber-400 to-orange-500', emoji: '🖥️' },
+          ].map((item, idx) => (
+            <motion.button
+              key={item.title}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              whileHover={{ scale: 1.03, y: -2 }}
+              onClick={() => onNavigate('files')}
+              className="relative overflow-hidden rounded-xl border-2 border-transparent hover:border-amber-400 dark:hover:border-amber-600 transition-colors text-left"
+            >
+              <div className={`bg-gradient-to-br ${item.gradient} p-4 text-white relative`}>
+                <motion.div
+                  className="absolute inset-0 bg-black/10"
+                  animate={{ opacity: [0, 0.15, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: idx * 0.3 }}
+                />
+                <span className="text-2xl">{item.emoji}</span>
+                <p className="font-bold text-sm mt-2">{item.title}</p>
+                <p className="text-xs opacity-80">{item.desc}</p>
+              </div>
+            </motion.button>
+          ))}
+        </div>
       </div>
 
       {/* Stats Grid */}
@@ -1482,13 +2055,15 @@ export default function HomePage() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   const sections: Record<string, React.ReactNode> = {
-    dashboard: <DashboardSection />,
-    compare: <ABCompareSection />,
-    architecture: <ArchitectureInfographicSection />,
-    compatibility: <ADECompatibilitySection />,
-    plugins: <PluginsSection />,
-    blueprint: <UltimateBlueprintSection />,
-    categories: <CategoriesSection />,
+    dashboard: <SectionErrorBoundary sectionName="Dashboard"><DashboardSection onNavigate={setActiveSection} /></SectionErrorBoundary>,
+    compare: <SectionErrorBoundary sectionName="A/B Compare"><ABCompareSection /></SectionErrorBoundary>,
+    architecture: <SectionErrorBoundary sectionName="Architecture"><ArchitectureInfographicSection /></SectionErrorBoundary>,
+    compatibility: <SectionErrorBoundary sectionName="ADE Compat"><ADECompatibilitySection /></SectionErrorBoundary>,
+    plugins: <SectionErrorBoundary sectionName="Plugins"><PluginsSection /></SectionErrorBoundary>,
+    blueprint: <SectionErrorBoundary sectionName="Blueprint"><UltimateBlueprintSection /></SectionErrorBoundary>,
+    categories: <SectionErrorBoundary sectionName="Categories"><CategoriesSection /></SectionErrorBoundary>,
+    files: <SectionErrorBoundary sectionName="Files"><FileBrowserSection /></SectionErrorBoundary>,
+    topics: <SectionErrorBoundary sectionName="Proxy Topics"><ProxyComparisonTopicsSection /></SectionErrorBoundary>,
   }
 
   return (
