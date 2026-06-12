@@ -1,0 +1,2002 @@
+     1→'use client'
+     2→
+     3→import { useState, useRef, useCallback, type ElementType } from 'react'
+     4→import { motion, AnimatePresence, useInView, type Variants } from 'framer-motion'
+     5→import {
+     6→  LayoutDashboard, GitCompare, Network, Puzzle, Gift, Layers,
+     7→  Menu, X, Search, Star, Copy, Check, ExternalLink,
+     8→  ChevronRight, ChevronDown, Zap, Shield, Cpu, Globe,
+     9→  Code, Terminal, ArrowRight, BookOpen, Sparkles,
+    10→  TrendingUp, Activity, Trophy, FolderTree,
+    11→  FileText, FileCode, Settings, Database, Server, Download, Eye, Filter,
+    12→  Users, Info
+    13→} from 'lucide-react'
+    14→import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+    15→import { Badge } from '@/components/ui/badge'
+    16→import { Button } from '@/components/ui/button'
+    17→import { Input } from '@/components/ui/input'
+    18→import { Progress } from '@/components/ui/progress'
+    19→import { Separator } from '@/components/ui/separator'
+    20→import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+    21→import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+    22→import { toast } from 'sonner'
+    23→import ReactMarkdown from 'react-markdown'
+    24→import { SectionErrorBoundary } from '@/components/ErrorBoundary'
+    25→import {
+    26→  ARCHITECTURE_LAYERS, TOP_PLUGINS, COMPARISON_DATA, CATEGORY_GROUPS,
+    27→  ADE_COMPATIBILITY, ULTIMATE_BLUEPRINT_STEPS, PROXY_ENDPOINTS,
+    28→  FILE_INVENTORY, STANDING_OUT_CAPABILITIES,
+    29→  CROSS_FIELD_CONNECTIONS, CROSS_FIELD_DIMENSIONS,
+    30→  type ArchLayer, type ArchComponent, type PluginEntry, type CompareItem,
+    31→  type ADECompatEntry, type FileEntry
+    32→} from '@/lib/architecture-data'
+    33→
+    34→// ==================== ANIMATION VARIANTS ====================
+    35→
+    36→const customEase = [0.25, 0.46, 0.45, 0.94] as const
+    37→
+    38→const staggerContainer: Variants = {
+    39→  hidden: { opacity: 0 },
+    40→  visible: {
+    41→    opacity: 1,
+    42→    transition: { staggerChildren: 0.08 },
+    43→  },
+    44→}
+    45→
+    46→const fadeUpItem: Variants = {
+    47→  hidden: { opacity: 0, y: 20 },
+    48→  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } },
+    49→}
+    50→
+    51→const scaleIn: Variants = {
+    52→  hidden: { opacity: 0, scale: 0.9 },
+    53→  visible: { opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 300, damping: 25 } },
+    54→}
+    55→
+    56→const slideFromLeft: Variants = {
+    57→  hidden: { opacity: 0, x: -30 },
+    58→  visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } },
+    59→}
+    60→
+    61→const fadeIn: Variants = {
+    62→  hidden: { opacity: 0 },
+    63→  visible: { opacity: 1, transition: { duration: 0.3 } },
+    64→}
+    65→
+    66→// ==================== SECURITY HELPERS ====================
+    67→
+    68→/** Masks sensitive key values for display: 'orca-racer' becomes 'or•••••cer' */
+    69→function maskKey(key: string): string {
+    70→  if (key === '(internal)') return key
+    71→  if (key.length <= 4) return key.charAt(0) + '••' + key.charAt(key.length - 1)
+    72→  return key.slice(0, 2) + '•'.repeat(key.length - 4) + key.slice(-2)
+    73→}
+    74→
+    75→/** Safely checks clipboard API availability */
+    76→function isClipboardAvailable(): boolean {
+    77→  return typeof navigator !== 'undefined' && typeof navigator.clipboard !== 'undefined' && typeof navigator.clipboard.writeText === 'function'
+    78→}
+    79→
+    80→/** Sanitize search input — strip potential XSS vectors */
+    81→function sanitizeSearch(input: string): string {
+    82→  return input.replace(/[<>"'&]/g, '').slice(0, 200)
+    83→}
+    84→
+    85→// ==================== HELPERS ====================
+    86→
+    87→function CopyButton({ text, label }: { text: string; label?: string }) {
+    88→  const [copied, setCopied] = useState(false)
+    89→  const handleCopy = () => {
+    90→    if (!isClipboardAvailable()) {
+    91→      toast.error('Clipboard not available in this environment')
+    92→      return
+    93→    }
+    94→    navigator.clipboard.writeText(text).then(() => {
+    95→      setCopied(true)
+    96→      toast.success(label ? `${label} copied!` : 'Copied to clipboard!')
+    97→      setTimeout(() => setCopied(false), 2000)
+    98→    }).catch(() => {
+    99→      toast.error('Failed to copy')
+   100→    })
+   101→  }
+   102→  return (
+   103→    <motion.button
+   104→      onClick={handleCopy}
+   105→      whileHover={{ scale: 1.05 }}
+   106→      whileTap={{ scale: 0.97 }}
+   107→      aria-label={copied ? 'Copied' : `Copy: ${text.slice(0, 30)}...`}
+   108→      className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs rounded-lg bg-amber-100 text-amber-800 hover:bg-amber-200 transition-colors dark:bg-amber-900/30 dark:text-amber-400 dark:hover:bg-amber-900/50 min-h-[44px] focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 cursor-pointer"
+   109→    >
+   110→      {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+   111→      {copied ? 'Copied!' : 'Copy'}
+   112→    </motion.button>
+   113→  )
+   114→}
+   115→
+   116→/** Key reveal button for masked sensitive values */
+   117→function KeyReveal({ value }: { value: string }) {
+   118→  const [revealed, setRevealed] = useState(false)
+   119→  if (value === '(internal)') return <span className="text-gray-700 dark:text-gray-300">{value}</span>
+   120→  return (
+   121→    <motion.button
+   122→      onClick={() => setRevealed(!revealed)}
+   123→      whileTap={{ scale: 0.97 }}
+   124→      className="font-mono cursor-pointer hover:underline focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded"
+   125→      aria-label={revealed ? 'Hide API key' : 'Reveal API key'}
+   126→      title={revealed ? 'Click to hide' : 'Click to reveal'}
+   127→    >
+   128→      <span className={revealed ? 'text-gray-700 dark:text-gray-300' : 'text-gray-500 dark:text-gray-400'}>
+   129→        {revealed ? value : maskKey(value)}
+   130→      </span>
+   131→    </motion.button>
+   132→  )
+   133→}
+   134→
+   135→const NAV_ITEMS = [
+   136→  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+   137→  { id: 'compare', label: 'A/B Compare', icon: GitCompare },
+   138→  { id: 'architecture', label: 'Architecture', icon: Network },
+   139→  { id: 'compatibility', label: 'ADE Compat', icon: Shield },
+   140→  { id: 'plugins', label: 'Plugins & MCP', icon: Puzzle },
+   141→  { id: 'blueprint', label: 'Blueprint', icon: Zap },
+   142→  { id: 'categories', label: 'Categories', icon: FolderTree },
+   143→  { id: 'files', label: 'Files', icon: FileText },
+   144→  { id: 'topics', label: 'Proxy Topics', icon: BookOpen },
+   145→] as const
+   146→
+   147→const VALID_SECTIONS = NAV_ITEMS.map(n => n.id)
+   148→
+   149→// ==================== SECTION HEADER COMPONENT ====================
+   150→
+   151→function SectionHeader({ icon: Icon, title, description }: { icon: ElementType; title: string; description: string }) {
+   152→  const ref = useRef(null)
+   153→  const isInView = useInView(ref, { once: true, margin: '-80px' })
+   154→  return (
+   155→    <div ref={ref}>
+   156→      <motion.div
+   157→        initial={{ opacity: 0, y: 20 }}
+   158→        animate={isInView ? { opacity: 1, y: 0 } : {}}
+   159→        transition={{ duration: 0.5, ease: customEase }}
+   160→      >
+   161→        <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white flex items-center gap-2">
+   162→          <Icon className="w-6 h-6 text-amber-500" />
+   163→          {title}
+   164→        </h2>
+   165→        <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400 mt-1">
+   166→          {description}
+   167→        </p>
+   168→      </motion.div>
+   169→    </div>
+   170→  )
+   171→}
+   172→
+   173→// ==================== ANIMATED ARCHITECTURE INFOGRAPHIC ====================
+   174→
+   175→function LayerCard({ layer, index }: { layer: ArchLayer; index: number }) {
+   176→  const ref = useRef(null)
+   177→  const isInView = useInView(ref, { once: true, margin: '-80px' })
+   178→  const [isExpanded, setIsExpanded] = useState(false)
+   179→
+   180→  return (
+   181→    <motion.div
+   182→      ref={ref}
+   183→      initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60, scale: 0.95 }}
+   184→      animate={isInView ? { opacity: 1, x: 0, scale: 1 } : {}}
+   185→      transition={{ duration: 0.6, delay: index * 0.1, ease: customEase }}
+   186→      layout
+   187→      className="relative"
+   188→    >
+   189→      {/* Pulsing glow effect */}
+   190→      <motion.div
+   191→        className="absolute -inset-1 rounded-2xl opacity-0"
+   192→        animate={isInView ? { opacity: [0, 0.3, 0] } : {}}
+   193→        transition={{ duration: 2, delay: index * 0.1 + 0.5, repeat: Infinity, repeatDelay: 3 }}
+   194→        style={{ background: `linear-gradient(135deg, ${layer.color}20, transparent, ${layer.color}10)`, borderRadius: '1rem' }}
+   195→      />
+   196→
+   197→      <Card
+   198→        className="relative overflow-hidden cursor-pointer hover:shadow-md transition-shadow rounded-xl transform-gpu"
+   199→        onClick={() => setIsExpanded(!isExpanded)}
+   200→        role="button"
+   201→        tabIndex={0}
+   202→        aria-expanded={isExpanded}
+   203→        aria-label={`${layer.label} — click to ${isExpanded ? 'collapse' : 'expand'}`}
+   204→        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setIsExpanded(!isExpanded) } }}
+   205→      >
+   206→        {/* Left color accent */}
+   207→        <div className="absolute left-0 top-0 bottom-0 w-1.5" style={{ backgroundColor: layer.color }} />
+   208→
+   209→        <CardHeader className="pb-2 pl-6">
+   210→          <div className="flex items-center justify-between">
+   211→            <div className="flex items-center gap-3">
+   212→              <motion.span
+   213→                className="text-2xl"
+   214→                animate={isInView ? { scale: [0, 1.2, 1], rotate: [0, 10, 0] } : {}}
+   215→                transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
+   216→              >
+   217→                {layer.icon}
+   218→              </motion.span>
+   219→              <div>
+   220→                <CardTitle className="text-base font-bold tracking-tight" style={{ color: layer.color }}>{layer.label}</CardTitle>
+   221→                <CardDescription className="text-xs leading-relaxed mt-0.5">{layer.description}</CardDescription>
+   222→              </div>
+   223→            </div>
+   224→            <div className="flex items-center gap-2">
+   225→              <Badge variant="outline" className="text-xs" style={{ borderColor: layer.color, color: layer.color }}>
+   226→                {layer.components.length} components
+   227→              </Badge>
+   228→              <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
+   229→                <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+   230→              </motion.div>
+   231→            </div>
+   232→          </div>
+   233→        </CardHeader>
+   234→
+   235→        <AnimatePresence>
+   236→          {isExpanded && (
+   237→            <motion.div
+   238→              initial={{ height: 0, opacity: 0 }}
+   239→              animate={{ height: 'auto', opacity: 1 }}
+   240→              exit={{ height: 0, opacity: 0 }}
+   241→              transition={{ duration: 0.3, ease: 'easeInOut' }}
+   242→            >
+   243→              <CardContent className="pt-0 pl-6">
+   244→                <motion.div
+   245→                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"
+   246→                  variants={staggerContainer}
+   247→                  initial="hidden"
+   248→                  animate="visible"
+   249→                >
+   250→                  {layer.components.map((comp, cIdx) => (
+   251→                    <motion.div
+   252→                      key={comp.id}
+   253→                      variants={fadeUpItem}
+   254→                      custom={cIdx}
+   255→                      whileHover={{ x: 4, backgroundColor: `${layer.color}10` }}
+   256→                      whileTap={{ scale: 0.98 }}
+   257→                      className="p-3 rounded-lg border hover:shadow-sm transition-shadow cursor-default"
+   258→                      style={{ borderColor: `${layer.color}30`, backgroundColor: `${layer.color}05` }}
+   259→                    >
+   260→                      <div className="flex items-center gap-2">
+   261→                        <span className="text-base">{comp.icon}</span>
+   262→                        <span className="font-semibold text-sm text-gray-900 dark:text-white">{comp.label}</span>
+   263→                      </div>
+   264→                      <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">{comp.description}</p>
+   265→                      <div className="flex flex-wrap gap-1 mt-1.5">
+   266→                        {comp.tags.map(tag => (
+   267→                          <Badge key={tag} variant="secondary" className="text-xs px-1.5 py-0.5">{tag}</Badge>
+   268→                        ))}
+   269→                      </div>
+   270→                      {(comp.stars || comp.downloads) && (
+   271→                        <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-600 dark:text-gray-400">
+   272→                          {comp.stars && <span className="flex items-center gap-0.5"><Star className="w-3 h-3 fill-amber-400 text-amber-400" />{comp.stars}</span>}
+   273→                          {comp.downloads && <span className="flex items-center gap-0.5"><TrendingUp className="w-3 h-3" />{comp.downloads}</span>}
+   274→                        </div>
+   275→                      )}
+   276→                    </motion.div>
+   277→                  ))}
+   278→                </motion.div>
+   279→              </CardContent>
+   280→            </motion.div>
+   281→          )}
+   282→        </AnimatePresence>
+   283→      </Card>
+   284→
+   285→      {/* Animated connector line to next layer */}
+   286→      {index < ARCHITECTURE_LAYERS.length - 1 && (
+   287→        <div className="flex justify-center py-2 relative">
+   288→          <motion.div
+   289→            initial={{ height: 0, opacity: 0 }}
+   290→            animate={isInView ? { height: 24, opacity: 1 } : {}}
+   291→            transition={{ duration: 0.4, delay: index * 0.1 + 0.2 }}
+   292→            className="w-0.5 rounded-full"
+   293→            style={{ backgroundColor: layer.color }}
+   294→          />
+   295→          {/* Data flow particle animation */}
+   296→          <motion.div
+   297→            className="absolute w-1.5 h-1.5 rounded-full"
+   298→            style={{ backgroundColor: layer.color }}
+   299→            animate={isInView ? {
+   300→              y: [0, 24],
+   301→              opacity: [0, 1, 0],
+   302→            } : {}}
+   303→            transition={{
+   304→              duration: 1.5,
+   305→              delay: index * 0.1 + 0.5,
+   306→              repeat: Infinity,
+   307→              repeatDelay: 2,
+   308→              ease: 'easeInOut',
+   309→            }}
+   310→          />
+   311→          <motion.div
+   312→            initial={{ scale: 0 }}
+   313→            animate={isInView ? { scale: 1 } : {}}
+   314→            transition={{ duration: 0.3, delay: index * 0.1 + 0.5, repeat: Infinity, repeatDelay: 2 }}
+   315→            className="absolute -bottom-1"
+   316→          >
+   317→            <ArrowRight className="w-3 h-3 rotate-90 text-gray-500 dark:text-gray-400" />
+   318→          </motion.div>
+   319→        </div>
+   320→      )}
+   321→    </motion.div>
+   322→  )
+   323→}
+   324→
+   325→function DataFlowSVG() {
+   326→  return (
+   327→    <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
+   328→      <defs>
+   329→        <linearGradient id="flowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+   330→          <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.6} />
+   331→          <stop offset="50%" stopColor="#8b5cf6" stopOpacity={0.4} />
+   332→          <stop offset="100%" stopColor="#10b981" stopOpacity={0.6} />
+   333→        </linearGradient>
+   334→      </defs>
+   335→    </svg>
+   336→  )
+   337→}
+   338→
+   339→function ArchitectureInfographicSection() {
+   340→  const [viewMode, setViewMode] = useState<'stack' | 'flow' | 'routing'>('stack')
+   341→
+   342→  return (
+   343→    <div className="space-y-6">
+   344→      <SectionHeader
+   345→        icon={Network}
+   346→        title="AI Agentic Architecture — Interactive Infographic"
+   347→        description="Deep-dive brainstorm translation of the agentic stack — 7 layers with OWL-ORCA proxy integration. Click any layer to expand."
+   348→      />
+   349→
+   350→      {/* View mode toggle */}
+   351→      <div className="flex items-center gap-2 flex-wrap" role="tablist" aria-label="Architecture view mode">
+   352→        {[
+   353→          { mode: 'stack' as const, icon: Layers, label: 'Stack View' },
+   354→          { mode: 'flow' as const, icon: Activity, label: 'Flow View' },
+   355→          { mode: 'routing' as const, icon: Globe, label: 'Routing Map' },
+   356→        ].map(({ mode, icon: ModeIcon, label }) => (
+   357→          <Button
+   358→            key={mode}
+   359→            variant={viewMode === mode ? 'default' : 'outline'}
+   360→            size="sm"
+   361→            onClick={() => setViewMode(mode)}
+   362→            role="tab"
+   363→            aria-selected={viewMode === mode}
+   364→            aria-label={label}
+   365→            className="min-h-[44px]"
+   366→          >
+   367→            <ModeIcon className="w-4 h-4 mr-1" /> {label}
+   368→          </Button>
+   369→        ))}
+   370→      </div>
+   371→
+   372→      <AnimatePresence mode="wait">
+   373→        <motion.div
+   374→          key={viewMode}
+   375→          initial={{ opacity: 0, y: 10 }}
+   376→          animate={{ opacity: 1, y: 0 }}
+   377→          exit={{ opacity: 0, y: -10 }}
+   378→          transition={{ duration: 0.25, ease: customEase }}
+   379→        >
+   380→          {viewMode === 'routing' ? (
+   381→            <ProxyRoutingMap />
+   382→          ) : viewMode === 'stack' ? (
+   383→            <div className="relative">
+   384→              <DataFlowSVG />
+   385→              <div className="space-y-2">
+   386→                {ARCHITECTURE_LAYERS.map((layer, index) => (
+   387→                  <LayerCard key={layer.id} layer={layer} index={index} />
+   388→                ))}
+   389→              </div>
+   390→            </div>
+   391→          ) : (
+   392→            <FlowDiagramView />
+   393→          )}
+   394→        </motion.div>
+   395→      </AnimatePresence>
+   396→
+   397→      {/* Architecture Legend */}
+   398→      <Card className="rounded-xl">
+   399→        <CardHeader className="pb-3">
+   400→          <CardTitle className="text-sm font-bold tracking-tight flex items-center gap-2">
+   401→            <Sparkles className="w-4 h-4 text-amber-500" /> Layer Legend & Data Flow
+   402→          </CardTitle>
+   403→        </CardHeader>
+   404→        <CardContent>
+   405→          <div className="flex flex-wrap gap-3">
+   406→            {ARCHITECTURE_LAYERS.map(layer => (
+   407→              <div key={layer.id} className="flex items-center gap-2 px-3 py-1.5 rounded-lg border" style={{ borderColor: `${layer.color}40` }}>
+   408→                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: layer.color }} />
+   409→                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">{layer.label.split('—')[0].trim()}</span>
+   410→              </div>
+   411→            ))}
+   412→          </div>
+   413→          <div className="mt-3 p-3 rounded-lg bg-amber-50 dark:bg-amber-900/10 text-xs leading-relaxed text-amber-800 dark:text-amber-300">
+   414→            <strong>Data Flow:</strong> User Input → Silent Protocol (diagnose) → Route (speed/depth) → Orca Router (:60001) / Kiro Gateway (:8333) → Agent Orchestration (5 parallel) → Local Models (Ollama fallback) → Ubuntu Host (infra)
+   415→          </div>
+   416→        </CardContent>
+   417→      </Card>
+   418→    </div>
+   419→  )
+   420→}
+   421→
+   422→function FlowDiagramView() {
+   423→  return (
+   424→    <Card className="overflow-hidden rounded-xl">
+   425→      <CardContent className="p-6">
+   426→        <div className="flex flex-col items-center gap-4">
+   427→          {ARCHITECTURE_LAYERS.map((layer, idx) => (
+   428→            <motion.div
+   429→              key={layer.id}
+   430→              initial={{ opacity: 0, scale: 0.8 }}
+   431→              whileInView={{ opacity: 1, scale: 1 }}
+   432→              viewport={{ once: true, margin: '-80px' }}
+   433→              transition={{ delay: idx * 0.1, ease: customEase }}
+   434→              className="w-full max-w-lg"
+   435→            >
+   436→              <motion.div
+   437→                whileHover={{ scale: 1.03, y: -2 }}
+   438→                whileTap={{ scale: 0.98 }}
+   439→                className="p-4 rounded-xl border-2 text-center transform-gpu"
+   440→                style={{ borderColor: layer.color, backgroundColor: `${layer.color}08` }}
+   441→              >
+   442→                <span className="text-3xl">{layer.icon}</span>
+   443→                <h3 className="font-bold tracking-tight mt-1" style={{ color: layer.color }}>{layer.label}</h3>
+   444→                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400 mt-1">{layer.description}</p>
+   445→                <div className="flex justify-center gap-1.5 mt-2 flex-wrap">
+   446→                  {layer.components.slice(0, 3).map(c => (
+   447→                    <Badge key={c.id} variant="outline" className="text-xs">{c.icon} {c.label}</Badge>
+   448→                  ))}
+   449→                  {layer.components.length > 3 && (
+   450→                    <Badge variant="secondary" className="text-xs">+{layer.components.length - 3}</Badge>
+   451→                  )}
+   452→                </div>
+   453→              </motion.div>
+   454→              {idx < ARCHITECTURE_LAYERS.length - 1 && (
+   455→                <div className="flex justify-center py-1 relative">
+   456→                  <motion.div
+   457→                    initial={{ height: 0 }}
+   458→                    whileInView={{ height: 20 }}
+   459→                    viewport={{ once: true }}
+   460→                    transition={{ delay: idx * 0.1 + 0.2 }}
+   461→                    className="w-0.5 rounded-full"
+   462→                    style={{ backgroundColor: layer.color }}
+   463→                  />
+   464→                  {/* Data flow particle */}
+   465→                  <motion.div
+   466→                    className="absolute w-1 h-1 rounded-full"
+   467→                    style={{ backgroundColor: layer.color }}
+   468→                    animate={{
+   469→                      y: [0, 20],
+   470→                      opacity: [0, 1, 0],
+   471→                    }}
+   472→                    transition={{
+   473→                      duration: 1.2,
+   474→                      delay: idx * 0.1 + 0.3,
+   475→                      repeat: Infinity,
+   476→                      repeatDelay: 1.5,
+   477→                      ease: 'easeInOut',
+   478→                    }}
+   479→                  />
+   480→                  <motion.div
+   481→                    initial={{ opacity: 0 }}
+   482→                    whileInView={{ opacity: 1 }}
+   483→                    viewport={{ once: true }}
+   484→                    transition={{ delay: idx * 0.1 + 0.4 }}
+   485→                    className="ml-0.5"
+   486→                  >
+   487→                    <svg width="8" height="8" viewBox="0 0 8 8" className="mt-1" aria-hidden="true">
+   488→                      <circle cx="4" cy="4" r="3" fill={layer.color}>
+   489→                        <animate attributeName="r" values="3;4;3" dur="2s" repeatCount="indefinite" />
+   490→                        <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite" />
+   491→                      </circle>
+   492→                    </svg>
+   493→                  </motion.div>
+   494→                </div>
+   495→              )}
+   496→            </motion.div>
+   497→          ))}
+   498→        </div>
+   499→      </CardContent>
+   500→    </Card>
+   501→  )
+   502→}
+   503→
+   504→// ==================== PROXY ROUTING MAP ====================
+   505→
+   506→function ProxyRoutingMap() {
+   507→  return (
+   508→    <Card className="overflow-hidden rounded-xl">
+   509→      <CardContent className="p-6">
+   510→        <div className="space-y-8">
+   511→          {/* ADEs Layer */}
+   512→          <div>
+   513→            <h4 className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+   514→              <Terminal className="w-3.5 h-3.5" /> Developer Interfaces (ADEs)
+   515→            </h4>
+   516→            <motion.div
+   517→              className="flex flex-wrap justify-center gap-2"
+   518→              variants={staggerContainer}
+   519→              initial="hidden"
+   520→              whileInView="visible"
+   521→              viewport={{ once: true, margin: '-80px' }}
+   522→            >
+   523→              {['OpenCode/Kilo', 'Orca', 'Goose', 'Zed', 'Warp', 'Cursor', 'Cline', 'Aider'].map((ade) => (
+   524→                <motion.div
+   525→                  key={ade}
+   526→                  variants={scaleIn}
+   527→                  whileHover={{ scale: 1.08, y: -2 }}
+   528→                  whileTap={{ scale: 0.97 }}
+   529→                  className="px-3 py-1.5 rounded-lg bg-amber-100 dark:bg-amber-900/20 border border-amber-300 dark:border-amber-700 text-xs font-medium text-amber-800 dark:text-amber-300 min-h-[36px] flex items-center cursor-default"
+   530→                >
+   531→                  {ade}
+   532→                </motion.div>
+   533→              ))}
+   534→            </motion.div>
+   535→          </div>
+   536→
+   537→          {/* Animated Connection Lines Down */}
+   538→          <div className="flex justify-center">
+   539→            <motion.div
+   540→              initial={{ height: 0, opacity: 0 }}
+   541→              whileInView={{ height: 40, opacity: 1 }}
+   542→              viewport={{ once: true }}
+   543→              className="w-0.5 bg-gradient-to-b from-amber-400 to-emerald-400 rounded-full"
+   544→            />
+   545→          </div>
+   546→
+   547→          {/* Proxy Endpoints Layer */}
+   548→          <div>
+   549→            <h4 className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+   550→              <Globe className="w-3.5 h-3.5" /> OWL-ORCA Proxy Stack (Local Endpoints)
+   551→            </h4>
+   552→            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+   553→              {PROXY_ENDPOINTS.map((ep, i) => (
+   554→                <motion.div
+   555→                  key={ep.name}
+   556→                  initial={{ opacity: 0, y: 20 }}
+   557→                  whileInView={{ opacity: 1, y: 0 }}
+   558→                  viewport={{ once: true, margin: '-80px' }}
+   559→                  transition={{ delay: i * 0.1, ease: customEase }}
+   560→                  whileHover={{ scale: 1.03, y: -2 }}
+   561→                  whileTap={{ scale: 0.98 }}
+   562→                  className="p-4 rounded-xl border-2 text-center transform-gpu"
+   563→                  style={{ borderColor: ep.color, backgroundColor: `${ep.color}08` }}
+   564→                >
+   565→                  <div className="flex items-center justify-center gap-2 mb-2">
+   566→                    <motion.div
+   567→                      className="w-3 h-3 rounded-full"
+   568→                      style={{ backgroundColor: ep.color }}
+   569→                      animate={{ scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }}
+   570→                      transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+   571→                    />
+   572→                    <span className="font-bold text-sm" style={{ color: ep.color }}>{ep.name}</span>
+   573→                  </div>
+   574→                  <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400 mb-2">{ep.role}</p>
+   575→                  <div className="text-xs font-mono space-y-1">
+   576→                    <div className="px-2 py-1.5 rounded bg-gray-100 dark:bg-gray-800">
+   577→                      <span className="text-gray-600 dark:text-gray-400">Port:</span> <span className="text-gray-700 dark:text-gray-300">:{ep.port}</span>
+   578→                    </div>
+   579→                    <div className="px-2 py-1.5 rounded bg-gray-100 dark:bg-gray-800">
+   580→                      <span className="text-gray-600 dark:text-gray-400">Key:</span> <KeyReveal value={ep.apiKey} />
+   581→                    </div>
+   582→                  </div>
+   583→                </motion.div>
+   584→              ))}
+   585→            </div>
+   586→          </div>
+   587→
+   588→          {/* Animated Connection Lines Down */}
+   589→          <div className="flex justify-center gap-4">
+   590→            <motion.div
+   591→              initial={{ height: 0, opacity: 0 }}
+   592→              whileInView={{ height: 40, opacity: 1 }}
+   593→              viewport={{ once: true }}
+   594→              className="w-0.5 bg-gradient-to-b from-emerald-400 to-blue-400 rounded-full"
+   595→            />
+   596→            <motion.div
+   597→              initial={{ height: 0, opacity: 0 }}
+   598→              whileInView={{ height: 40, opacity: 1 }}
+   599→              viewport={{ once: true }}
+   600→              transition={{ delay: 0.1 }}
+   601→              className="w-0.5 bg-gradient-to-b from-purple-400 to-violet-500 rounded-full"
+   602→            />
+   603→          </div>
+   604→
+   605→          {/* Cloud Providers Layer */}
+   606→          <div>
+   607→            <h4 className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+   608→              <Server className="w-3.5 h-3.5" /> Cloud Free-Tier Providers
+   609→            </h4>
+   610→            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+   611→              {[
+   612→                { name: 'GitHub Copilot Free', models: 'GPT-4o, Claude 3.5 Sonnet', auth: 'owl-token auth -p copilot', color: '#10b981' },
+   613→                { name: 'Antigravity Free', models: 'GPT-4o-mini, Gemini Flash', auth: 'owl-token auth -p antigravity', color: '#06b6d4' },
+   614→                { name: 'AWS Builder ID (Kiro)', models: 'Claude Sonnet 4.5, DeepSeek 3.2', auth: 'kiro-cli login', color: '#8b5cf6' },
+   615→              ].map((provider, i) => (
+   616→                <motion.div
+   617→                  key={provider.name}
+   618→                  initial={{ opacity: 0, y: 20 }}
+   619→                  whileInView={{ opacity: 1, y: 0 }}
+   620→                  viewport={{ once: true, margin: '-80px' }}
+   621→                  transition={{ delay: i * 0.1, ease: customEase }}
+   622→                  whileHover={{ y: -2 }}
+   623→                  className="p-3 rounded-lg border text-center"
+   624→                  style={{ borderColor: `${provider.color}40`, backgroundColor: `${provider.color}05` }}
+   625→                >
+   626→                  <p className="font-semibold text-sm text-gray-900 dark:text-white">{provider.name}</p>
+   627→                  <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400 mt-1">{provider.models}</p>
+   628→                  <code className="text-xs mt-2 inline-block bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded font-mono">{provider.auth}</code>
+   629→                </motion.div>
+   630→              ))}
+   631→            </div>
+   632→          </div>
+   633→
+   634→          {/* Routing Summary */}
+   635→          <div className="p-4 rounded-lg bg-gradient-to-r from-emerald-50 via-purple-50 to-amber-50 dark:from-emerald-900/10 dark:via-purple-900/10 dark:to-amber-900/10 border">
+   636→            <h4 className="text-xs font-bold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+   637→              <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Routing Paths
+   638→            </h4>
+   639→            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs leading-relaxed">
+   640→              <div className="flex items-center gap-2">
+   641→                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+   642→                <span className="text-gray-600 dark:text-gray-400">ADE → Orca Router → Copilot Free / Antigravity</span>
+   643→              </div>
+   644→              <div className="flex items-center gap-2">
+   645→                <div className="w-2 h-2 rounded-full bg-purple-500" />
+   646→                <span className="text-gray-600 dark:text-gray-400">ADE → Kiro Gateway → AWS Builder ID (Premium)</span>
+   647→              </div>
+   648→              <div className="flex items-center gap-2">
+   649→                <div className="w-2 h-2 rounded-full bg-amber-500" />
+   650→                <span className="text-gray-600 dark:text-gray-400">Forward Proxy → HTTPS CONNECT Tunnel (Domain Bypass)</span>
+   651→              </div>
+   652→              <div className="flex items-center gap-2">
+   653→                <div className="w-2 h-2 rounded-full bg-pink-500" />
+   654→                <span className="text-gray-600 dark:text-gray-400">OpenCode/Kilo → Zero-Config (Auto-injected by install.sh)</span>
+   655→              </div>
+   656→            </div>
+   657→          </div>
+   658→        </div>
+   659→      </CardContent>
+   660→    </Card>
+   661→  )
+   662→}
+   663→
+   664→// ==================== A/B COMPARISON SECTION ====================
+   665→
+   666→function ABCompareSection() {
+   667→  const [highlightWinner, setHighlightWinner] = useState<'all' | 'full' | 'slim'>('all')
+   668→
+   669→  const fullWins = COMPARISON_DATA.filter(d => d.winner === 'full').length
+   670→  const slimWins = COMPARISON_DATA.filter(d => d.winner === 'slim').length
+   671→
+   672→  const sectionRef = useRef(null)
+   673→  const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
+   674→
+   675→  return (
+   676→    <div className="space-y-6">
+   677→      <SectionHeader
+   678→        icon={GitCompare}
+   679→        title="A/B Comparison: oh-my-opencode vs oh-my-opencode-slim"
+   680→        description="Side-by-side analysis of the two leading OpenCode multi-agent orchestration plugins — features, metrics, and trade-offs."
+   681→      />
+   682→
+   683→      {/* Score Cards */}
+   684→      <motion.div
+   685→        ref={sectionRef}
+   686→        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+   687→        variants={staggerContainer}
+   688→        initial="hidden"
+   689→        animate={isInView ? 'visible' : 'hidden'}
+   690→      >
+   691→        <motion.div variants={fadeUpItem} whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }} className="transform-gpu">
+   692→          <Card className="border-2 border-amber-400 dark:border-amber-600 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl h-full">
+   693→            <CardHeader>
+   694→              <div className="flex items-center justify-between">
+   695→                <CardTitle className="text-amber-800 dark:text-amber-300 flex items-center gap-2 font-bold tracking-tight">
+   696→                  <Trophy className="w-5 h-5" />
+   697→                  oh-my-opencode
+   698→                </CardTitle>
+   699→                <Badge className="bg-amber-500 text-white border-0">{fullWins} wins</Badge>
+   700→              </div>
+   701→              <CardDescription className="text-amber-700 dark:text-amber-400">
+   702→                Now renaming to oh-my-openagent — The full-featured powerhouse
+   703→              </CardDescription>
+   704→            </CardHeader>
+   705→            <CardContent>
+   706→              <div className="space-y-3">
+   707→                <div className="flex items-center justify-between">
+   708→                  <span className="text-sm leading-relaxed">GitHub Stars</span>
+   709→                  <span className="font-bold text-amber-700 dark:text-amber-300">~38,000</span>
+   710→                </div>
+   711→                <div className="flex items-center justify-between">
+   712→                  <span className="text-sm leading-relaxed">Weekly Downloads</span>
+   713→                  <span className="font-bold text-amber-700 dark:text-amber-300">~60K</span>
+   714→                </div>
+   715→                <div className="flex items-center justify-between">
+   716→                  <span className="text-sm leading-relaxed">Agents</span>
+   717→                  <span className="font-bold text-amber-700 dark:text-amber-300">11 built-in</span>
+   718→                </div>
+   719→                <div className="flex items-center justify-between">
+   720→                  <span className="text-sm leading-relaxed">License</span>
+   721→                  <span className="text-sm text-amber-600 dark:text-amber-400">SUL-1.0</span>
+   722→                </div>
+   723→                <Separator className="bg-amber-200 dark:bg-amber-800" />
+   724→                <div className="text-xs leading-relaxed text-amber-700 dark:text-amber-400 space-y-1">
+   725→                  <p><strong>Best for:</strong> Maximum features, Claude Code compat, autonomous mode</p>
+   726→                  <p><strong>Watch out:</strong> High token overhead (15-25K startup), 3x more API requests</p>
+   727→                </div>
+   728→              </div>
+   729→            </CardContent>
+   730→          </Card>
+   731→        </motion.div>
+   732→
+   733→        <motion.div variants={fadeUpItem} whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }} className="transform-gpu">
+   734→          <Card className="border-2 border-emerald-400 dark:border-emerald-600 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-xl h-full">
+   735→            <CardHeader>
+   736→              <div className="flex items-center justify-between">
+   737→                <CardTitle className="text-emerald-800 dark:text-emerald-300 flex items-center gap-2 font-bold tracking-tight">
+   738→                  <Zap className="w-5 h-5" />
+   739→                  oh-my-opencode-slim
+   740→                </CardTitle>
+   741→                <Badge className="bg-emerald-500 text-white border-0">{slimWins} wins</Badge>
+   742→              </div>
+   743→              <CardDescription className="text-emerald-700 dark:text-emerald-400">
+   744→                Lightweight fork — Token efficiency champion
+   745→              </CardDescription>
+   746→            </CardHeader>
+   747→            <CardContent>
+   748→              <div className="space-y-3">
+   749→                <div className="flex items-center justify-between">
+   750→                  <span className="text-sm leading-relaxed">GitHub Stars</span>
+   751→                  <span className="font-bold text-emerald-700 dark:text-emerald-300">~5,100</span>
+   752→                </div>
+   753→                <div className="flex items-center justify-between">
+   754→                  <span className="text-sm leading-relaxed">Weekly Downloads</span>
+   755→                  <span className="font-bold text-emerald-700 dark:text-emerald-300">~7.2K</span>
+   756→                </div>
+   757→                <div className="flex items-center justify-between">
+   758→                  <span className="text-sm leading-relaxed">Agents</span>
+   759→                  <span className="font-bold text-emerald-700 dark:text-emerald-300">7+2+custom</span>
+   760→                </div>
+   761→                <div className="flex items-center justify-between">
+   762→                  <span className="text-sm leading-relaxed">License</span>
+   763→                  <span className="text-sm text-emerald-600 dark:text-emerald-400">MIT</span>
+   764→                </div>
+   765→                <Separator className="bg-emerald-200 dark:bg-emerald-800" />
+   766→                <div className="text-xs leading-relaxed text-emerald-700 dark:text-emerald-400 space-y-1">
+   767→                  <p><strong>Best for:</strong> Token efficiency, simplicity, Council consensus, custom agents</p>
+   768→                  <p><strong>Watch out:</strong> Fewer features, limited Claude Code compat, smaller community</p>
+   769→                </div>
+   770→              </div>
+   771→            </CardContent>
+   772→          </Card>
+   773→        </motion.div>
+   774→      </motion.div>
+   775→
+   776→      {/* Winner Toggle */}
+   777→      <div className="flex items-center gap-2 flex-wrap">
+   778→        <span className="text-sm text-gray-600 dark:text-gray-400">Highlight:</span>
+   779→        {[
+   780→          { key: 'all' as const, label: 'All', activeClass: 'bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-800' },
+   781→          { key: 'full' as const, label: `Full (${fullWins})`, activeClass: 'bg-amber-500 text-white' },
+   782→          { key: 'slim' as const, label: `Slim (${slimWins})`, activeClass: 'bg-emerald-500 text-white' },
+   783→        ].map(({ key, label, activeClass }) => (
+   784→          <motion.button
+   785→            key={key}
+   786→            onClick={() => setHighlightWinner(key)}
+   787→            whileHover={{ scale: 1.05 }}
+   788→            whileTap={{ scale: 0.97 }}
+   789→            className={`px-3 py-1.5 text-xs rounded-full transition-colors flex items-center gap-1.5 min-h-[36px] cursor-pointer focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+   790→              highlightWinner === key ? activeClass : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400'
+   791→            }`}
+   792→            aria-label={`Highlight ${label}`}
+   793→            aria-pressed={highlightWinner === key}
+   794→          >
+   795→            {label}
+   796→          </motion.button>
+   797→        ))}
+   798→      </div>
+   799→
+   800→      {/* Detailed Comparison Table */}
+   801→      <Card className="rounded-xl">
+   802→        <CardContent className="p-0">
+   803→          <div className="overflow-x-auto">
+   804→            <table className="w-full text-sm" role="table">
+   805→              <thead>
+   806→                <tr className="border-b bg-muted/50">
+   807→                  <th className="text-left p-3 font-medium w-40" scope="col">Dimension</th>
+   808→                  <th className="text-left p-3 font-medium" scope="col">
+   809→                    <span className="flex items-center gap-1"><Trophy className="w-3.5 h-3.5 text-amber-500" /> Full</span>
+   810→                  </th>
+   811→                  <th className="text-left p-3 font-medium" scope="col">
+   812→                    <span className="flex items-center gap-1"><Zap className="w-3.5 h-3.5 text-emerald-500" /> Slim</span>
+   813→                  </th>
+   814→                  <th className="text-center p-3 font-medium w-16" scope="col">Edge</th>
+   815→                </tr>
+   816→              </thead>
+   817→              <tbody>
+   818→                {COMPARISON_DATA.map((row, idx) => {
+   819→                  const dimmed = highlightWinner !== 'all' && row.winner !== highlightWinner && row.winner !== 'tie'
+   820→                  return (
+   821→                    <motion.tr
+   822→                      key={row.id}
+   823→                      initial={{ opacity: 0, x: -10 }}
+   824→                      whileInView={{ opacity: 1, x: 0 }}
+   825→                      viewport={{ once: true }}
+   826→                      transition={{ delay: idx * 0.02, ease: customEase }}
+   827→                      className={`border-b last:border-b-0 hover:bg-muted/30 transition-colors ${dimmed ? 'opacity-40' : ''}`}
+   828→                    >
+   829→                      <td className="p-3 font-medium text-gray-900 dark:text-white text-xs">{row.dimension}</td>
+   830→                      <td className={`p-3 text-xs leading-relaxed ${row.winner === 'full' ? 'font-semibold text-amber-700 dark:text-amber-300' : 'text-gray-600 dark:text-gray-400'}`}>
+   831→                        {row.ohMyOpencode}
+   832→                      </td>
+   833→                      <td className={`p-3 text-xs leading-relaxed ${row.winner === 'slim' ? 'font-semibold text-emerald-700 dark:text-emerald-300' : 'text-gray-600 dark:text-gray-400'}`}>
+   834→                        {row.ohMyOpencodeSlim}
+   835→                      </td>
+   836→                      <td className="p-3 text-center">
+   837→                        {row.winner === 'full' && <Trophy className="w-4 h-4 text-amber-500 mx-auto" />}
+   838→                        {row.winner === 'slim' && <Zap className="w-4 h-4 text-emerald-500 mx-auto" />}
+   839→                        {row.winner === 'tie' && <span className="text-gray-500 dark:text-gray-400 text-xs">Tie</span>}
+   840→                      </td>
+   841→                    </motion.tr>
+   842→                  )
+   843→                })}
+   844→              </tbody>
+   845→            </table>
+   846→          </div>
+   847→        </CardContent>
+   848→      </Card>
+   849→
+   850→      {/* Verdict */}
+   851→      <Card className="bg-gradient-to-r from-amber-50 to-emerald-50 dark:from-amber-900/10 dark:to-emerald-900/10 rounded-xl">
+   852→        <CardContent className="p-5">
+   853→          <h3 className="font-bold tracking-tight text-gray-900 dark:text-white flex items-center gap-2 mb-3">
+   854→            <Sparkles className="w-5 h-5 text-amber-500" /> The Verdict
+   855→          </h3>
+   856→          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+   857→            <div className="p-3 rounded-lg bg-amber-100/50 dark:bg-amber-900/20">
+   858→              <p className="font-semibold text-amber-800 dark:text-amber-300 text-sm">Choose Full When:</p>
+   859→              <ul className="text-xs leading-relaxed text-amber-700 dark:text-amber-400 mt-2 space-y-1" role="list">
+   860→                <li>- You need Claude Code ecosystem compatibility</li>
+   861→                <li>- Feature completeness matters more than token cost</li>
+   862→                <li>- You want autonomous Ultrawork mode</li>
+   863→                <li>- You need advanced per-agent model routing</li>
+   864→                <li>- Large community and documentation are priorities</li>
+   865→              </ul>
+   866→            </div>
+   867→            <div className="p-3 rounded-lg bg-emerald-100/50 dark:bg-emerald-900/20">
+   868→              <p className="font-semibold text-emerald-800 dark:text-emerald-300 text-sm">Choose Slim When:</p>
+   869→              <ul className="text-xs leading-relaxed text-emerald-700 dark:text-emerald-400 mt-2 space-y-1" role="list">
+   870→                <li>- Token efficiency and lower API costs are critical</li>
+   871→                <li>- You prefer MIT-licensed open source</li>
+   872→                <li>- Council consensus (multi-model) is valuable</li>
+   873→                <li>- You want custom dynamic agents</li>
+   874→                <li>- Simplicity and fewer moving parts are preferred</li>
+   875→              </ul>
+   876→            </div>
+   877→          </div>
+   878→        </CardContent>
+   879→      </Card>
+   880→    </div>
+   881→  )
+   882→}
+   883→
+   884→// ==================== ADE COMPATIBILITY SECTION ====================
+   885→
+   886→function ADECompatibilitySection() {
+   887→  const [tierFilter, setTierFilter] = useState<number>(0)
+   888→  const [search, setSearch] = useState('')
+   889→
+   890→  const filtered = ADE_COMPATIBILITY.filter(a => {
+   891→    const matchSearch = a.name.toLowerCase().includes(search.toLowerCase()) || a.verdict.toLowerCase().includes(search.toLowerCase())
+   892→    const matchTier = tierFilter === 0 || a.tier === tierFilter
+   893→    return matchSearch && matchTier
+   894→  })
+   895→
+   896→  const tierConfig: Record<number, { label: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
+   897→    1: { label: 'Tier 1 — Perfect Match', color: '#10b981', bg: 'bg-emerald-50 dark:bg-emerald-900/10', border: 'border-emerald-400 dark:border-emerald-600', icon: <Trophy className="w-4 h-4 text-emerald-500" /> },
+   898→    2: { label: 'Tier 2 — Plug & Play', color: '#3b82f6', bg: 'bg-blue-50 dark:bg-blue-900/10', border: 'border-blue-400 dark:border-blue-600', icon: <Zap className="w-4 h-4 text-blue-500" /> },
+   899→    3: { label: 'Tier 3 — Sandbox Host', color: '#f59e0b', bg: 'bg-amber-50 dark:bg-amber-900/10', border: 'border-amber-400 dark:border-amber-600', icon: <Shield className="w-4 h-4 text-amber-500" /> },
+   900→    4: { label: 'Tier 4 — Redundant / N/A', color: '#ef4444', bg: 'bg-red-50 dark:bg-red-900/10', border: 'border-red-400 dark:border-red-600', icon: <X className="w-4 h-4 text-red-500" /> },
+   901→  }
+   902→
+   903→  return (
+   904→    <div className="space-y-6">
+   905→      <SectionHeader
+   906→        icon={Shield}
+   907→        title="ADE Compatibility — OWL-ORCA v7.1.0"
+   908→        description="Deep-dive compatibility analysis: which ADEs work with the OWL-ORCA Master Installer proxy stack. The Golden Rule: any ADE with custom OpenAI-compatible base URL support passes."
+   909→      />
+   910→
+   911→      {/* Proxy Endpoints Summary */}
+   912→      <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/10 dark:to-teal-900/10 border-emerald-200 dark:border-emerald-800 rounded-xl">
+   913→        <CardHeader>
+   914→          <CardTitle className="text-emerald-800 dark:text-emerald-300 flex items-center gap-2 text-base font-bold tracking-tight">
+   915→            <Globe className="w-5 h-5" /> 3 Local Proxy Endpoints (install.sh creates these)
+   916→          </CardTitle>
+   917→        </CardHeader>
+   918→        <CardContent>
+   919→          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+   920→            {PROXY_ENDPOINTS.map((ep, i) => (
+   921→              <motion.div
+   922→                key={ep.name}
+   923→                initial={{ opacity: 0, y: 20 }}
+   924→                whileInView={{ opacity: 1, y: 0 }}
+   925→                viewport={{ once: true, margin: '-80px' }}
+   926→                transition={{ delay: i * 0.08, ease: customEase }}
+   927→                whileHover={{ y: -2 }}
+   928→                whileTap={{ scale: 0.98 }}
+   929→                className="p-3 rounded-lg border-2 bg-white dark:bg-gray-900"
+   930→                style={{ borderColor: ep.color }}
+   931→              >
+   932→                <div className="flex items-center gap-2 mb-1.5">
+   933→                  <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: ep.color }} />
+   934→                  <span className="font-semibold text-sm text-gray-900 dark:text-white">{ep.name}</span>
+   935→                </div>
+   936→                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400 mb-2">{ep.role}</p>
+   937→                <div className="space-y-1 text-xs font-mono">
+   938→                  <div className="p-1.5 rounded bg-gray-100 dark:bg-gray-800">
+   939→                    <span className="text-gray-600 dark:text-gray-400">URL:</span> <span className="text-gray-700 dark:text-gray-300">{ep.url}</span>
+   940→                  </div>
+   941→                  <div className="p-1.5 rounded bg-gray-100 dark:bg-gray-800">
+   942→                    <span className="text-gray-600 dark:text-gray-400">Key:</span> <KeyReveal value={ep.apiKey} />
+   943→                  </div>
+   944→                </div>
+   945→                <div className="mt-2">
+   946→                  <CopyButton text={`export OPENAI_BASE_URL="${ep.url}" && export OPENAI_API_KEY="${ep.apiKey}"`} label="Environment variables" />
+   947→                </div>
+   948→              </motion.div>
+   949→            ))}
+   950→          </div>
+   951→        </CardContent>
+   952→      </Card>
+   953→
+   954→      {/* Tier Legend & Filter */}
+   955→      <div className="flex items-center gap-2 flex-wrap">
+   956→        <span className="text-sm text-gray-600 dark:text-gray-400">Filter:</span>
+   957→        <div className="flex gap-1.5" role="radiogroup" aria-label="Filter by tier">
+   958→          {[
+   959→            { tier: 0, label: 'All', activeClass: 'bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-800' },
+   960→            { tier: 1, label: 'Tier 1', activeClass: 'bg-emerald-500 text-white' },
+   961→            { tier: 2, label: 'Tier 2', activeClass: 'bg-blue-500 text-white' },
+   962→            { tier: 3, label: 'Tier 3', activeClass: 'bg-amber-500 text-white' },
+   963→            { tier: 4, label: 'Tier 4', activeClass: 'bg-red-500 text-white' },
+   964→          ].map(t => (
+   965→            <motion.button
+   966→              key={t.tier}
+   967→              onClick={() => setTierFilter(t.tier)}
+   968→              whileHover={{ scale: 1.05 }}
+   969→              whileTap={{ scale: 0.97 }}
+   970→              role="radio"
+   971→              aria-checked={tierFilter === t.tier}
+   972→              className={`px-3 py-1.5 text-xs rounded-full transition-colors min-h-[36px] cursor-pointer focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+   973→                tierFilter === t.tier
+   974→                  ? t.activeClass
+   975→                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400'
+   976→              }`}
+   977→            >
+   978→              {t.label}
+   979→            </motion.button>
+   980→          ))}
+   981→        </div>
+   982→        <div className="flex-1 min-w-0 max-w-xs">
+   983→          <Input
+   984→            placeholder="Search ADEs..."
+   985→            value={search}
+   986→            onChange={e => setSearch(sanitizeSearch(e.target.value))}
+   987→            maxLength={200}
+   988→            className="h-9 text-xs"
+   989→            aria-label="Search ADEs by name or verdict"
+   990→          />
+   991→        </div>
+   992→      </div>
+   993→
+   994→      <p className="text-sm text-gray-600 dark:text-gray-400">{filtered.length} ADEs found</p>
+   995→
+   996→      {/* ADE Cards */}
+   997→      <div className="space-y-3">
+   998→        {filtered.map((ade, idx) => {
+   999→          const cfg = tierConfig[ade.tier]
+  1000→          return (
+  1001→            <motion.div
+  1002→              key={ade.id}
+  1003→              initial={{ opacity: 0, y: 10 }}
+  1004→              whileInView={{ opacity: 1, y: 0 }}
+  1005→              viewport={{ once: true, margin: '-80px' }}
+  1006→              transition={{ delay: idx * 0.03, ease: customEase }}
+  1007→            >
+  1008→              <Card className={`border-l-4 ${cfg.border} ${cfg.bg} hover:shadow-md transition-shadow rounded-xl`}>
+  1009→                <CardContent className="p-4">
+  1010→                  <div className="flex flex-col gap-3">
+  1011→                    {/* Header */}
+  1012→                    <div className="flex items-center justify-between flex-wrap gap-2">
+  1013→                      <div className="flex items-center gap-2">
+  1014→                        {cfg.icon}
+  1015→                        <h4 className="font-semibold text-gray-900 dark:text-white">{ade.name}</h4>
+  1016→                        <Badge
+  1017→                          className="text-xs border-0 text-white"
+  1018→                          style={{ backgroundColor: cfg.color }}
+  1019→                        >
+  1020→                          {ade.tierLabel}
+  1021→                        </Badge>
+  1022→                      </div>
+  1023→                      <Badge
+  1024→                        variant="outline"
+  1025→                        className="text-xs font-bold"
+  1026→                        style={{ borderColor: cfg.color, color: cfg.color }}
+  1027→                      >
+  1028→                        {ade.verdict}
+  1029→                      </Badge>
+  1030→                    </div>
+  1031→
+  1032→                    {/* How to connect */}
+  1033→                    <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">{ade.howToConnect}</p>
+  1034→
+  1035→                    {/* Endpoint info */}
+  1036→                    {ade.endpoint !== '—' && (
+  1037→                      <div className="flex flex-wrap gap-3 text-xs font-mono">
+  1038→                        <div className="px-2 py-1 rounded bg-white/60 dark:bg-black/20">
+  1039→                          <span className="text-gray-600 dark:text-gray-400">Endpoint:</span>{' '}
+  1040→                          <span className="text-gray-700 dark:text-gray-300">{ade.endpoint}</span>
+  1041→                        </div>
+  1042→                        <div className="px-2 py-1 rounded bg-white/60 dark:bg-black/20">
+  1043→                          <span className="text-gray-600 dark:text-gray-400">Key:</span>{' '}
+  1044→                          <KeyReveal value={ade.apiKey} />
+  1045→                        </div>
+  1046→                        {ade.models && (
+  1047→                          <div className="px-2 py-1 rounded bg-white/60 dark:bg-black/20">
+  1048→                            <span className="text-gray-600 dark:text-gray-400">Models:</span>{' '}
+  1049→                            <span className="text-gray-700 dark:text-gray-300">{ade.models}</span>
+  1050→                          </div>
+  1051→                        )}
+  1052→                      </div>
+  1053→                    )}
+  1054→
+  1055→                    {/* Copy env vars */}
+  1056→                    {ade.endpoint !== '—' && (
+  1057→                      <CopyButton text={`export OPENAI_BASE_URL="${ade.endpoint}"\nexport OPENAI_API_KEY="${ade.apiKey}"`} label="Environment variables" />
+  1058→                    )}
+  1059→                  </div>
+  1060→                </CardContent>
+  1061→              </Card>
+  1062→            </motion.div>
+  1063→          )
+  1064→        })}
+  1065→      </div>
+  1066→
+  1067→      {/* Golden Rule */}
+  1068→      <Card className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10 rounded-xl">
+  1069→        <CardContent className="p-5">
+  1070→          <h3 className="font-bold tracking-tight text-amber-800 dark:text-amber-300 flex items-center gap-2 text-sm mb-2">
+  1071→            <Sparkles className="w-4 h-4" /> The Golden Rule of Compatibility
+  1072→          </h3>
+  1073→          <p className="text-xs leading-relaxed text-amber-700 dark:text-amber-400">
+  1074→            Because the Orca Router and Kiro Gateway expose <strong>standard OpenAI-compatible API endpoints</strong>,
+  1075→            <strong> ANY ADE that allows you to set a Custom Base URL and a Custom API Key will pass the objective.</strong>
+  1076→            This means the OWL-ORCA proxy stack works with virtually every modern AI coding tool — not just the ones listed above.
+  1077→          </p>
+  1078→        </CardContent>
+  1079→      </Card>
+  1080→    </div>
+  1081→  )
+  1082→}
+  1083→
+  1084→// ==================== ULTIMATE FREE UNLIMITED BLUEPRINT ====================
+  1085→
+  1086→function UltimateBlueprintSection() {
+  1087→  return (
+  1088→    <div className="space-y-6">
+  1089→      <SectionHeader
+  1090→        icon={Zap}
+  1091→        title='Ultimate "Free Unlimited" Orchestration Blueprint'
+  1092→        description="The exact 5-step setup to achieve a 5-agent parallel coding fleet with zero rate-limiting, zero cost, and kernel-level isolation — using the OWL-ORCA Master Installer v7.1.0."
+  1093→      />
+  1094→
+  1095→      {/* Steps */}
+  1096→      <div className="space-y-4">
+  1097→        {ULTIMATE_BLUEPRINT_STEPS.map((step, idx) => (
+  1098→          <motion.div
+  1099→            key={step.step}
+  1100→            initial={{ opacity: 0, x: idx % 2 === 0 ? -40 : 40 }}
+  1101→            whileInView={{ opacity: 1, x: 0 }}
+  1102→            viewport={{ once: true, margin: '-80px' }}
+  1103→            transition={{ delay: idx * 0.1, ease: customEase }}
+  1104→          >
+  1105→            <Card className="overflow-hidden border-l-4 border-l-amber-500 hover:shadow-lg transition-shadow rounded-xl">
+  1106→              <div className="flex items-start gap-4 p-5">
+  1107→                {/* Step Number */}
+  1108→                <motion.div
+  1109→                  className="shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white font-bold text-lg shadow-md"
+  1110→                  whileHover={{ scale: 1.1, rotate: 5 }}
+  1111→                  whileTap={{ scale: 0.95 }}
+  1112→                >
+  1113→                  {step.step}
+  1114→                </motion.div>
+  1115→
+  1116→                <div className="flex-1 min-w-0">
+  1117→                  <h3 className="font-bold tracking-tight text-gray-900 dark:text-white text-base">{step.title}</h3>
+  1118→                  <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400 mt-1">{step.description}</p>
+  1119→
+  1120→                  {/* Command */}
+  1121→                  {step.command && (
+  1122→                    <div className="mt-3 p-3 rounded-lg bg-gray-900 dark:bg-gray-800 text-xs font-mono text-emerald-400 overflow-x-auto">
+  1123→                      {step.command.split('\n').map((line, lIdx) => (
+  1124→                        <div key={lIdx} className="flex">
+  1125→                          {line.startsWith('#') ? (
+  1126→                            <span className="text-gray-500">{line}</span>
+  1127→                          ) : line.startsWith('export') ? (
+  1128→                            <span><span className="text-amber-400">export</span> {line.slice(7)}</span>
+  1129→                          ) : line.startsWith('curl') ? (
+  1130→                            <span><span className="text-amber-400">curl</span> {line.slice(4)}</span>
+  1131→                          ) : (
+  1132→                            <span>{line}</span>
+  1133→                          )}
+  1134→                        </div>
+  1135→                      ))}
+  1136→                      <div className="mt-2">
+  1137→                        <CopyButton text={step.command} label="Command" />
+  1138→                      </div>
+  1139→                    </div>
+  1140→                  )}
+  1141→
+  1142→                  {/* Details */}
+  1143→                  <p className="text-xs leading-relaxed text-gray-500 dark:text-gray-400 mt-2 italic">{step.details}</p>
+  1144→                </div>
+  1145→              </div>
+  1146→            </Card>
+  1147→          </motion.div>
+  1148→        ))}
+  1149→      </div>
+  1150→
+  1151→      {/* Result Card */}
+  1152→      <Card className="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-emerald-900/10 dark:via-teal-900/10 dark:to-cyan-900/10 border-2 border-emerald-300 dark:border-emerald-700 rounded-xl">
+  1153→        <CardContent className="p-6">
+  1154→          <div className="text-center">
+  1155→            <motion.div
+  1156→              initial={{ scale: 0 }}
+  1157→              whileInView={{ scale: 1 }}
+  1158→              viewport={{ once: true }}
+  1159→              transition={{ type: 'spring', stiffness: 200 }}
+  1160→              className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500 text-white mb-4"
+  1161→            >
+  1162→              <Sparkles className="w-8 h-8" />
+  1163→            </motion.div>
+  1164→            <h3 className="text-xl font-bold tracking-tight text-emerald-800 dark:text-emerald-300 mb-2">The Result</h3>
+  1165→            <p className="text-sm leading-relaxed text-emerald-700 dark:text-emerald-400 max-w-lg mx-auto">
+  1166→              A <strong>5-agent parallel coding fleet</strong>, drawing from <strong>GitHub Copilot Free</strong>,{' '}
+  1167→              <strong>Antigravity Free</strong>, and <strong>AWS Builder ID Free</strong> (Claude Sonnet 4.5, DeepSeek 3.2),
+  1168→              with <strong>zero rate-limiting</strong>, <strong>zero cost</strong>, and <strong>kernel-level isolation</strong>.
+  1169→            </p>
+  1170→          </div>
+  1171→
+  1172→          <motion.div
+  1173→            className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3"
+  1174→            variants={staggerContainer}
+  1175→            initial="hidden"
+  1176→            whileInView="visible"
+  1177→            viewport={{ once: true }}
+  1178→          >
+  1179→            {[
+  1180→              { label: 'Cost', value: '$0', sub: 'Free tiers pooled' },
+  1181→              { label: 'Agents', value: '5', sub: 'Parallel in worktrees' },
+  1182→              { label: 'Rate Limits', value: 'None', sub: 'Circuit-breaking proxy' },
+  1183→            ].map(stat => (
+  1184→              <motion.div key={stat.label} variants={scaleIn} className="p-3 rounded-lg bg-white/60 dark:bg-black/20 text-center">
+  1185→                <p className="text-2xl font-black text-emerald-700 dark:text-emerald-300">{stat.value}</p>
+  1186→                <p className="text-xs font-medium text-gray-900 dark:text-white">{stat.label}</p>
+  1187→                <p className="text-xs text-gray-500 dark:text-gray-400">{stat.sub}</p>
+  1188→              </motion.div>
+  1189→            ))}
+  1190→          </motion.div>
+  1191→        </CardContent>
+  1192→      </Card>
+  1193→
+  1194→      {/* Pooled Free Tiers */}
+  1195→      <Card className="rounded-xl">
+  1196→        <CardHeader>
+  1197→          <CardTitle className="text-sm font-bold tracking-tight flex items-center gap-2">
+  1198→            <Gift className="w-4 h-4 text-amber-500" /> Pooled Free-Tier Sources
+  1199→          </CardTitle>
+  1200→        </CardHeader>
+  1201→        <CardContent>
+  1202→          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+  1203→            {[
+  1204→              { name: 'GitHub Copilot Free', models: 'GPT-4o, Claude 3.5 Sonnet', auth: 'owl-token auth -p copilot' },
+  1205→              { name: 'Antigravity Free', models: 'GPT-4o-mini, Gemini Flash', auth: 'owl-token auth -p antigravity' },
+  1206→              { name: 'AWS Builder ID (Kiro)', models: 'Claude Sonnet 4.5, DeepSeek 3.2', auth: 'kiro-cli login' },
+  1207→            ].map(src => (
+  1208→              <div key={src.name} className="p-3 rounded-lg border bg-muted/30">
+  1209→                <p className="font-semibold text-sm text-gray-900 dark:text-white">{src.name}</p>
+  1210→                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400 mt-1">{src.models}</p>
+  1211→                <div className="mt-2">
+  1212→                  <code className="text-xs bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded font-mono">{src.auth}</code>
+  1213→                </div>
+  1214→              </div>
+  1215→            ))}
+  1216→          </div>
+  1217→        </CardContent>
+  1218→      </Card>
+  1219→    </div>
+  1220→  )
+  1221→}
+  1222→
+  1223→// ==================== PLUGINS & MCP SECTION ====================
+  1224→
+  1225→function PluginsSection() {
+  1226→  const [search, setSearch] = useState('')
+  1227→  const [tierFilter, setTierFilter] = useState<number>(0)
+  1228→  const [catFilter, setCatFilter] = useState<string>('all')
+  1229→
+  1230→  const filtered = TOP_PLUGINS.filter(p => {
+  1231→    const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) || p.description.toLowerCase().includes(search.toLowerCase())
+  1232→    const matchTier = tierFilter === 0 || p.tier === tierFilter
+  1233→    const matchCat = catFilter === 'all' || p.category === catFilter
+  1234→    return matchSearch && matchTier && matchCat
+  1235→  })
+  1236→
+  1237→  const tierColors: Record<number, string> = {
+  1238→    1: 'border-amber-400 bg-amber-50 dark:bg-amber-900/10',
+  1239→    2: 'border-emerald-400 bg-emerald-50 dark:bg-emerald-900/10',
+  1240→    3: 'border-gray-300 bg-gray-50 dark:bg-gray-900/10',
+  1241→  }
+  1242→
+  1243→  const tierLabels: Record<number, string> = {
+  1244→    1: 'Essential',
+  1245→    2: 'High Impact',
+  1246→    3: 'Quality of Life',
+  1247→  }
+  1248→
+  1249→  const catIcons: Record<string, React.ReactNode> = {
+  1250→    plugin: <Puzzle className="w-3.5 h-3.5" />,
+  1251→    skill: <Code className="w-3.5 h-3.5" />,
+  1252→    mcp: <Network className="w-3.5 h-3.5" />,
+  1253→    proxy: <Globe className="w-3.5 h-3.5" />,
+  1254→  }
+  1255→
+  1256→  return (
+  1257→    <div className="space-y-6">
+  1258→      <SectionHeader
+  1259→        icon={Puzzle}
+  1260→        title="Plugins, Skills & MCP Servers — Above Mediocrity Stack"
+  1261→        description="Curated enhancement tools to make OpenCode deliver above mediocrity. Tiered by impact."
+  1262→      />
+  1263→
+  1264→      {/* Tier Legend */}
+  1265→      <div className="flex flex-wrap gap-3">
+  1266→        {[
+  1267→          { tier: 1, label: 'Tier 1 — Essential', color: 'bg-amber-500' },
+  1268→          { tier: 2, label: 'Tier 2 — High Impact', color: 'bg-emerald-500' },
+  1269→          { tier: 3, label: 'Tier 3 — Quality of Life', color: 'bg-gray-400' },
+  1270→        ].map(t => (
+  1271→          <div key={t.tier} className="flex items-center gap-2 px-3 py-1.5 rounded-full border bg-white dark:bg-gray-900">
+  1272→            <div className={`w-2.5 h-2.5 rounded-full ${t.color}`} />
+  1273→            <span className="text-xs font-medium">{t.label}</span>
+  1274→          </div>
+  1275→        ))}
+  1276→      </div>
+  1277→
+  1278→      {/* Filters */}
+  1279→      <div className="flex flex-col sm:flex-row gap-3">
+  1280→        <div className="relative flex-1">
+  1281→          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 dark:text-gray-400" />
+  1282→          <Input
+  1283→            placeholder="Search plugins, skills, MCP servers..."
+  1284→            value={search}
+  1285→            onChange={e => setSearch(sanitizeSearch(e.target.value))}
+  1286→            maxLength={200}
+  1287→            className="pl-9 h-10"
+  1288→            aria-label="Search plugins"
+  1289→          />
+  1290→        </div>
+  1291→        <div className="flex gap-2">
+  1292→          <select
+  1293→            value={tierFilter}
+  1294→            onChange={e => setTierFilter(Number(e.target.value))}
+  1295→            className="px-3 py-2 text-sm rounded-md border bg-white dark:bg-gray-900 dark:border-gray-700 min-h-[44px] focus:ring-2 focus:ring-amber-500"
+  1296→            aria-label="Filter by tier"
+  1297→          >
+  1298→            <option value={0}>All Tiers</option>
+  1299→            <option value={1}>Tier 1 Essential</option>
+  1300→            <option value={2}>Tier 2 High Impact</option>
+  1301→            <option value={3}>Tier 3 QoL</option>
+  1302→          </select>
+  1303→          <select
+  1304→            value={catFilter}
+  1305→            onChange={e => setCatFilter(e.target.value)}
+  1306→            className="px-3 py-2 text-sm rounded-md border bg-white dark:bg-gray-900 dark:border-gray-700 min-h-[44px] focus:ring-2 focus:ring-amber-500"
+  1307→            aria-label="Filter by type"
+  1308→          >
+  1309→            <option value="all">All Types</option>
+  1310→            <option value="plugin">Plugins</option>
+  1311→            <option value="skill">Skills</option>
+  1312→            <option value="mcp">MCP Servers</option>
+  1313→            <option value="proxy">Proxies</option>
+  1314→          </select>
+  1315→        </div>
+  1316→      </div>
+  1317→
+  1318→      <p className="text-sm text-gray-600 dark:text-gray-400">{filtered.length} items found</p>
+  1319→
+  1320→      {/* Plugin Cards */}
+  1321→      <div className="space-y-3">
+  1322→        {filtered.map((plugin, idx) => (
+  1323→          <motion.div
+  1324→            key={plugin.id}
+  1325→            initial={{ opacity: 0, y: 10 }}
+  1326→            whileInView={{ opacity: 1, y: 0 }}
+  1327→            viewport={{ once: true, margin: '-80px' }}
+  1328→            transition={{ delay: idx * 0.03, ease: customEase }}
+  1329→          >
+  1330→            <Card className={`border-l-4 ${tierColors[plugin.tier]} hover:shadow-md transition-shadow rounded-xl`}>
+  1331→              <CardContent className="p-4">
+  1332→                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+  1333→                  <div className="flex-1 min-w-0">
+  1334→                    <div className="flex items-center gap-2 flex-wrap">
+  1335→                      <h4 className="font-semibold text-gray-900 dark:text-white">{plugin.name}</h4>
+  1336→                      <Badge variant="outline" className="text-xs flex items-center gap-1">
+  1337→                        {catIcons[plugin.category]} {plugin.category.toUpperCase()}
+  1338→                      </Badge>
+  1339→                      <Badge className={`text-xs border-0 ${plugin.tier === 1 ? 'bg-amber-500' : plugin.tier === 2 ? 'bg-emerald-500' : 'bg-gray-400'} text-white`}>
+  1340→                        {tierLabels[plugin.tier]}
+  1341→                      </Badge>
+  1342→                    </div>
+  1343→                    <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">{plugin.description}</p>
+  1344→                    <div className="flex items-center gap-4 mt-2 text-xs text-gray-600 dark:text-gray-400">
+  1345→                      <span className="flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {plugin.stars}</span>
+  1346→                      <span className="flex items-center gap-1"><TrendingUp className="w-3 h-3" /> {plugin.downloads}</span>
+  1347→                    </div>
+  1348→                  </div>
+  1349→                  {plugin.url && (
+  1350→                    <a
+  1351→                      href={plugin.url}
+  1352→                      target="_blank"
+  1353→                      rel="noopener noreferrer"
+  1354→                      className="text-gray-500 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded"
+  1355→                      aria-label={`Visit ${plugin.name} external page`}
+  1356→                    >
+  1357→                      <ExternalLink className="w-4 h-4" />
+  1358→                    </a>
+  1359→                  )}
+  1360→                </div>
+  1361→              </CardContent>
+  1362→            </Card>
+  1363→          </motion.div>
+  1364→        ))}
+  1365→      </div>
+  1366→
+  1367→      {/* Recommended Config */}
+  1368→      <Card className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10 border-amber-200 dark:border-amber-800 rounded-xl">
+  1369→        <CardHeader>
+  1370→          <CardTitle className="text-amber-800 dark:text-amber-300 flex items-center gap-2 font-bold tracking-tight">
+  1371→            <Code className="w-5 h-5" /> opencode.json — Above Mediocrity Config
+  1372→          </CardTitle>
+  1373→        </CardHeader>
+  1374→        <CardContent>
+  1375→          <pre className="text-xs bg-black/5 dark:bg-white/5 p-4 rounded-lg overflow-x-auto font-mono" aria-label="opencode.json configuration">
+  1376→{`{
+  1377→  "lsp": { "enabled": true },
+  1378→  "plugins": [
+  1379→    "oh-my-openagent",
+  1380→    "superpowers",
+  1381→    "opencode-gemini-auth"
+  1382→  ],
+  1383→  "mcpServers": {
+  1384→    "context7": {
+  1385→      "command": "npx",
+  1386→      "args": ["-y", "@upstash/context7-mcp"]
+  1387→    },
+  1388→    "github": {
+  1389→      "command": "npx",
+  1390→      "args": ["-y", "@modelcontextprotocol/server-github"],
+  1391→      "env": { "GITHUB_TOKEN": "\${GITHUB_TOKEN}" }
+  1392→    },
+  1393→    "firecrawl": {
+  1394→      "command": "npx",
+  1395→      "args": ["-y", "firecrawl-mcp"],
+  1396→      "env": { "FIRECRAWL_API_KEY": "\${FIRECRAWL_API_KEY}" }
+  1397→    },
+  1398→    "supabase": {
+  1399→      "command": "npx",
+  1400→      "args": ["-y", "@supabase/mcp-server-supabase"],
+  1401→      "env": { "SUPABASE_ACCESS_TOKEN": "\${SUPABASE_ACCESS_TOKEN}" }
+  1402→    }
+  1403→  },
+  1404→  "provider": {
+  1405→    "openrouter": { "apiKey": "\${OPENROUTER_API_KEY}" }
+  1406→  }
+  1407→}`}
+  1408→          </pre>
+  1409→          <div className="mt-3">
+  1410→            <CopyButton text={`curl -fsSL https://opencode.ai/install | bash && npx oh-my-openagent init && npx superpowers init`} label="Install command" />
+  1411→          </div>
+  1412→        </CardContent>
+  1413→      </Card>
+  1414→    </div>
+  1415→  )
+  1416→}
+  1417→
+  1418→// ==================== CATEGORIES / SUBREPO SECTION ====================
+  1419→
+  1420→function CategoriesSection() {
+  1421→  const [expandedCat, setExpandedCat] = useState<string | null>(null)
+  1422→
+  1423→  const catIcons: Record<string, React.ReactNode> = {
+  1424→    documents: <FileText className="w-5 h-5" />,
+  1425→    scripts: <FileCode className="w-5 h-5" />,
+  1426→    configs: <Settings className="w-5 h-5" />,
+  1427→    knowledge: <BookOpen className="w-5 h-5" />,
+  1428→    data: <Database className="w-5 h-5" />,
+  1429→    infrastructure: <Server className="w-5 h-5" />,
+  1430→  }
+  1431→
+  1432→  const catColors: Record<string, string> = {
+  1433→    documents: 'border-amber-400 bg-amber-50 dark:bg-amber-900/10',
+  1434→    scripts: 'border-emerald-400 bg-emerald-50 dark:bg-emerald-900/10',
+  1435→    configs: 'border-cyan-400 bg-cyan-50 dark:bg-cyan-900/10',
+  1436→    knowledge: 'border-violet-400 bg-violet-50 dark:bg-violet-900/10',
+  1437→    data: 'border-rose-400 bg-rose-50 dark:bg-rose-900/10',
+  1438→    infrastructure: 'border-orange-400 bg-orange-50 dark:bg-orange-900/10',
+  1439→  }
+  1440→
+  1441→  const subrepoExamples: Record<string, string[]> = {
+  1442→    documents: ['AI_Agentic_Stack_Blueprint.pdf', 'provider_comparison_matrix.png', 'setup-guide.docx'],
+  1443→    scripts: ['install-stack.sh', 'configure-proxies.py', 'health-check.ts'],
+  1444→    configs: ['opencode.json', 'litellm-config.yaml', '.env.template', '9router.toml'],
+  1445→    knowledge: ['SKILL.md', 'AGENTS.md', 'troubleshooting.md', 'architecture-decisions.mdx'],
+  1446→    data: ['providers.csv', 'schema.prisma', 'embeddings.db'],
+  1447→    infrastructure: ['Dockerfile.proxy', 'docker-compose.yml', 'Caddyfile', 'opencode.service'],
+  1448→  }
+  1449→
+  1450→  return (
+  1451→    <div className="space-y-6">
+  1452→      <SectionHeader
+  1453→        icon={FolderTree}
+  1454→        title="Independent Category Subrepos"
+  1455→        description="Every PDF, script, JSON, markdown gets its own independent category with a dedicated subrepo structure. Each group is self-contained."
+  1456→      />
+  1457→
+  1458→      {/* Architecture Overview */}
+  1459→      <Card className="bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/10 dark:to-purple-900/10 border-violet-200 dark:border-violet-800 rounded-xl">
+  1460→        <CardContent className="p-5">
+  1461→          <h3 className="font-bold tracking-tight text-violet-800 dark:text-violet-300 flex items-center gap-2 mb-3">
+  1462→            <Layers className="w-5 h-5" /> Subrepo Architecture Pattern
+  1463→          </h3>
+  1464→          <pre className="text-xs bg-black/5 dark:bg-white/5 p-4 rounded-lg font-mono overflow-x-auto" aria-label="Subrepo directory structure">
+  1465→{`ai-agentic-stack/
+  1466→├── documents/          # Independent subrepo
+  1467→│   ├── .git/
+  1468→│   ├── blueprints/
+  1469→│   ├── guides/
+  1470→│   └── diagrams/
+  1471→├── scripts/            # Independent subrepo
+  1472→│   ├── .git/
+  1473→│   ├── installers/
+  1474→│   ├── automation/
+  1475→│   └── health-checks/
+  1476→├── configs/            # Independent subrepo
+  1477→│   ├── .git/
+  1478→│   ├── opencode/
+  1479→│   ├── proxies/
+  1480→│   └── mcp-servers/
+  1481→├── knowledge/          # Independent subrepo
+  1482→│   ├── .git/
+  1483→│   ├── skills/
+  1484→│   ├── agents/
+  1485→│   └── wiki/
+  1486→├── data/               # Independent subrepo
+  1487→│   ├── .git/
+  1488→│   ├── schemas/
+  1489→│   └── datasets/
+  1490→└── infrastructure/     # Independent subrepo
+  1491→    ├── .git/
+  1492→    ├── docker/
+  1493→    ├── systemd/
+  1494→    └── networking/`}
+  1495→          </pre>
+  1496→        </CardContent>
+  1497→      </Card>
+  1498→
+  1499→      {/* Category Cards */}
+  1500→      <motion.div
+  1501→        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+  1502→        variants={staggerContainer}
+  1503→        initial="hidden"
+  1504→        whileInView="visible"
+  1505→        viewport={{ once: true, margin: '-80px' }}
+  1506→      >
+  1507→        {CATEGORY_GROUPS.map((cat) => (
+  1508→          <motion.div key={cat.id} variants={fadeUpItem}>
+  1509→            <Card
+  1510→              className={`border-l-4 hover:shadow-md transition-shadow cursor-pointer rounded-xl ${catColors[cat.id]}`}
+  1511→              onClick={() => setExpandedCat(expandedCat === cat.id ? null : cat.id)}
+  1512→              role="button"
+  1513→              tabIndex={0}
+  1514→              aria-expanded={expandedCat === cat.id}
+  1515→              aria-label={`${cat.label} — click to ${expandedCat === cat.id ? 'collapse' : 'expand'}`}
+  1516→              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedCat(expandedCat === cat.id ? null : cat.id) } }}
+  1517→            >
+  1518→              <CardHeader className="pb-2">
+  1519→                <div className="flex items-center justify-between">
+  1520→                  <div className="flex items-center gap-3">
+  1521→                    <span className="text-2xl">{cat.icon}</span>
+  1522→                    <div>
+  1523→                      <CardTitle className="text-base font-bold tracking-tight">{cat.label}</CardTitle>
+  1524→                      <CardDescription className="text-xs leading-relaxed">{cat.description}</CardDescription>
+  1525→                    </div>
+  1526→                  </div>
+  1527→                  <motion.div animate={{ rotate: expandedCat === cat.id ? 180 : 0 }} transition={{ duration: 0.2 }}>
+  1528→                    <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+  1529→                  </motion.div>
+  1530→                </div>
+  1531→              </CardHeader>
+  1532→              <CardContent>
+  1533→                <div className="flex flex-wrap gap-1.5">
+  1534→                  {cat.types.map(type => (
+  1535→                    <Badge key={type} variant="outline" className="text-xs">{type}</Badge>
+  1536→                  ))}
+  1537→                </div>
+  1538→
+  1539→                <AnimatePresence>
+  1540→                  {expandedCat === cat.id && (
+  1541→                    <motion.div
+  1542→                      initial={{ height: 0, opacity: 0 }}
+  1543→                      animate={{ height: 'auto', opacity: 1 }}
+  1544→                      exit={{ height: 0, opacity: 0 }}
+  1545→                      transition={{ duration: 0.2 }}
+  1546→                      className="overflow-hidden"
+  1547→                    >
+  1548→                      <Separator className="my-3" />
+  1549→                      <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Example files in this subrepo:</p>
+  1550→                      <div className="space-y-1.5">
+  1551→                        {(subrepoExamples[cat.id] || []).map(file => (
+  1552→                          <div key={file} className="flex items-center gap-2 text-xs p-1.5 rounded bg-white/50 dark:bg-black/20">
+  1553→                            <FileText className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+  1554→                            <span className="font-mono text-gray-700 dark:text-gray-300">{file}</span>
+  1555→                          </div>
+  1556→                        ))}
+  1557→                      </div>
+  1558→                    </motion.div>
+  1559→                  )}
+  1560→                </AnimatePresence>
+  1561→              </CardContent>
+  1562→            </Card>
+  1563→          </motion.div>
+  1564→        ))}
+  1565→      </motion.div>
+  1566→    </div>
+  1567→  )
+  1568→}
+  1569→
+  1570→// ==================== FILE BROWSER SECTION ====================
+  1571→
+  1572→function FileBrowserSection() {
+  1573→  const [categoryFilter, setCategoryFilter] = useState<string>('all')
+  1574→  const [typeFilter, setTypeFilter] = useState<string>('all')
+  1575→  const [search, setSearch] = useState('')
+  1576→  const [selectedFile, setSelectedFile] = useState<FileEntry | null>(null)
+  1577→  const [mdContent, setMdContent] = useState<string | null>(null)
+  1578→  const [mdLoading, setMdLoading] = useState(false)
+  1579→
+  1580→  const filtered = FILE_INVENTORY.filter(f => {
+  1581→    const matchSearch = f.name.toLowerCase().includes(search.toLowerCase()) || f.description.toLowerCase().includes(search.toLowerCase())
+  1582→    const matchCategory = categoryFilter === 'all' || f.category === categoryFilter
+  1583→    const matchType = typeFilter === 'all' || f.type === typeFilter
+  1584→    return matchSearch && matchCategory && matchType
+  1585→  })
+  1586→
+  1587→  const handleFileClick = useCallback((file: FileEntry) => {
+  1588→    setSelectedFile(file)
+  1589→    if (file.type === 'md') {
+  1590→      setMdLoading(true)
+  1591→      setMdContent(null)
+  1592→      fetch(file.path)
+  1593→        .then(res => {
+  1594→          if (!res.ok) throw new Error('Failed to fetch')
+  1595→          return res.text()
+  1596→        })
+  1597→        .then(text => {
+  1598→          setMdContent(text)
+  1599→          setMdLoading(false)
+  1600→        })
+  1601→        .catch(() => {
+  1602→          setMdContent('Unable to load markdown content. The file may not exist in the public directory yet.')
+  1603→          setMdLoading(false)
+  1604→        })
+  1605→    }
+  1606→  }, [])
+  1607→
+  1608→  const fileTypeIcon = (type: string) => {
+  1609→    switch (type) {
+  1610→      case 'pdf': return '📄'
+  1611→      case 'png': return '🖼️'
+  1612→      case 'md': return '📝'
+  1613→      case 'json': return '📊'
+  1614→      case 'py': return '🐍'
+  1615→      case 'html': return '🌐'
+  1616→      default: return '📎'
+  1617→    }
+  1618→  }
+  1619→
+  1620→  const categoryColor: Record<string, string> = {
+  1621→    document: '#f59e0b',
+  1622→    image: '#8b5cf6',
+  1623→    research: '#10b981',
+  1624→    data: '#3b82f6',
+  1625→    script: '#ef4444',
+  1626→  }
+  1627→
+  1628→  return (
+  1629→    <div className="space-y-6">
+  1630→      <SectionHeader
+  1631→        icon={FileText}
+  1632→        title="File Browser"
+  1633→        description="Browse and preview the complete inventory of documents, images, research reports, and data files in the AI Agentic Stack knowledge base."
+  1634→      />
+  1635→
+  1636→      {/* Filters */}
+  1637→      <div className="space-y-3">
+  1638→        <div className="flex items-center gap-2 flex-wrap">
+  1639→          <Filter className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+  1640→          <span className="text-sm text-gray-600 dark:text-gray-400">Category:</span>
+  1641→          {['all', 'document', 'image', 'research', 'data', 'script'].map(cat => (
+  1642→            <motion.button
+  1643→              key={cat}
+  1644→              onClick={() => setCategoryFilter(cat)}
+  1645→              whileHover={{ scale: 1.05 }}
+  1646→              whileTap={{ scale: 0.97 }}
+  1647→              className={`px-3 py-1.5 text-xs rounded-full transition-colors min-h-[36px] cursor-pointer focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+  1648→                categoryFilter === cat
+  1649→                  ? 'bg-amber-500 text-white'
+  1650→                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400'
+  1651→              }`}
+  1652→              aria-label={`Filter by ${cat === 'all' ? 'all categories' : cat}`}
+  1653→              aria-pressed={categoryFilter === cat}
+  1654→            >
+  1655→              {cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+  1656→            </motion.button>
+  1657→          ))}
+  1658→        </div>
+  1659→        <div className="flex items-center gap-2 flex-wrap">
+  1660→          <span className="text-sm text-gray-600 dark:text-gray-400">Type:</span>
+  1661→          {['all', 'pdf', 'png', 'md', 'json'].map(t => (
+  1662→            <motion.button
+  1663→              key={t}
+  1664→              onClick={() => setTypeFilter(t)}
+  1665→              whileHover={{ scale: 1.05 }}
+  1666→              whileTap={{ scale: 0.97 }}
+  1667→              className={`px-3 py-1.5 text-xs rounded-full transition-colors min-h-[36px] cursor-pointer focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+  1668→                typeFilter === t
+  1669→                  ? 'bg-violet-500 text-white'
+  1670→                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400'
+  1671→              }`}
+  1672→              aria-label={`Filter by ${t === 'all' ? 'all types' : t.toUpperCase()}`}
+  1673→              aria-pressed={typeFilter === t}
+  1674→            >
+  1675→              {t === 'all' ? 'All' : t.toUpperCase()}
+  1676→            </motion.button>
+  1677→          ))}
+  1678→        </div>
+  1679→        <div className="relative">
+  1680→          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 dark:text-gray-400" />
+  1681→          <Input
+  1682→            placeholder="Search files by name or description..."
+  1683→            value={search}
+  1684→            onChange={e => setSearch(sanitizeSearch(e.target.value))}
+  1685→            maxLength={200}
+  1686→            className="pl-10 h-10"
+  1687→            aria-label="Search files"
+  1688→          />
+  1689→        </div>
+  1690→      </div>
+  1691→
+  1692→      {/* File Grid */}
+  1693→      <motion.div
+  1694→        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+  1695→        variants={staggerContainer}
+  1696→        initial="hidden"
+  1697→        animate="visible"
+  1698→      >
+  1699→        {filtered.map((file) => (
+  1700→          <motion.div
+  1701→            key={file.id}
+  1702→            variants={fadeUpItem}
+  1703→            whileHover={{ scale: 1.02, y: -2 }}
+  1704→            whileTap={{ scale: 0.98 }}
+  1705→            className="cursor-pointer transform-gpu"
+  1706→            onClick={() => handleFileClick(file)}
+  1707→            role="button"
+  1708→            tabIndex={0}
+  1709→            aria-label={`Open ${file.name}`}
+  1710→            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFileClick(file) } }}
+  1711→          >
+  1712→            <Card className="h-full border-l-4 hover:shadow-lg transition-shadow rounded-xl" style={{ borderLeftColor: categoryColor[file.category] || '#6b7280' }}>
+  1713→              <CardHeader className="pb-2">
+  1714→                <div className="flex items-center justify-between">
+  1715→                  <div className="flex items-center gap-2">
+  1716→                    <span className="text-xl">{fileTypeIcon(file.type)}</span>
+  1717→                    <CardTitle className="text-sm line-clamp-1 font-bold tracking-tight">{file.name}</CardTitle>
+  1718→                  </div>
+  1719→                  <Badge variant="outline" className="text-xs">{file.type.toUpperCase()}</Badge>
+  1720→                </div>
+  1721→              </CardHeader>
+  1722→              <CardContent className="pt-0">
+  1723→                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400 line-clamp-2 mb-2">{file.description}</p>
+  1724→                {file.preview && (
+  1725→                  <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 italic mb-2">{file.preview}</p>
+  1726→                )}
+  1727→                <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+  1728→                  <span>{file.size}</span>
+  1729→                  <span>{file.date}</span>
+  1730→                </div>
+  1731→              </CardContent>
+  1732→            </Card>
+  1733→          </motion.div>
+  1734→        ))}
+  1735→      </motion.div>
+  1736→
+  1737→      {filtered.length === 0 && (
+  1738→        <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+  1739→          <FileText className="w-12 h-12 mx-auto mb-3 opacity-30" />
+  1740→          <p className="text-sm">No files match your filters.</p>
+  1741→        </div>
+  1742→      )}
+  1743→
+  1744→      {/* File Preview Dialog */}
+  1745→      <Dialog open={!!selectedFile} onOpenChange={(open) => { if (!open) setSelectedFile(null) }}>
+  1746→        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+  1747→          <DialogHeader>
+  1748→            <DialogTitle className="flex items-center gap-2">
+  1749→              {selectedFile && <span className="text-xl">{fileTypeIcon(selectedFile.type)}</span>}
+  1750→              {selectedFile?.name}
+  1751→            </DialogTitle>
+  1752→            <DialogDescription>{selectedFile?.description}</DialogDescription>
+  1753→          </DialogHeader>
+  1754→
+  1755→          {selectedFile && (
+  1756→            <div className="space-y-4">
+  1757→              <div className="flex flex-wrap gap-2">
+  1758→                <Badge variant="outline">{selectedFile.type.toUpperCase()}</Badge>
+  1759→                <Badge variant="secondary">{selectedFile.category}</Badge>
+  1760→                <Badge variant="secondary">{selectedFile.size}</Badge>
+  1761→                <Badge variant="secondary">{selectedFile.date}</Badge>
+  1762→              </div>
+  1763→
+  1764→              {selectedFile.type === 'png' && (
+  1765→                <div className="rounded-lg border overflow-hidden bg-muted/30 flex items-center justify-center p-4">
+  1766→                  <img
+  1767→                    src={selectedFile.path}
+  1768→                    alt={selectedFile.name}
+  1769→                    className="max-w-full max-h-96 object-contain rounded"
+  1770→                    loading="lazy"
+  1771→                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+  1772→                  />
+  1773→                </div>
+  1774→              )}
+  1775→
+  1776→              {selectedFile.type === 'pdf' && (
+  1777→                <div className="space-y-3">
+  1778→                  <div className="p-6 rounded-lg border bg-muted/20 text-center">
+  1779→                    <span className="text-4xl">📄</span>
+  1780→                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">PDF preview requires the file in the public directory.</p>
+  1781→                  </div>
+  1782→                  <Button variant="outline" size="sm" asChild className="w-full min-h-[44px]">
+  1783→                    <a href={selectedFile.path} target="_blank" rel="noopener noreferrer">
+  1784→                      <Download className="w-4 h-4 mr-2" />
+  1785→                      Open / Download PDF
+  1786→                    </a>
+  1787→                  </Button>
+  1788→                </div>
+  1789→              )}
+  1790→
+  1791→              {selectedFile.type === 'md' && (
+  1792→                <div className="rounded-lg border p-4 bg-muted/10 max-h-96 overflow-y-auto">
+  1793→                  {mdLoading ? (
+  1794→                    <div className="flex items-center justify-center py-8">
+  1795→                      <div className="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
+  1796→                      <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Loading markdown...</span>
+  1797→                    </div>
+  1798→                  ) : mdContent ? (
+  1799→                    <div className="prose prose-sm dark:prose-invert max-w-none">
+  1800→                      <ReactMarkdown
+  1801→                        allowedElements={['p', 'br', 'strong', 'em', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'code', 'pre', 'a', 'blockquote', 'table', 'thead', 'tbody', 'tr', 'th', 'td']}
+  1802→                      >
+  1803→                        {mdContent}
+  1804→                      </ReactMarkdown>
+  1805→                    </div>
+  1806→                  ) : (
+  1807→                    <p className="text-sm text-gray-600 dark:text-gray-400 text-center py-4">Click to load preview</p>
+  1808→                  )}
+  1809→                </div>
+  1810→              )}
+  1811→
+  1812→              {selectedFile.type === 'json' && (
+  1813→                <pre className="p-4 rounded-lg border bg-gray-50 dark:bg-gray-900 text-xs font-mono overflow-auto max-h-96" aria-label="JSON preview">
+  1814→                  {'{ "message": "JSON preview — file not yet available in public directory" }'}
+  1815→                </pre>
+  1816→              )}
+  1817→
+  1818→              <div className="flex gap-2 pt-2">
+  1819→                <Button variant="outline" size="sm" asChild className="min-h-[44px]">
+  1820→                  <a href={selectedFile.path} target="_blank" rel="noopener noreferrer" download>
+  1821→                    <Download className="w-4 h-4 mr-2" />
+  1822→                    Download
+  1823→                  </a>
+  1824→                </Button>
+  1825→                <Button variant="outline" size="sm" asChild className="min-h-[44px]">
+  1826→                  <a href={selectedFile.path} target="_blank" rel="noopener noreferrer">
+  1827→                    <ExternalLink className="w-4 h-4 mr-2" />
+  1828→                    Open in New Tab
+  1829→                  </a>
+  1830→                </Button>
+  1831→                <Button
+  1832→                  variant="outline"
+  1833→                  size="sm"
+  1834→                  className="min-h-[44px]"
+  1835→                  onClick={() => {
+  1836→                    if (!isClipboardAvailable()) {
+  1837→                      toast.error('Clipboard not available')
+  1838→                      return
+  1839→                    }
+  1840→                    navigator.clipboard.writeText(selectedFile.path)
+  1841→                    toast.success('Path copied to clipboard!')
+  1842→                  }}
+  1843→                >
+  1844→                  <Copy className="w-4 h-4 mr-2" />
+  1845→                  Copy Path
+  1846→                </Button>
+  1847→              </div>
+  1848→            </div>
+  1849→          )}
+  1850→        </DialogContent>
+  1851→      </Dialog>
+  1852→    </div>
+  1853→  )
+  1854→}
+  1855→
+  1856→// ==================== PROXY COMPARISON TOPICS SECTION ====================
+  1857→
+  1858→const PROXY_COMPARISONS = [
+  1859→  {
+  1860→    id: 'owl-orca',
+  1861→    name: 'OWL-ORCA v7.1.0',
+  1862→    approach: 'Local Install + Protocol Translation',
+  1863→    tagline: 'The Kitchen Sink — install once, race forever',
+  1864→    color: '#10b981',
+  1865→    architecture: '3 local endpoints (Orca Router :60001, Kiro Gateway :8333, Forward Proxy :60000). Stream racing across GitHub Copilot Free + Antigravity Free. Protocol translation on-the-fly. Circuit breaking built-in.',
+  1866→    freeTokens: '~2B+/mo (pooled Copilot + Antigravity + AWS Builder ID)',
+  1867→    setupComplexity: 'One command (install.sh)',
+  1868→    openSource: true,
+  1869→    strengths: ['Zero config for OpenCode/Kilo CLI (auto-injection)', '3 distinct proxy roles in one install', 'Premium models free via AWS Builder ID', 'Circuit breaking prevents cascading failures', 'Protocol translation (Copilot/Antigravity → OpenAI format)', 'Works with ANY ADE via custom base URL'],
+  1870→    weaknesses: ['Ubuntu-only (Linux dependency)', 'Newer project — less battle-tested', 'Requires GitHub Copilot Free + Antigravity accounts', 'Forward proxy can be a security concern if misconfigured'],
+  1871→    economics: 'Race theory: like high-frequency trading, speed wins. OWL-ORCA races multiple free tiers simultaneously and returns the fastest response. This is "arbitrage of free tiers" — the economic value comes from the delta between what you pay ($0) and what you receive (premium model outputs).',
+  1872→    psychology: 'Reduces choice overload. Instead of picking one provider, you get "auto-racer" that picks for you. Paradox of choice (Schwartz, 2004): more options = more anxiety. OWL-ORCA eliminates the decision by racing all options.',
+  1873→    networkScience: 'Like BGP (Border Gateway Protocol) for AI models. Circuit breaking = failover routing. Stream racing = anycast. The Forward Proxy = a VPN tunnel. This is essentially internet routing applied to LLM API calls.',
+  1874→    history: 'Reminiscent of early telephone exchanges (1880s): human operators manually connected calls. OWL-ORCA automates the "connection" between ADEs and providers, just as automatic exchanges replaced human operators.',
+  1875→  },
+  1876→  {
+  1877→    id: 'litellm',
+  1878→    name: 'LiteLLM',
+  1879→    approach: 'Unified OpenAI-Compatible Proxy',
+  1880→    tagline: 'The Universal Translator — 100+ providers, one API',
+  1881→    color: '#3b82f6',
+  1882→    architecture: 'Python proxy server. Translates OpenAI-format requests to 100+ provider APIs. Load balancing, fallbacks, budget controls, key management. Self-hosted or cloud.',
+  1883→    freeTokens: 'Depends on your own provider keys (0 without BYOK)',
+  1884→    setupComplexity: 'pip install litellm[proxy] + config YAML',
+  1885→    openSource: true,
+  1886→    strengths: ['Largest provider support (100+ LLMs)', 'Mature project with enterprise features', 'Budget controls and spend tracking', 'Load balancing and fallback chains', 'Key management and rotation', 'Both self-hosted and cloud options'],
+  1887→    weaknesses: ['No free-tier aggregation — BYOK only', 'Python dependency (heavier than Go/Rust alternatives)', 'No stream racing (sequential fallback, not parallel)', 'Configuration complexity for 100+ providers', 'No protocol translation for Copilot/Antigravity'],
+  1888→    economics: 'Translation theory: LiteLLM is a market maker, not a provider. Like a currency exchange, it doesn\'t create value — it facilitates access. The economic value is in reducing integration cost (one API vs 100), but you still pay per-token to providers.',
+  1889→    psychology: 'Reduced cognitive load via standardization. One API format for 100 providers = one mental model. However, the paradox: 100 options creates choice overload for model selection. LiteLLM solves the "how to connect" but not "which model to use."',
+  1890→    networkScience: 'Like a CDN (Content Delivery Network) for LLM APIs. LiteLLM is the edge node that caches, routes, and load-balances. Fallback chains = redundant paths. But unlike OWL-ORCA, there\'s no "racing" — it\'s sequential failover.',
+  1891→    history: 'Like the Rosetta Stone (196 BC): a universal translation layer. LiteLLM does for LLM APIs what the Rosetta Stone did for languages — makes every provider understandable through one common format.',
+  1892→  },
+  1893→  {
+  1894→    id: 'openrouter',
+  1895→    name: 'OpenRouter',
+  1896→    approach: 'Cloud API Aggregator',
+  1897→    tagline: 'The Marketplace — 300+ models, one endpoint',
+  1898→    color: '#8b5cf6',
+  1899→    architecture: 'Cloud-hosted API gateway. Single endpoint routes to 300+ models. Free models available. Automatic provider failover. Streaming support. Usage tracking.',
+  1900→    freeTokens: 'Free tier models available (~30+ free models)',
+  1901→    setupComplexity: 'API key + base URL change',
+  1902→    openSource: false,
+  1903→    strengths: ['Largest model selection (300+ models)', 'Free models available at zero cost', 'Zero infrastructure — fully cloud-hosted', 'Simple setup (just change base URL)', 'Built-in OpenCode support', 'Usage statistics and cost tracking'],
+  1904→    weaknesses: ['Not self-hosted — dependency on OpenRouter cloud', 'Rate limits on free models', 'No local proxy for Copilot/Antigravity', 'Privacy concerns (all traffic routes through OpenRouter)', 'No stream racing across providers'],
+  1905→    economics: 'Marketplace theory: OpenRouter is like Amazon for LLMs. It aggregates supply (providers) and demand (developers), taking a small margin. Free models are the "loss leaders" that attract users to paid models. Classic two-sided market (Rochet & Tirole, 2003).',
+  1906→    psychology: 'The IKEA effect in reverse: less setup effort = less perceived value. OpenRouter is "too easy" — developers may not appreciate the complexity it abstracts. However, the 300+ model count creates a "paradox of abundance" where having more choices can lead to decision paralysis.',
+  1907→    networkScience: 'Like DNS (Domain Name System) for AI models. You give it a model name, it resolves to the correct provider. But unlike DNS, there\'s a middleman tax (latency, cost, dependency).',
+  1908→    history: 'Like the early telegraph networks (1840s): centralized relay stations. OpenRouter is the "central station" that all messages pass through. This was efficient but created a single point of failure — just as the telegraph monopolies did.',
+  1909→  },
+  1910→  {
+  1911→    id: 'freellmapi',
+  1912→    name: 'FreeLLMAPI',
+  1913→    approach: 'Free-Tier Aggregation',
+  1914→    tagline: 'The Free Pool — 1.7B tokens/month from 16 providers',
+  1915→    color: '#f59e0b',
+  1916→    architecture: 'Python proxy that aggregates 16 free-tier LLM providers behind one /v1 endpoint. Automatic failover. OpenAI-compatible. Pure free-tier pooling.',
+  1917→    freeTokens: '~1.7 billion tokens/month',
+  1918→    setupComplexity: 'pip install + configure free-tier keys',
+  1919→    openSource: true,
+  1920→    strengths: ['Maximum free tokens (~1.7B/mo)', 'Pure free-tier aggregation — no paid providers needed', 'OpenAI-compatible API', 'Automatic failover between providers', 'Lightweight Python proxy', 'Community-maintained free provider list'],
+  1921→    weaknesses: ['No premium models (free-tier only)', 'Rate limits vary per provider', 'Quality varies (free models = lower capability)', 'No stream racing (sequential, not parallel)', 'Maintenance burden: free providers change frequently', 'No Copilot/Antigravity/AWS integration'],
+  1922→    economics: 'Commons theory: FreeLLMAPI is a digital commons (Ostrom, 1990). Multiple free providers are pooled like shared grazing land. The tragedy: when one provider becomes popular, its free tier gets exhausted faster. FreeLLMAPI manages this through failover, but the underlying scarcity remains.',
+  1923→    psychology: 'Scarcity mindset vs abundance mindset. FreeLLMAPI creates an illusion of abundance (1.7B tokens!) but the reality is scarcity (rate limits, model quality). The psychological tension between "free" and "limited" creates anxiety about running out.',
+  1924→    networkScience: 'Like mesh networking: multiple redundant paths, no central authority. If one provider fails, traffic routes to another. But mesh networks have higher latency than star topologies (like OWL-ORCA\'s centralized proxy).',
+  1925→    history: 'Like the early internet (ARPANET, 1969): built on the principle of redundancy and free access. ARPANET connected universities for free, just as FreeLLMAPI connects free-tier providers. The lesson: free infrastructure eventually gets commercialized.',
+  1926→  },
+  1927→]
+  1928→
+  1929→function ProxyComparisonTopicsSection() {
+  1930→  const [expandedId, setExpandedId] = useState<string | null>(null)
+  1931→
+  1932→  return (
+  1933→    <div className="space-y-6">
+  1934→      <SectionHeader
+  1935→        icon={BookOpen}
+  1936→        title="Proxy Stacks — The Deep Comparison"
+  1937→        description="How OWL-ORCA stands out against LiteLLM, OpenRouter, FreeLLMAPI, and the rest. Analyzed through economics, psychology, and network science."
+  1938→      />
+  1939→
+  1940→      {/* 2x2 Comparison Grid */}
+  1941→      <motion.div
+  1942→        className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+  1943→        variants={staggerContainer}
+  1944→        initial="hidden"
+  1945→        whileInView="visible"
+  1946→        viewport={{ once: true, margin: '-80px' }}
+  1947→      >
+  1948→        {PROXY_COMPARISONS.map((proxy) => (
+  1949→          <motion.div key={proxy.id} variants={fadeUpItem}>
+  1950→            <Card
+  1951→              className="border-2 cursor-pointer hover:shadow-lg transition-all h-full rounded-xl"
+  1952→              style={{ borderColor: expandedId === proxy.id ? proxy.color : `${proxy.color}40` }}
+  1953→              onClick={() => setExpandedId(expandedId === proxy.id ? null : proxy.id)}
+  1954→              role="button"
+  1955→              tabIndex={0}
+  1956→              aria-expanded={expandedId === proxy.id}
+  1957→              aria-label={`${proxy.name} — click to ${expandedId === proxy.id ? 'collapse' : 'expand'}`}
+  1958→              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedId(expandedId === proxy.id ? null : proxy.id) } }}
+  1959→            >
+  1960→              <CardHeader className="pb-2">
+  1961→                <div className="flex items-center justify-between">
+  1962→                  <div className="flex items-center gap-3">
+  1963→                    <motion.div
+  1964→                      className="w-3 h-3 rounded-full"
+  1965→                      style={{ backgroundColor: proxy.color }}
+  1966→                      animate={{ scale: expandedId === proxy.id ? [1, 1.3, 1] : 1 }}
+  1967→                      transition={{ duration: 0.5 }}
+  1968→                    />
+  1969→                    <div>
+  1970→                      <CardTitle className="text-base font-bold tracking-tight" style={{ color: proxy.color }}>{proxy.name}</CardTitle>
+  1971→                      <CardDescription className="text-xs leading-relaxed">{proxy.tagline}</CardDescription>
+  1972→                    </div>
+  1973→                  </div>
+  1974→                  <div className="flex items-center gap-2">
+  1975→                    {proxy.openSource && (
+  1976→                      <Badge variant="outline" className="text-xs border-emerald-400 text-emerald-600 dark:text-emerald-400">OSS</Badge>
+  1977→                    )}
+  1978→                    <motion.div animate={{ rotate: expandedId === proxy.id ? 180 : 0 }} transition={{ duration: 0.2 }}>
+  1979→                      <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+  1980→                    </motion.div>
+  1981→                  </div>
+  1982→                </div>
+  1983→              </CardHeader>
+  1984→              <CardContent className="pt-0">
+  1985→                <div className="space-y-1.5 mb-3">
+  1986→                  <div className="flex justify-between text-xs">
+  1987→                    <span className="text-gray-600 dark:text-gray-400">Approach</span>
+  1988→                    <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.approach}</span>
+  1989→                  </div>
+  1990→                  <div className="flex justify-between text-xs">
+  1991→                    <span className="text-gray-600 dark:text-gray-400">Free Tokens</span>
+  1992→                    <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.freeTokens}</span>
+  1993→                  </div>
+  1994→                  <div className="flex justify-between text-xs">
+  1995→                    <span className="text-gray-600 dark:text-gray-400">Setup</span>
+  1996→                    <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.setupComplexity}</span>
+  1997→                  </div>
+  1998→                </div>
+  1999→
+  2000→                <AnimatePresence>
+
+[showing lines 1-2000 of 2628; use offset=2001 with limit to continue reading]
