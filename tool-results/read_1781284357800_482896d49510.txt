@@ -1,0 +1,502 @@
+  1501→                    <CardTitle className="text-sm line-clamp-1">{file.name}</CardTitle>
+  1502→                  </div>
+  1503→                  <Badge variant="outline" className="text-[10px]">{file.type.toUpperCase()}</Badge>
+  1504→                </div>
+  1505→              </CardHeader>
+  1506→              <CardContent className="pt-0">
+  1507→                <p className="text-xs text-muted-foreground line-clamp-2 mb-2">{file.description}</p>
+  1508→                {file.preview && (
+  1509→                  <p className="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-2 italic mb-2">{file.preview}</p>
+  1510→                )}
+  1511→                <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+  1512→                  <span>{file.size}</span>
+  1513→                  <span>{file.date}</span>
+  1514→                </div>
+  1515→              </CardContent>
+  1516→            </Card>
+  1517→          </motion.div>
+  1518→        ))}
+  1519→      </div>
+  1520→
+  1521→      {filtered.length === 0 && (
+  1522→        <div className="text-center py-12 text-muted-foreground">
+  1523→          <FileText className="w-12 h-12 mx-auto mb-3 opacity-30" />
+  1524→          <p className="text-sm">No files match your filters.</p>
+  1525→        </div>
+  1526→      )}
+  1527→
+  1528→      {/* File Preview Dialog */}
+  1529→      <Dialog open={!!selectedFile} onOpenChange={(open) => { if (!open) setSelectedFile(null) }}>
+  1530→        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+  1531→          <DialogHeader>
+  1532→            <DialogTitle className="flex items-center gap-2">
+  1533→              {selectedFile && <span className="text-xl">{fileTypeIcon(selectedFile.type)}</span>}
+  1534→              {selectedFile?.name}
+  1535→            </DialogTitle>
+  1536→            <DialogDescription>{selectedFile?.description}</DialogDescription>
+  1537→          </DialogHeader>
+  1538→          {selectedFile && (
+  1539→            <div className="space-y-4">
+  1540→              <div className="flex flex-wrap gap-2">
+  1541→                <Badge variant="outline">{selectedFile.type.toUpperCase()}</Badge>
+  1542→                <Badge variant="secondary">{selectedFile.category}</Badge>
+  1543→                <Badge variant="secondary">{selectedFile.size}</Badge>
+  1544→                <Badge variant="secondary">{selectedFile.date}</Badge>
+  1545→              </div>
+  1546→
+  1547→              {selectedFile.type === 'png' && (
+  1548→                <div className="rounded-lg border overflow-hidden bg-muted/30 flex items-center justify-center p-4">
+  1549→                  <img
+  1550→                    src={selectedFile.path}
+  1551→                    alt={selectedFile.name}
+  1552→                    className="max-w-full max-h-96 object-contain rounded"
+  1553→                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+  1554→                  />
+  1555→                </div>
+  1556→              )}
+  1557→
+  1558→              {selectedFile.type === 'pdf' && (
+  1559→                <div className="space-y-3">
+  1560→                  <div className="p-6 rounded-lg border bg-muted/20 text-center">
+  1561→                    <span className="text-4xl">📄</span>
+  1562→                    <p className="text-sm text-muted-foreground mt-2">PDF preview requires the file in the public directory.</p>
+  1563→                  </div>
+  1564→                  <Button variant="outline" size="sm" asChild className="w-full">
+  1565→                    <a href={selectedFile.path} target="_blank" rel="noopener noreferrer">
+  1566→                      <Download className="w-4 h-4 mr-2" />
+  1567→                      Open / Download PDF
+  1568→                    </a>
+  1569→                  </Button>
+  1570→                </div>
+  1571→              )}
+  1572→
+  1573→              {selectedFile.type === 'md' && (
+  1574→                <div className="rounded-lg border p-4 bg-muted/10 max-h-96 overflow-y-auto">
+  1575→                  {mdLoading ? (
+  1576→                    <div className="flex items-center justify-center py-8">
+  1577→                      <div className="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
+  1578→                      <span className="ml-2 text-sm text-muted-foreground">Loading markdown...</span>
+  1579→                    </div>
+  1580→                  ) : mdContent ? (
+  1581→                    <div className="prose prose-sm dark:prose-invert max-w-none">
+  1582→                      <ReactMarkdown>{mdContent}</ReactMarkdown>
+  1583→                    </div>
+  1584→                  ) : (
+  1585→                    <p className="text-sm text-muted-foreground text-center py-4">Click to load preview</p>
+  1586→                  )}
+  1587→                </div>
+  1588→              )}
+  1589→
+  1590→              {selectedFile.type === 'json' && (
+  1591→                <pre className="p-4 rounded-lg border bg-gray-50 dark:bg-gray-900 text-xs font-mono overflow-auto max-h-96">
+  1592→                  {'{ "message": "JSON preview — file not yet available in public directory" }'}
+  1593→                </pre>
+  1594→              )}
+  1595→
+  1596→              <div className="flex gap-2 pt-2">
+  1597→                <Button variant="outline" size="sm" asChild>
+  1598→                  <a href={selectedFile.path} target="_blank" rel="noopener noreferrer" download>
+  1599→                    <Download className="w-4 h-4 mr-2" />
+  1600→                    Download
+  1601→                  </a>
+  1602→                </Button>
+  1603→                <Button variant="outline" size="sm" asChild>
+  1604→                  <a href={selectedFile.path} target="_blank" rel="noopener noreferrer">
+  1605→                    <ExternalLink className="w-4 h-4 mr-2" />
+  1606→                    Open in New Tab
+  1607→                  </a>
+  1608→                </Button>
+  1609→                <Button
+  1610→                  variant="outline"
+  1611→                  size="sm"
+  1612→                  onClick={() => {
+  1613→                    navigator.clipboard.writeText(selectedFile.path)
+  1614→                    toast.success('Path copied to clipboard!')
+  1615→                  }}
+  1616→                >
+  1617→                  <Copy className="w-4 h-4 mr-2" />
+  1618→                  Copy Path
+  1619→                </Button>
+  1620→              </div>
+  1621→            </div>
+  1622→          )}
+  1623→        </DialogContent>
+  1624→      </Dialog>
+  1625→    </div>
+  1626→  )
+  1627→}
+  1628→
+  1629→// ==================== PROXY COMPARISON TOPICS SECTION ====================
+  1630→
+  1631→const PROXY_COMPARISONS = [
+  1632→  {
+  1633→    id: 'owl-orca',
+  1634→    name: 'OWL-ORCA v7.1.0',
+  1635→    approach: 'Local Install + Protocol Translation',
+  1636→    tagline: 'The Kitchen Sink — install once, race forever',
+  1637→    color: '#10b981',
+  1638→    architecture: '3 local endpoints (Orca Router :60001, Kiro Gateway :8333, Forward Proxy :60000). Stream racing across GitHub Copilot Free + Antigravity Free. Protocol translation on-the-fly. Circuit breaking built-in.',
+  1639→    freeTokens: '~2B+/mo (pooled Copilot + Antigravity + AWS Builder ID)',
+  1640→    setupComplexity: 'One command (install.sh)',
+  1641→    openSource: true,
+  1642→    strengths: ['Zero config for OpenCode/Kilo CLI (auto-injection)', '3 distinct proxy roles in one install', 'Premium models free via AWS Builder ID', 'Circuit breaking prevents cascading failures', 'Protocol translation (Copilot/Antigravity → OpenAI format)', 'Works with ANY ADE via custom base URL'],
+  1643→    weaknesses: ['Ubuntu-only (Linux dependency)', 'Newer project — less battle-tested', 'Requires GitHub Copilot Free + Antigravity accounts', 'Forward proxy can be a security concern if misconfigured'],
+  1644→    economics: 'Race theory: like high-frequency trading, speed wins. OWL-ORCA races multiple free tiers simultaneously and returns the fastest response. This is "arbitrage of free tiers" — the economic value comes from the delta between what you pay ($0) and what you receive (premium model outputs).',
+  1645→    psychology: 'Reduces choice overload. Instead of picking one provider, you get "auto-racer" that picks for you. Paradox of choice (Schwartz, 2004): more options = more anxiety. OWL-ORCA eliminates the decision by racing all options.',
+  1646→    networkScience: 'Like BGP (Border Gateway Protocol) for AI models. Circuit breaking = failover routing. Stream racing = anycast. The Forward Proxy = a VPN tunnel. This is essentially internet routing applied to LLM API calls.',
+  1647→    history: 'Reminiscent of early telephone exchanges (1880s): human operators manually connected calls. OWL-ORCA automates the "connection" between ADEs and providers, just as automatic exchanges replaced human operators.',
+  1648→  },
+  1649→  {
+  1650→    id: 'litellm',
+  1651→    name: 'LiteLLM',
+  1652→    approach: 'Unified OpenAI-Compatible Proxy',
+  1653→    tagline: 'The Universal Translator — 100+ providers, one API',
+  1654→    color: '#3b82f6',
+  1655→    architecture: 'Python proxy server. Translates OpenAI-format requests to 100+ provider APIs. Load balancing, fallbacks, budget controls, key management. Self-hosted or cloud.',
+  1656→    freeTokens: 'Depends on your own provider keys (0 without BYOK)',
+  1657→    setupComplexity: 'pip install litellm[proxy] + config YAML',
+  1658→    openSource: true,
+  1659→    strengths: ['Largest provider support (100+ LLMs)', 'Mature project with enterprise features', 'Budget controls and spend tracking', 'Load balancing and fallback chains', 'Key management and rotation', 'Both self-hosted and cloud options'],
+  1660→    weaknesses: ['No free-tier aggregation — BYOK only', 'Python dependency (heavier than Go/Rust alternatives)', 'No stream racing (sequential fallback, not parallel)', 'Configuration complexity for 100+ providers', 'No protocol translation for Copilot/Antigravity'],
+  1661→    economics: 'Translation theory: LiteLLM is a market maker, not a provider. Like a currency exchange, it doesn\'t create value — it facilitates access. The economic value is in reducing integration cost (one API vs 100), but you still pay per-token to providers.',
+  1662→    psychology: 'Reduced cognitive load via standardization. One API format for 100 providers = one mental model. However, the paradox: 100 options creates choice overload for model selection. LiteLLM solves the "how to connect" but not "which model to use."',
+  1663→    networkScience: 'Like a CDN (Content Delivery Network) for LLM APIs. LiteLLM is the edge node that caches, routes, and load-balances. Fallback chains = redundant paths. But unlike OWL-ORCA, there\'s no "racing" — it\'s sequential failover.',
+  1664→    history: 'Like the Rosetta Stone (196 BC): a universal translation layer. LiteLLM does for LLM APIs what the Rosetta Stone did for languages — makes every provider understandable through one common format.',
+  1665→  },
+  1666→  {
+  1667→    id: 'openrouter',
+  1668→    name: 'OpenRouter',
+  1669→    approach: 'Cloud API Aggregator',
+  1670→    tagline: 'The Marketplace — 300+ models, one endpoint',
+  1671→    color: '#8b5cf6',
+  1672→    architecture: 'Cloud-hosted API gateway. Single endpoint routes to 300+ models. Free models available. Automatic provider failover. Streaming support. Usage tracking.',
+  1673→    freeTokens: 'Free tier models available (~30+ free models)',
+  1674→    setupComplexity: 'API key + base URL change',
+  1675→    openSource: false,
+  1676→    strengths: ['Largest model selection (300+ models)', 'Free models available at zero cost', 'Zero infrastructure — fully cloud-hosted', 'Simple setup (just change base URL)', 'Built-in OpenCode support', 'Usage statistics and cost tracking'],
+  1677→    weaknesses: ['Not self-hosted — dependency on OpenRouter cloud', 'Rate limits on free models', 'No local proxy for Copilot/Antigravity', 'Privacy concerns (all traffic routes through OpenRouter)', 'No stream racing across providers'],
+  1678→    economics: 'Marketplace theory: OpenRouter is like Amazon for LLMs. It aggregates supply (providers) and demand (developers), taking a small margin. Free models are the "loss leaders" that attract users to paid models. Classic two-sided market (Rochet & Tirole, 2003).',
+  1679→    psychology: 'The IKEA effect in reverse: less setup effort = less perceived value. OpenRouter is "too easy" — developers may not appreciate the complexity it abstracts. However, the 300+ model count creates a "paradox of abundance" where having more choices can lead to decision paralysis.',
+  1680→    networkScience: 'Like DNS (Domain Name System) for AI models. You give it a model name, it resolves to the correct provider. But unlike DNS, there\'s a middleman tax (latency, cost, dependency).',
+  1681→    history: 'Like the early telegraph networks (1840s): centralized relay stations. OpenRouter is the "central station" that all messages pass through. This was efficient but created a single point of failure — just as the telegraph monopolies did.',
+  1682→  },
+  1683→  {
+  1684→    id: 'freellmapi',
+  1685→    name: 'FreeLLMAPI',
+  1686→    approach: 'Free-Tier Aggregation',
+  1687→    tagline: 'The Free Pool — 1.7B tokens/month from 16 providers',
+  1688→    color: '#f59e0b',
+  1689→    architecture: 'Python proxy that aggregates 16 free-tier LLM providers behind one /v1 endpoint. Automatic failover. OpenAI-compatible. Pure free-tier pooling.',
+  1690→    freeTokens: '~1.7 billion tokens/month',
+  1691→    setupComplexity: 'pip install + configure free-tier keys',
+  1692→    openSource: true,
+  1693→    strengths: ['Maximum free tokens (~1.7B/mo)', 'Pure free-tier aggregation — no paid providers needed', 'OpenAI-compatible API', 'Automatic failover between providers', 'Lightweight Python proxy', 'Community-maintained free provider list'],
+  1694→    weaknesses: ['No premium models (free-tier only)', 'Rate limits vary per provider', 'Quality varies (free models = lower capability)', 'No stream racing (sequential, not parallel)', 'Maintenance burden: free providers change frequently', 'No Copilot/Antigravity/AWS integration'],
+  1695→    economics: 'Commons theory: FreeLLMAPI is a digital commons (Ostrom, 1990). Multiple free providers are pooled like shared grazing land. The tragedy: when one provider becomes popular, its free tier gets exhausted faster. FreeLLMAPI manages this through failover, but the underlying scarcity remains.',
+  1696→    psychology: 'Scarcity mindset vs abundance mindset. FreeLLMAPI creates an illusion of abundance (1.7B tokens!) but the reality is scarcity (rate limits, model quality). The psychological tension between "free" and "limited" creates anxiety about running out.',
+  1697→    networkScience: 'Like mesh networking: multiple redundant paths, no central authority. If one provider fails, traffic routes to another. But mesh networks have higher latency than star topologies (like OWL-ORCA\'s centralized proxy).',
+  1698→    history: 'Like the early internet (ARPANET, 1969): built on the principle of redundancy and free access. ARPANET connected universities for free, just as FreeLLMAPI connects free-tier providers. The lesson: free infrastructure eventually gets commercialized.',
+  1699→  },
+  1700→]
+  1701→
+  1702→function ProxyComparisonTopicsSection() {
+  1703→  const [expandedId, setExpandedId] = useState<string | null>(null)
+  1704→
+  1705→  return (
+  1706→    <div className="space-y-6">
+  1707→      <div>
+  1708→        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+  1709→          <BookOpen className="w-6 h-6 text-amber-500" />
+  1710→          Proxy Stacks — The Deep Comparison
+  1711→        </h2>
+  1712→        <p className="text-muted-foreground mt-1">
+  1713→          How OWL-ORCA stands out against LiteLLM, OpenRouter, FreeLLMAPI, and the rest. Analyzed through economics, psychology, and network science.
+  1714→        </p>
+  1715→      </div>
+  1716→
+  1717→      {/* 2x2 Comparison Grid */}
+  1718→      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+  1719→        {PROXY_COMPARISONS.map((proxy, idx) => (
+  1720→          <motion.div
+  1721→            key={proxy.id}
+  1722→            initial={{ opacity: 0, y: 20 }}
+  1723→            animate={{ opacity: 1, y: 0 }}
+  1724→            transition={{ delay: idx * 0.1 }}
+  1725→          >
+  1726→            <Card
+  1727→              className="border-2 cursor-pointer hover:shadow-lg transition-all h-full"
+  1728→              style={{ borderColor: expandedId === proxy.id ? proxy.color : `${proxy.color}40` }}
+  1729→              onClick={() => setExpandedId(expandedId === proxy.id ? null : proxy.id)}
+  1730→            >
+  1731→              <CardHeader className="pb-2">
+  1732→                <div className="flex items-center justify-between">
+  1733→                  <div className="flex items-center gap-3">
+  1734→                    <motion.div
+  1735→                      className="w-3 h-3 rounded-full"
+  1736→                      style={{ backgroundColor: proxy.color }}
+  1737→                      animate={{ scale: expandedId === proxy.id ? [1, 1.3, 1] : 1 }}
+  1738→                      transition={{ duration: 0.5 }}
+  1739→                    />
+  1740→                    <div>
+  1741→                      <CardTitle className="text-base" style={{ color: proxy.color }}>{proxy.name}</CardTitle>
+  1742→                      <CardDescription className="text-xs">{proxy.tagline}</CardDescription>
+  1743→                    </div>
+  1744→                  </div>
+  1745→                  <div className="flex items-center gap-2">
+  1746→                    {proxy.openSource && (
+  1747→                      <Badge variant="outline" className="text-[10px] border-emerald-400 text-emerald-600 dark:text-emerald-400">OSS</Badge>
+  1748→                    )}
+  1749→                    <motion.div animate={{ rotate: expandedId === proxy.id ? 180 : 0 }} transition={{ duration: 0.2 }}>
+  1750→                      <ChevronDown className="w-4 h-4 text-muted-foreground" />
+  1751→                    </motion.div>
+  1752→                  </div>
+  1753→                </div>
+  1754→              </CardHeader>
+  1755→              <CardContent className="pt-0">
+  1756→                <div className="space-y-1.5 mb-3">
+  1757→                  <div className="flex justify-between text-xs">
+  1758→                    <span className="text-muted-foreground">Approach</span>
+  1759→                    <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.approach}</span>
+  1760→                  </div>
+  1761→                  <div className="flex justify-between text-xs">
+  1762→                    <span className="text-muted-foreground">Free Tokens</span>
+  1763→                    <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.freeTokens}</span>
+  1764→                  </div>
+  1765→                  <div className="flex justify-between text-xs">
+  1766→                    <span className="text-muted-foreground">Setup</span>
+  1767→                    <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.setupComplexity}</span>
+  1768→                  </div>
+  1769→                </div>
+  1770→
+  1771→                <AnimatePresence>
+  1772→                  {expandedId === proxy.id && (
+  1773→                    <motion.div
+  1774→                      initial={{ height: 0, opacity: 0 }}
+  1775→                      animate={{ height: 'auto', opacity: 1 }}
+  1776→                      exit={{ height: 0, opacity: 0 }}
+  1777→                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+  1778→                      className="overflow-hidden"
+  1779→                    >
+  1780→                      <div className="mb-3 p-3 rounded-lg border" style={{ borderColor: `${proxy.color}30`, backgroundColor: `${proxy.color}05` }}>
+  1781→                        <p className="text-xs font-semibold mb-1" style={{ color: proxy.color }}>Architecture</p>
+  1782→                        <p className="text-xs text-muted-foreground">{proxy.architecture}</p>
+  1783→                      </div>
+  1784→
+  1785→                      <div className="mb-3">
+  1786→                        <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-1.5">Strengths</p>
+  1787→                        <div className="flex flex-wrap gap-1">
+  1788→                          {proxy.strengths.map(s => (
+  1789→                            <Badge key={s} variant="outline" className="text-[10px] border-emerald-300 text-emerald-700 dark:border-emerald-700 dark:text-emerald-400">✓ {s}</Badge>
+  1790→                          ))}
+  1791→                        </div>
+  1792→                      </div>
+  1793→
+  1794→                      <div className="mb-4">
+  1795→                        <p className="text-xs font-semibold text-red-600 dark:text-red-400 mb-1.5">Weaknesses</p>
+  1796→                        <div className="flex flex-wrap gap-1">
+  1797→                          {proxy.weaknesses.map(w => (
+  1798→                            <Badge key={w} variant="outline" className="text-[10px] border-red-300 text-red-700 dark:border-red-700 dark:text-red-400">✗ {w}</Badge>
+  1799→                          ))}
+  1800→                        </div>
+  1801→                      </div>
+  1802→
+  1803→                      <Accordion type="multiple" className="w-full">
+  1804→                        <AccordionItem value="economics">
+  1805→                          <AccordionTrigger className="text-xs py-2">
+  1806→                            <span className="flex items-center gap-2">💰 Economics Lens</span>
+  1807→                          </AccordionTrigger>
+  1808→                          <AccordionContent>
+  1809→                            <p className="text-xs text-muted-foreground leading-relaxed">{proxy.economics}</p>
+  1810→                          </AccordionContent>
+  1811→                        </AccordionItem>
+  1812→                        <AccordionItem value="psychology">
+  1813→                          <AccordionTrigger className="text-xs py-2">
+  1814→                            <span className="flex items-center gap-2">🧠 Psychology Lens</span>
+  1815→                          </AccordionTrigger>
+  1816→                          <AccordionContent>
+  1817→                            <p className="text-xs text-muted-foreground leading-relaxed">{proxy.psychology}</p>
+  1818→                          </AccordionContent>
+  1819→                        </AccordionItem>
+  1820→                        <AccordionItem value="network">
+  1821→                          <AccordionTrigger className="text-xs py-2">
+  1822→                            <span className="flex items-center gap-2">🌐 Network Science Lens</span>
+  1823→                          </AccordionTrigger>
+  1824→                          <AccordionContent>
+  1825→                            <p className="text-xs text-muted-foreground leading-relaxed">{proxy.networkScience}</p>
+  1826→                          </AccordionContent>
+  1827→                        </AccordionItem>
+  1828→                        <AccordionItem value="history">
+  1829→                          <AccordionTrigger className="text-xs py-2">
+  1830→                            <span className="flex items-center gap-2">📜 Historical Parallels</span>
+  1831→                          </AccordionTrigger>
+  1832→                          <AccordionContent>
+  1833→                            <p className="text-xs text-muted-foreground leading-relaxed">{proxy.history}</p>
+  1834→                          </AccordionContent>
+  1835→                        </AccordionItem>
+  1836→                      </Accordion>
+  1837→                    </motion.div>
+  1838→                  )}
+  1839→                </AnimatePresence>
+  1840→              </CardContent>
+  1841→            </Card>
+  1842→          </motion.div>
+  1843→        ))}
+  1844→      </div>
+  1845→
+  1846→      {/* Standing Out Summary */}
+  1847→      <Card className="border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/10 dark:to-teal-900/10">
+  1848→        <CardHeader>
+  1849→          <CardTitle className="text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
+  1850→            <Sparkles className="w-5 h-5" />
+  1851→            Standing Out — Why OWL-ORCA Wins the Combination Game
+  1852→          </CardTitle>
+  1853→        </CardHeader>
+  1854→        <CardContent>
+  1855→          <div className="space-y-3">
+  1856→            <p className="text-sm text-emerald-700 dark:text-emerald-400">
+  1857→              No single proxy wins every category. But <strong className="text-emerald-800 dark:text-emerald-300">OWL-ORCA</strong> is the ONLY proxy that combines all five critical capabilities in one install:
+  1858→            </p>
+  1859→            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+  1860→              {[
+  1861→                { label: 'Stream Racing', desc: 'Parallel requests across providers — fastest wins', icon: '⚡' },
+  1862→                { label: 'Protocol Translation', desc: 'Copilot/Antigravity → OpenAI format on-the-fly', icon: '🔄' },
+  1863→                { label: 'Premium Models Free', desc: 'AWS Builder ID gives Claude Sonnet 4.5 at $0', icon: '🎁' },
+  1864→                { label: 'Zero-Config for OpenCode', desc: 'Auto-injected by install.sh — no manual setup', icon: '🚀' },
+  1865→                { label: 'Circuit Breaking', desc: 'Prevents cascading failures across providers', icon: '🛡️' },
+  1866→              ].map(item => (
+  1867→                <div key={item.label} className="p-2.5 rounded-lg bg-emerald-100/50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+  1868→                  <div className="flex items-center gap-2">
+  1869→                    <span className="text-base">{item.icon}</span>
+  1870→                    <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">{item.label}</span>
+  1871→                  </div>
+  1872→                  <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5">{item.desc}</p>
+  1873→                </div>
+  1874→              ))}
+  1875→            </div>
+  1876→            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
+  1877→              {[
+  1878→                { name: 'LiteLLM', win: 'Provider Count (100+)' },
+  1879→                { name: 'OpenRouter', win: 'Convenience (cloud)' },
+  1880→                { name: 'FreeLLMAPI', win: 'Free Volume (1.7B/mo)' },
+  1881→                { name: 'OWL-ORCA', win: 'Free + Premium + Racing + Zero-Config' },
+  1882→              ].map(item => (
+  1883→                <div key={item.name} className={`p-2 rounded-lg text-center border ${item.name === 'OWL-ORCA' ? 'border-emerald-400 bg-emerald-200/50 dark:bg-emerald-800/30' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900'}`}>
+  1884→                  <p className={`text-xs font-bold ${item.name === 'OWL-ORCA' ? 'text-emerald-800 dark:text-emerald-300' : 'text-gray-600 dark:text-gray-400'}`}>{item.name}</p>
+  1885→                  <p className="text-[10px] text-muted-foreground mt-0.5">Wins: {item.win}</p>
+  1886→                </div>
+  1887→              ))}
+  1888→            </div>
+  1889→          </div>
+  1890→        </CardContent>
+  1891→      </Card>
+  1892→    </div>
+  1893→  )
+  1894→}
+  1895→
+  1896→// ==================== DASHBOARD SECTION ====================
+  1897→
+  1898→function DashboardSection({ onNavigate }: { onNavigate: (section: string) => void }) {
+  1899→  return (
+  1900→    <div className="space-y-6">
+  1901→      <div>
+  1902→        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h2>
+  1903→        <p className="text-muted-foreground mt-1">AI Agentic Development Stack — Overview</p>
+  1904→      </div>
+  1905→
+  1906→      {/* Quick Access - Key Images */}
+  1907→      <div>
+  1908→        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+  1909→          <Eye className="w-3.5 h-3.5" /> Quick Access
+  1910→        </h3>
+  1911→        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+  1912→          {[
+  1913→            { title: 'Architecture Diagram', desc: '7-layer stack with OWL-ORCA', gradient: 'from-emerald-400 to-teal-500', emoji: '🖼️' },
+  1914→            { title: 'Provider Matrix', desc: 'Free-tier LLM comparison', gradient: 'from-violet-400 to-purple-500', emoji: '📊' },
+  1915→            { title: 'Wiki Dashboard', desc: 'Interactive app preview', gradient: 'from-amber-400 to-orange-500', emoji: '🖥️' },
+  1916→          ].map((item, idx) => (
+  1917→            <motion.button
+  1918→              key={item.title}
+  1919→              initial={{ opacity: 0, y: 10 }}
+  1920→              animate={{ opacity: 1, y: 0 }}
+  1921→              transition={{ delay: idx * 0.1 }}
+  1922→              whileHover={{ scale: 1.03, y: -2 }}
+  1923→              onClick={() => onNavigate('files')}
+  1924→              className="relative overflow-hidden rounded-xl border-2 border-transparent hover:border-amber-400 dark:hover:border-amber-600 transition-colors text-left"
+  1925→            >
+  1926→              <div className={`bg-gradient-to-br ${item.gradient} p-4 text-white relative`}>
+  1927→                <motion.div
+  1928→                  className="absolute inset-0 bg-black/10"
+  1929→                  animate={{ opacity: [0, 0.15, 0] }}
+  1930→                  transition={{ duration: 2, repeat: Infinity, delay: idx * 0.3 }}
+  1931→                />
+  1932→                <span className="text-2xl">{item.emoji}</span>
+  1933→                <p className="font-bold text-sm mt-2">{item.title}</p>
+  1934→                <p className="text-xs opacity-80">{item.desc}</p>
+  1935→              </div>
+  1936→            </motion.button>
+  1937→          ))}
+  1938→        </div>
+  1939→      </div>
+  1940→
+  1941→      {/* Stats Grid */}
+  1942→      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+  1943→        {[
+  1944→          { label: 'ADE Tools', value: '20+', icon: Terminal, border: 'border-l-amber-500', bg: 'bg-amber-100 dark:bg-amber-900/30', text: 'text-amber-600 dark:text-amber-400', stat: '9 CLI-first' },
+  1945→          { label: 'Proxy Stacks', value: '10+', icon: Globe, border: 'border-l-emerald-500', bg: 'bg-emerald-100 dark:bg-emerald-900/30', text: 'text-emerald-600 dark:text-emerald-400', stat: '~1.7B free tokens/mo' },
+  1946→          { label: 'Plugins & MCP', value: '15+', icon: Puzzle, border: 'border-l-violet-500', bg: 'bg-violet-100 dark:bg-violet-900/30', text: 'text-violet-600 dark:text-violet-400', stat: 'Above Mediocrity' },
+  1947→          { label: 'Architecture Layers', value: '7', icon: Layers, border: 'border-l-rose-500', bg: 'bg-rose-100 dark:bg-rose-900/30', text: 'text-rose-600 dark:text-rose-400', stat: 'With OWL-ORCA Proxy' },
+  1948→          { label: 'Proxy Endpoints', value: '3', icon: Globe, border: 'border-l-cyan-500', bg: 'bg-cyan-100 dark:bg-cyan-900/30', text: 'text-cyan-600 dark:text-cyan-400', stat: 'OWL-ORCA v7.1.0' },
+  1949→        ].map((stat) => (
+  1950→          <motion.div key={stat.label} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
+  1951→            <Card className={`border-l-4 ${stat.border}`}>
+  1952→              <CardContent className="p-4">
+  1953→                <div className="flex items-center gap-3">
+  1954→                  <div className={`p-2 rounded-lg ${stat.bg}`}>
+  1955→                    <stat.icon className={`w-5 h-5 ${stat.text}`} />
+  1956→                  </div>
+  1957→                  <div>
+  1958→                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+  1959→                    <p className="text-xs text-muted-foreground">{stat.stat}</p>
+  1960→                  </div>
+  1961→                </div>
+  1962→              </CardContent>
+  1963→            </Card>
+  1964→          </motion.div>
+  1965→        ))}
+  1966→      </div>
+  1967→
+  1968→      {/* Standing Out — Why OWL-ORCA Wins */}
+  1969→      <Card className="relative overflow-hidden border-2 border-amber-300 dark:border-amber-700">
+  1970→        {/* Decorative ambient glow */}
+  1971→        <div className="absolute -top-16 -right-16 w-48 h-48 bg-gradient-to-br from-amber-200/30 to-violet-200/30 dark:from-amber-900/20 dark:to-violet-900/20 rounded-full blur-3xl pointer-events-none" />
+  1972→        <div className="absolute -bottom-12 -left-12 w-36 h-36 bg-gradient-to-br from-emerald-200/20 to-cyan-200/20 dark:from-emerald-900/10 dark:to-cyan-900/10 rounded-full blur-3xl pointer-events-none" />
+  1973→        <CardHeader className="relative">
+  1974→          <div className="flex items-center justify-between">
+  1975→            <CardTitle className="flex items-center gap-2 text-lg">
+  1976→              <Trophy className="w-5 h-5 text-amber-500" />
+  1977→              Standing Out
+  1978→            </CardTitle>
+  1979→            <Badge className="bg-gradient-to-r from-amber-500 to-violet-500 text-white border-0 text-[10px]">
+  1980→              5 Unique Capabilities
+  1981→            </Badge>
+  1982→          </div>
+  1983→          <CardDescription className="text-sm">
+  1984→            Why OWL-ORCA uniquely combines 5 capabilities that no other single proxy offers
+  1985→          </CardDescription>
+  1986→        </CardHeader>
+  1987→        <CardContent className="relative">
+  1988→          <div className="space-y-2.5">
+  1989→            {STANDING_OUT_CAPABILITIES.map((cap, idx) => {
+  1990→              const IconMap: Record<string, React.ElementType> = {
+  1991→                Zap, ArrowRight, Shield, Terminal, Globe,
+  1992→              }
+  1993→              const IconComponent = IconMap[cap.icon]
+  1994→              return (
+  1995→                <motion.div
+  1996→                  key={cap.id}
+  1997→                  initial={{ opacity: 0, x: -12 }}
+  1998→                  animate={{ opacity: 1, x: 0 }}
+  1999→                  transition={{ delay: idx * 0.08, duration: 0.35 }}
+  2000→                  className="group flex items-start gap-3 p-3 rounded-lg border border-transparent hover:border-gray-200 dark:hover:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+
+[showing lines 1501-2000 of 2383; use offset=2001 with limit to continue reading]

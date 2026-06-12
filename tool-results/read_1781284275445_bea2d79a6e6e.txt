@@ -1,0 +1,502 @@
+   401→                  <div className="flex items-center justify-center gap-2 mb-2">
+   402→                    <motion.div
+   403→                      className="w-3 h-3 rounded-full"
+   404→                      style={{ backgroundColor: ep.color }}
+   405→                      animate={{ scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }}
+   406→                      transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+   407→                    />
+   408→                    <span className="font-bold text-sm" style={{ color: ep.color }}>{ep.name}</span>
+   409→                  </div>
+   410→                  <p className="text-xs text-muted-foreground mb-2">{ep.role}</p>
+   411→                  <div className="text-[10px] font-mono space-y-1">
+   412→                    <div className="px-2 py-1 rounded bg-gray-100 dark:bg-gray-800">
+   413→                      <span className="text-muted-foreground">Port:</span> <span className="text-gray-700 dark:text-gray-300">:{ep.port}</span>
+   414→                    </div>
+   415→                    <div className="px-2 py-1 rounded bg-gray-100 dark:bg-gray-800">
+   416→                      <span className="text-muted-foreground">Key:</span> <span className="text-gray-700 dark:text-gray-300">{ep.key}</span>
+   417→                    </div>
+   418→                  </div>
+   419→                </motion.div>
+   420→              ))}
+   421→            </div>
+   422→          </div>
+   423→
+   424→          {/* Animated Connection Lines Down */}
+   425→          <div className="flex justify-center gap-4">
+   426→            <motion.div
+   427→              initial={{ height: 0, opacity: 0 }}
+   428→              whileInView={{ height: 40, opacity: 1 }}
+   429→              viewport={{ once: true }}
+   430→              className="w-0.5 bg-gradient-to-b from-emerald-400 to-blue-400 rounded-full"
+   431→            />
+   432→            <motion.div
+   433→              initial={{ height: 0, opacity: 0 }}
+   434→              whileInView={{ height: 40, opacity: 1 }}
+   435→              viewport={{ once: true }}
+   436→              transition={{ delay: 0.1 }}
+   437→              className="w-0.5 bg-gradient-to-b from-purple-400 to-violet-500 rounded-full"
+   438→            />
+   439→          </div>
+   440→
+   441→          {/* Cloud Providers Layer */}
+   442→          <div>
+   443→            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+   444→              <Server className="w-3.5 h-3.5" /> Cloud Free-Tier Providers
+   445→            </h4>
+   446→            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+   447→              {[
+   448→                { name: 'GitHub Copilot Free', models: 'GPT-4o, Claude 3.5 Sonnet', auth: 'owl-token auth -p copilot', color: '#10b981' },
+   449→                { name: 'Antigravity Free', models: 'GPT-4o-mini, Gemini Flash', auth: 'owl-token auth -p antigravity', color: '#06b6d4' },
+   450→                { name: 'AWS Builder ID (Kiro)', models: 'Claude Sonnet 4.5, DeepSeek 3.2', auth: 'kiro-cli login', color: '#8b5cf6' },
+   451→              ].map((provider, i) => (
+   452→                <motion.div
+   453→                  key={provider.name}
+   454→                  initial={{ opacity: 0, y: 20 }}
+   455→                  whileInView={{ opacity: 1, y: 0 }}
+   456→                  viewport={{ once: true }}
+   457→                  transition={{ delay: i * 0.1 }}
+   458→                  className="p-3 rounded-lg border text-center"
+   459→                  style={{ borderColor: `${provider.color}40`, backgroundColor: `${provider.color}05` }}
+   460→                >
+   461→                  <p className="font-semibold text-sm text-gray-900 dark:text-white">{provider.name}</p>
+   462→                  <p className="text-xs text-muted-foreground mt-1">{provider.models}</p>
+   463→                  <code className="text-[10px] mt-2 inline-block bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded font-mono">{provider.auth}</code>
+   464→                </motion.div>
+   465→              ))}
+   466→            </div>
+   467→          </div>
+   468→
+   469→          {/* Routing Summary */}
+   470→          <div className="p-4 rounded-lg bg-gradient-to-r from-emerald-50 via-purple-50 to-amber-50 dark:from-emerald-900/10 dark:via-purple-900/10 dark:to-amber-900/10 border">
+   471→            <h4 className="text-xs font-bold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+   472→              <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Routing Paths
+   473→            </h4>
+   474→            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+   475→              <div className="flex items-center gap-2">
+   476→                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+   477→                <span className="text-gray-600 dark:text-gray-400">ADE → Orca Router → Copilot Free / Antigravity</span>
+   478→              </div>
+   479→              <div className="flex items-center gap-2">
+   480→                <div className="w-2 h-2 rounded-full bg-purple-500" />
+   481→                <span className="text-gray-600 dark:text-gray-400">ADE → Kiro Gateway → AWS Builder ID (Premium)</span>
+   482→              </div>
+   483→              <div className="flex items-center gap-2">
+   484→                <div className="w-2 h-2 rounded-full bg-amber-500" />
+   485→                <span className="text-gray-600 dark:text-gray-400">Forward Proxy → HTTPS CONNECT Tunnel (Domain Bypass)</span>
+   486→              </div>
+   487→              <div className="flex items-center gap-2">
+   488→                <div className="w-2 h-2 rounded-full bg-pink-500" />
+   489→                <span className="text-gray-600 dark:text-gray-400">OpenCode/Kilo → Zero-Config (Auto-injected by install.sh)</span>
+   490→              </div>
+   491→            </div>
+   492→          </div>
+   493→        </div>
+   494→      </CardContent>
+   495→    </Card>
+   496→  )
+   497→}
+   498→
+   499→// ==================== A/B COMPARISON SECTION ====================
+   500→
+   501→function ABCompareSection() {
+   502→  const [highlightWinner, setHighlightWinner] = useState<'all' | 'full' | 'slim'>('all')
+   503→
+   504→  const fullWins = COMPARISON_DATA.filter(d => d.winner === 'full').length
+   505→  const slimWins = COMPARISON_DATA.filter(d => d.winner === 'slim').length
+   506→  const ties = COMPARISON_DATA.filter(d => d.winner === 'tie').length
+   507→
+   508→  return (
+   509→    <div className="space-y-6">
+   510→      <div>
+   511→        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+   512→          <GitCompare className="w-6 h-6 text-amber-500" />
+   513→          A/B Comparison: oh-my-opencode vs oh-my-opencode-slim
+   514→        </h2>
+   515→        <p className="text-muted-foreground mt-1">
+   516→          Side-by-side analysis of the two leading OpenCode multi-agent orchestration plugins — features, metrics, and trade-offs.
+   517→        </p>
+   518→      </div>
+   519→
+   520→      {/* Score Cards */}
+   521→      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+   522→        <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
+   523→          <Card className="border-2 border-amber-400 dark:border-amber-600 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20">
+   524→            <CardHeader>
+   525→              <div className="flex items-center justify-between">
+   526→                <CardTitle className="text-amber-800 dark:text-amber-300 flex items-center gap-2">
+   527→                  <Trophy className="w-5 h-5" />
+   528→                  oh-my-opencode
+   529→                </CardTitle>
+   530→                <Badge className="bg-amber-500 text-white border-0">{fullWins} wins</Badge>
+   531→              </div>
+   532→              <CardDescription className="text-amber-700 dark:text-amber-400">
+   533→                Now renaming to oh-my-openagent — The full-featured powerhouse
+   534→              </CardDescription>
+   535→            </CardHeader>
+   536→            <CardContent>
+   537→              <div className="space-y-3">
+   538→                <div className="flex items-center justify-between">
+   539→                  <span className="text-sm">GitHub Stars</span>
+   540→                  <span className="font-bold text-amber-700 dark:text-amber-300">~38,000</span>
+   541→                </div>
+   542→                <div className="flex items-center justify-between">
+   543→                  <span className="text-sm">Weekly Downloads</span>
+   544→                  <span className="font-bold text-amber-700 dark:text-amber-300">~60K</span>
+   545→                </div>
+   546→                <div className="flex items-center justify-between">
+   547→                  <span className="text-sm">Agents</span>
+   548→                  <span className="font-bold text-amber-700 dark:text-amber-300">11 built-in</span>
+   549→                </div>
+   550→                <div className="flex items-center justify-between">
+   551→                  <span className="text-sm">License</span>
+   552→                  <span className="text-sm text-amber-600 dark:text-amber-400">SUL-1.0</span>
+   553→                </div>
+   554→                <Separator className="bg-amber-200 dark:bg-amber-800" />
+   555→                <div className="text-xs text-amber-700 dark:text-amber-400 space-y-1">
+   556→                  <p><strong>Best for:</strong> Maximum features, Claude Code compat, autonomous mode</p>
+   557→                  <p><strong>Watch out:</strong> High token overhead (15-25K startup), 3x more API requests</p>
+   558→                </div>
+   559→              </div>
+   560→            </CardContent>
+   561→          </Card>
+   562→        </motion.div>
+   563→
+   564→        <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
+   565→          <Card className="border-2 border-emerald-400 dark:border-emerald-600 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20">
+   566→            <CardHeader>
+   567→              <div className="flex items-center justify-between">
+   568→                <CardTitle className="text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
+   569→                  <Zap className="w-5 h-5" />
+   570→                  oh-my-opencode-slim
+   571→                </CardTitle>
+   572→                <Badge className="bg-emerald-500 text-white border-0">{slimWins} wins</Badge>
+   573→              </div>
+   574→              <CardDescription className="text-emerald-700 dark:text-emerald-400">
+   575→                Lightweight fork — Token efficiency champion
+   576→              </CardDescription>
+   577→            </CardHeader>
+   578→            <CardContent>
+   579→              <div className="space-y-3">
+   580→                <div className="flex items-center justify-between">
+   581→                  <span className="text-sm">GitHub Stars</span>
+   582→                  <span className="font-bold text-emerald-700 dark:text-emerald-300">~5,100</span>
+   583→                </div>
+   584→                <div className="flex items-center justify-between">
+   585→                  <span className="text-sm">Weekly Downloads</span>
+   586→                  <span className="font-bold text-emerald-700 dark:text-emerald-300">~7.2K</span>
+   587→                </div>
+   588→                <div className="flex items-center justify-between">
+   589→                  <span className="text-sm">Agents</span>
+   590→                  <span className="font-bold text-emerald-700 dark:text-emerald-300">7+2+custom</span>
+   591→                </div>
+   592→                <div className="flex items-center justify-between">
+   593→                  <span className="text-sm">License</span>
+   594→                  <span className="text-sm text-emerald-600 dark:text-emerald-400">MIT</span>
+   595→                </div>
+   596→                <Separator className="bg-emerald-200 dark:bg-emerald-800" />
+   597→                <div className="text-xs text-emerald-700 dark:text-emerald-400 space-y-1">
+   598→                  <p><strong>Best for:</strong> Token efficiency, simplicity, Council consensus, custom agents</p>
+   599→                  <p><strong>Watch out:</strong> Fewer features, limited Claude Code compat, smaller community</p>
+   600→                </div>
+   601→              </div>
+   602→            </CardContent>
+   603→          </Card>
+   604→        </motion.div>
+   605→      </div>
+   606→
+   607→      {/* Winner Toggle */}
+   608→      <div className="flex items-center gap-2 flex-wrap">
+   609→        <span className="text-sm text-muted-foreground">Highlight:</span>
+   610→        {[
+   611→          { key: 'all', label: 'All', color: 'bg-gray-500' },
+   612→          { key: 'full', label: `Full (${fullWins})`, color: 'bg-amber-500' },
+   613→          { key: 'slim', label: `Slim (${slimWins})`, color: 'bg-emerald-500' },
+   614→        ].map(({ key, label, color }) => (
+   615→          <button
+   616→            key={key}
+   617→            onClick={() => setHighlightWinner(key as any)}
+   618→            className={`px-3 py-1.5 text-xs rounded-full transition-colors flex items-center gap-1.5 ${
+   619→              highlightWinner === key ? `${color} text-white` : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400'
+   620→            }`}
+   621→          >
+   622→            <div className={`w-2 h-2 rounded-full ${highlightWinner === key ? 'bg-white' : color}`} />
+   623→            {label}
+   624→          </button>
+   625→        ))}
+   626→      </div>
+   627→
+   628→      {/* Detailed Comparison Table */}
+   629→      <Card>
+   630→        <CardContent className="p-0">
+   631→          <div className="overflow-x-auto">
+   632→            <table className="w-full text-sm">
+   633→              <thead>
+   634→                <tr className="border-b bg-muted/50">
+   635→                  <th className="text-left p-3 font-medium w-40">Dimension</th>
+   636→                  <th className="text-left p-3 font-medium">
+   637→                    <span className="flex items-center gap-1"><Trophy className="w-3.5 h-3.5 text-amber-500" /> Full</span>
+   638→                  </th>
+   639→                  <th className="text-left p-3 font-medium">
+   640→                    <span className="flex items-center gap-1"><Zap className="w-3.5 h-3.5 text-emerald-500" /> Slim</span>
+   641→                  </th>
+   642→                  <th className="text-center p-3 font-medium w-16">Edge</th>
+   643→                </tr>
+   644→              </thead>
+   645→              <tbody>
+   646→                {COMPARISON_DATA.map((row, idx) => {
+   647→                  const dimmed = highlightWinner !== 'all' && row.winner !== highlightWinner && row.winner !== 'tie'
+   648→                  return (
+   649→                    <motion.tr
+   650→                      key={row.id}
+   651→                      initial={{ opacity: 0, x: -10 }}
+   652→                      whileInView={{ opacity: 1, x: 0 }}
+   653→                      viewport={{ once: true }}
+   654→                      transition={{ delay: idx * 0.02 }}
+   655→                      className={`border-b last:border-b-0 hover:bg-muted/30 transition-colors ${dimmed ? 'opacity-40' : ''}`}
+   656→                    >
+   657→                      <td className="p-3 font-medium text-gray-900 dark:text-white text-xs">{row.dimension}</td>
+   658→                      <td className={`p-3 text-xs ${row.winner === 'full' ? 'font-semibold text-amber-700 dark:text-amber-300' : 'text-muted-foreground'}`}>
+   659→                        {row.ohMyOpencode}
+   660→                      </td>
+   661→                      <td className={`p-3 text-xs ${row.winner === 'slim' ? 'font-semibold text-emerald-700 dark:text-emerald-300' : 'text-muted-foreground'}`}>
+   662→                        {row.ohMyOpencodeSlim}
+   663→                      </td>
+   664→                      <td className="p-3 text-center">
+   665→                        {row.winner === 'full' && <Trophy className="w-4 h-4 text-amber-500 mx-auto" />}
+   666→                        {row.winner === 'slim' && <Zap className="w-4 h-4 text-emerald-500 mx-auto" />}
+   667→                        {row.winner === 'tie' && <span className="text-muted-foreground text-xs">Tie</span>}
+   668→                      </td>
+   669→                    </motion.tr>
+   670→                  )
+   671→                })}
+   672→              </tbody>
+   673→            </table>
+   674→          </div>
+   675→        </CardContent>
+   676→      </Card>
+   677→
+   678→      {/* Verdict */}
+   679→      <Card className="bg-gradient-to-r from-amber-50 to-emerald-50 dark:from-amber-900/10 dark:to-emerald-900/10">
+   680→        <CardContent className="p-5">
+   681→          <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
+   682→            <Sparkles className="w-5 h-5 text-amber-500" /> The Verdict
+   683→          </h3>
+   684→          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+   685→            <div className="p-3 rounded-lg bg-amber-100/50 dark:bg-amber-900/20">
+   686→              <p className="font-semibold text-amber-800 dark:text-amber-300 text-sm">Choose Full When:</p>
+   687→              <ul className="text-xs text-amber-700 dark:text-amber-400 mt-2 space-y-1">
+   688→                <li>- You need Claude Code ecosystem compatibility</li>
+   689→                <li>- Feature completeness matters more than token cost</li>
+   690→                <li>- You want autonomous Ultrawork mode</li>
+   691→                <li>- You need advanced per-agent model routing</li>
+   692→                <li>- Large community and documentation are priorities</li>
+   693→              </ul>
+   694→            </div>
+   695→            <div className="p-3 rounded-lg bg-emerald-100/50 dark:bg-emerald-900/20">
+   696→              <p className="font-semibold text-emerald-800 dark:text-emerald-300 text-sm">Choose Slim When:</p>
+   697→              <ul className="text-xs text-emerald-700 dark:text-emerald-400 mt-2 space-y-1">
+   698→                <li>- Token efficiency and lower API costs are critical</li>
+   699→                <li>- You prefer MIT-licensed open source</li>
+   700→                <li>- Council consensus (multi-model) is valuable</li>
+   701→                <li>- You want custom dynamic agents</li>
+   702→                <li>- Simplicity and fewer moving parts are preferred</li>
+   703→              </ul>
+   704→            </div>
+   705→          </div>
+   706→        </CardContent>
+   707→      </Card>
+   708→    </div>
+   709→  )
+   710→}
+   711→
+   712→// ==================== ADE COMPATIBILITY SECTION ====================
+   713→
+   714→function ADECompatibilitySection() {
+   715→  const [tierFilter, setTierFilter] = useState<number>(0)
+   716→  const [search, setSearch] = useState('')
+   717→
+   718→  const filtered = ADE_COMPATIBILITY.filter(a => {
+   719→    const matchSearch = a.name.toLowerCase().includes(search.toLowerCase()) || a.verdict.toLowerCase().includes(search.toLowerCase())
+   720→    const matchTier = tierFilter === 0 || a.tier === tierFilter
+   721→    return matchSearch && matchTier
+   722→  })
+   723→
+   724→  const tierConfig: Record<number, { label: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
+   725→    1: { label: 'Tier 1 — Perfect Match', color: '#10b981', bg: 'bg-emerald-50 dark:bg-emerald-900/10', border: 'border-emerald-400 dark:border-emerald-600', icon: <Trophy className="w-4 h-4 text-emerald-500" /> },
+   726→    2: { label: 'Tier 2 — Plug & Play', color: '#3b82f6', bg: 'bg-blue-50 dark:bg-blue-900/10', border: 'border-blue-400 dark:border-blue-600', icon: <Zap className="w-4 h-4 text-blue-500" /> },
+   727→    3: { label: 'Tier 3 — Sandbox Host', color: '#f59e0b', bg: 'bg-amber-50 dark:bg-amber-900/10', border: 'border-amber-400 dark:border-amber-600', icon: <Shield className="w-4 h-4 text-amber-500" /> },
+   728→    4: { label: 'Tier 4 — Redundant / N/A', color: '#ef4444', bg: 'bg-red-50 dark:bg-red-900/10', border: 'border-red-400 dark:border-red-600', icon: <X className="w-4 h-4 text-red-500" /> },
+   729→  }
+   730→
+   731→  return (
+   732→    <div className="space-y-6">
+   733→      <div>
+   734→        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+   735→          <Shield className="w-6 h-6 text-amber-500" />
+   736→          ADE Compatibility — OWL-ORCA v7.1.0
+   737→        </h2>
+   738→        <p className="text-muted-foreground mt-1">
+   739→          Deep-dive compatibility analysis: which ADEs work with the OWL-ORCA Master Installer proxy stack. The Golden Rule: any ADE with custom OpenAI-compatible base URL support passes.
+   740→        </p>
+   741→      </div>
+   742→
+   743→      {/* Proxy Endpoints Summary */}
+   744→      <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/10 dark:to-teal-900/10 border-emerald-200 dark:border-emerald-800">
+   745→        <CardHeader>
+   746→          <CardTitle className="text-emerald-800 dark:text-emerald-300 flex items-center gap-2 text-base">
+   747→            <Globe className="w-5 h-5" /> 3 Local Proxy Endpoints (install.sh creates these)
+   748→          </CardTitle>
+   749→        </CardHeader>
+   750→        <CardContent>
+   751→          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+   752→            {PROXY_ENDPOINTS.map(ep => (
+   753→              <motion.div
+   754→                key={ep.name}
+   755→                whileHover={{ y: -2 }}
+   756→                className="p-3 rounded-lg border-2 bg-white dark:bg-gray-900"
+   757→                style={{ borderColor: ep.color }}
+   758→              >
+   759→                <div className="flex items-center gap-2 mb-1.5">
+   760→                  <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: ep.color }} />
+   761→                  <span className="font-semibold text-sm text-gray-900 dark:text-white">{ep.name}</span>
+   762→                </div>
+   763→                <p className="text-xs text-muted-foreground mb-2">{ep.role}</p>
+   764→                <div className="space-y-1 text-xs font-mono">
+   765→                  <div className="p-1.5 rounded bg-gray-100 dark:bg-gray-800">
+   766→                    <span className="text-muted-foreground">URL:</span> <span className="text-gray-700 dark:text-gray-300">{ep.url}</span>
+   767→                  </div>
+   768→                  <div className="p-1.5 rounded bg-gray-100 dark:bg-gray-800">
+   769→                    <span className="text-muted-foreground">Key:</span> <span className="text-gray-700 dark:text-gray-300">{ep.apiKey}</span>
+   770→                  </div>
+   771→                </div>
+   772→                <div className="mt-2">
+   773→                  <CopyButton text={`export OPENAI_BASE_URL="${ep.url}" && export OPENAI_API_KEY="${ep.apiKey}"`} />
+   774→                </div>
+   775→              </motion.div>
+   776→            ))}
+   777→          </div>
+   778→        </CardContent>
+   779→      </Card>
+   780→
+   781→      {/* Tier Legend & Filter */}
+   782→      <div className="flex items-center gap-2 flex-wrap">
+   783→        <span className="text-sm text-muted-foreground">Filter:</span>
+   784→        <div className="flex gap-1.5">
+   785→          {[
+   786→            { tier: 0, label: 'All' },
+   787→            { tier: 1, label: 'Tier 1' },
+   788→            { tier: 2, label: 'Tier 2' },
+   789→            { tier: 3, label: 'Tier 3' },
+   790→            { tier: 4, label: 'Tier 4' },
+   791→          ].map(t => (
+   792→            <button
+   793→              key={t.tier}
+   794→              onClick={() => setTierFilter(t.tier)}
+   795→              className={`px-3 py-1 text-xs rounded-full transition-colors ${
+   796→                tierFilter === t.tier
+   797→                  ? t.tier === 0 ? 'bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-800'
+   798→                    : t.tier === 1 ? 'bg-emerald-500 text-white'
+   799→                    : t.tier === 2 ? 'bg-blue-500 text-white'
+   800→                    : t.tier === 3 ? 'bg-amber-500 text-white'
+   801→                    : 'bg-red-500 text-white'
+   802→                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400'
+   803→              }`}
+   804→            >
+   805→              {t.label}
+   806→            </button>
+   807→          ))}
+   808→        </div>
+   809→        <div className="flex-1 min-w-0 max-w-xs">
+   810→          <Input placeholder="Search ADEs..." value={search} onChange={e => setSearch(e.target.value)} className="h-7 text-xs" />
+   811→        </div>
+   812→      </div>
+   813→
+   814→      <p className="text-sm text-muted-foreground">{filtered.length} ADEs found</p>
+   815→
+   816→      {/* ADE Cards */}
+   817→      <div className="space-y-3">
+   818→        {filtered.map((ade, idx) => {
+   819→          const cfg = tierConfig[ade.tier]
+   820→          return (
+   821→            <motion.div
+   822→              key={ade.id}
+   823→              initial={{ opacity: 0, y: 10 }}
+   824→              whileInView={{ opacity: 1, y: 0 }}
+   825→              viewport={{ once: true }}
+   826→              transition={{ delay: idx * 0.03 }}
+   827→            >
+   828→              <Card className={`border-l-4 ${cfg.border} ${cfg.bg} hover:shadow-md transition-shadow`}>
+   829→                <CardContent className="p-4">
+   830→                  <div className="flex flex-col gap-3">
+   831→                    {/* Header */}
+   832→                    <div className="flex items-center justify-between flex-wrap gap-2">
+   833→                      <div className="flex items-center gap-2">
+   834→                        {cfg.icon}
+   835→                        <h4 className="font-semibold text-gray-900 dark:text-white">{ade.name}</h4>
+   836→                        <Badge
+   837→                          className="text-[10px] border-0 text-white"
+   838→                          style={{ backgroundColor: cfg.color }}
+   839→                        >
+   840→                          {ade.tierLabel}
+   841→                        </Badge>
+   842→                      </div>
+   843→                      <Badge
+   844→                        variant="outline"
+   845→                        className="text-[10px] font-bold"
+   846→                        style={{ borderColor: cfg.color, color: cfg.color }}
+   847→                      >
+   848→                        {ade.verdict}
+   849→                      </Badge>
+   850→                    </div>
+   851→
+   852→                    {/* How to connect */}
+   853→                    <p className="text-sm text-muted-foreground">{ade.howToConnect}</p>
+   854→
+   855→                    {/* Endpoint info */}
+   856→                    {ade.endpoint !== '—' && (
+   857→                      <div className="flex flex-wrap gap-3 text-xs font-mono">
+   858→                        <div className="px-2 py-1 rounded bg-white/60 dark:bg-black/20">
+   859→                          <span className="text-muted-foreground">Endpoint:</span>{' '}
+   860→                          <span className="text-gray-700 dark:text-gray-300">{ade.endpoint}</span>
+   861→                        </div>
+   862→                        <div className="px-2 py-1 rounded bg-white/60 dark:bg-black/20">
+   863→                          <span className="text-muted-foreground">Key:</span>{' '}
+   864→                          <span className="text-gray-700 dark:text-gray-300">{ade.apiKey}</span>
+   865→                        </div>
+   866→                        {ade.models && (
+   867→                          <div className="px-2 py-1 rounded bg-white/60 dark:bg-black/20">
+   868→                            <span className="text-muted-foreground">Models:</span>{' '}
+   869→                            <span className="text-gray-700 dark:text-gray-300">{ade.models}</span>
+   870→                          </div>
+   871→                        )}
+   872→                      </div>
+   873→                    )}
+   874→
+   875→                    {/* Copy env vars */}
+   876→                    {ade.endpoint !== '—' && (
+   877→                      <CopyButton text={`export OPENAI_BASE_URL="${ade.endpoint}"\nexport OPENAI_API_KEY="${ade.apiKey}"`} />
+   878→                    )}
+   879→                  </div>
+   880→                </CardContent>
+   881→              </Card>
+   882→            </motion.div>
+   883→          )
+   884→        })}
+   885→      </div>
+   886→
+   887→      {/* Golden Rule */}
+   888→      <Card className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10">
+   889→        <CardContent className="p-5">
+   890→          <h3 className="font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2 text-sm mb-2">
+   891→            <Sparkles className="w-4 h-4" /> The Golden Rule of Compatibility
+   892→          </h3>
+   893→          <p className="text-xs text-amber-700 dark:text-amber-400">
+   894→            Because the Orca Router and Kiro Gateway expose <strong>standard OpenAI-compatible API endpoints</strong>,
+   895→            <strong> ANY ADE that allows you to set a Custom Base URL and a Custom API Key will pass the objective.</strong>
+   896→            This means the OWL-ORCA proxy stack works with virtually every modern AI coding tool — not just the ones listed above.
+   897→          </p>
+   898→        </CardContent>
+   899→      </Card>
+   900→    </div>
+
+[showing lines 401-900 of 2383; use offset=901 with limit to continue reading]
