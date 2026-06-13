@@ -297,3 +297,24 @@ Stage Summary:
 - GitHub Pages configured at: https://marktantongco.github.io/owl-orca-ai-agentic-stack/
 - Comprehensive README with SEO keywords: AI agentic stack, free unlimited, OWL-ORCA, proxy, OpenCode, Next.js, GSAP, Framer Motion
 - Topics added to GitHub repo for discoverability
+
+---
+Task ID: 10
+Agent: Main Agent
+Task: Fix site deployment and Vercel page hero section
+
+Work Log:
+- Diagnosed GSAP build failure: `gsap/ScrollTrigger` and `gsap/MotionPathPlugin` subpath imports failed with Next.js 16 Turbopack
+- Reinstalled gsap@3.12.5 (from 3.15.0) which has proper subpath module files
+- Added `transpilePackages: ['gsap', '@gsap/react']` to next.config.ts to help Turbopack resolve subpath imports
+- Initially tried adding `serverExternalPackages: ['gsap']` but it conflicted with transpilePackages — removed it
+- Added full-screen hero landing section to main page with: animated gradient background (gray-900 → emerald-950), floating orbs with Framer Motion, dot grid SVG pattern, radial glow animation, "Free & Unlimited AI — Ubuntu Native" badge, "AI Agentic Stack / Knowledge Base" title with gradient text, descriptive subtitle, CTA buttons (Explore Architecture, Compare Proxies), staggered stats row (7 layers, 20+ tools, 15 plugins, ~2B/mo tokens), scroll indicator with bouncing chevron
+- Build verified: 0 errors, successful production build
+- Committed changes to git
+- Vercel CLI token expired and git push auth unavailable — deployment needs manual push/reconnect
+
+Stage Summary:
+- GSAP module resolution fixed with transpilePackages config
+- Hero landing section added with animated gradient, floating orbs, CTA buttons, stats
+- Build passes cleanly with Turbopack
+- Manual deployment required (Vercel token expired, no git push auth)
