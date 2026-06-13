@@ -3700,9 +3700,20 @@ function DashboardSection({ onNavigate }: { onNavigate: (section: string) => voi
 export default function HomePage() {
   const [activeSection, setActiveSection] = useState('dashboard')
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const mainRef = useRef<HTMLElement>(null)
+
+  // Enhanced section setter that scrolls to content after switching
+  const handleSectionChange = useCallback((section: string) => {
+    setActiveSection(section)
+    setMobileNavOpen(false)
+    // Scroll to main content area after a brief delay for animation
+    setTimeout(() => {
+      mainRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+  }, [])
 
   const sections: Record<string, React.ReactNode> = {
-    dashboard: <SectionErrorBoundary sectionName="Dashboard"><DashboardSection onNavigate={setActiveSection} /></SectionErrorBoundary>,
+    dashboard: <SectionErrorBoundary sectionName="Dashboard"><DashboardSection onNavigate={handleSectionChange} /></SectionErrorBoundary>,
     compare: <SectionErrorBoundary sectionName="A/B Compare"><ABCompareSection /></SectionErrorBoundary>,
     architecture: <SectionErrorBoundary sectionName="Architecture"><ArchitectureInfographicSection /></SectionErrorBoundary>,
     compatibility: <SectionErrorBoundary sectionName="ADE Compat"><ADECompatibilitySection /></SectionErrorBoundary>,
@@ -3710,7 +3721,7 @@ export default function HomePage() {
     blueprint: <SectionErrorBoundary sectionName="Blueprint"><UltimateBlueprintSection /></SectionErrorBoundary>,
     categories: <SectionErrorBoundary sectionName="Categories"><CategoriesSection /></SectionErrorBoundary>,
     files: <SectionErrorBoundary sectionName="Files"><FileBrowserSection /></SectionErrorBoundary>,
-    research: <SectionErrorBoundary sectionName="Research Hub"><ResearchHubSection onNavigate={setActiveSection} /></SectionErrorBoundary>,
+    research: <SectionErrorBoundary sectionName="Research Hub"><ResearchHubSection onNavigate={handleSectionChange} /></SectionErrorBoundary>,
     topics: <SectionErrorBoundary sectionName="Proxy Topics"><ProxyComparisonTopicsSection /></SectionErrorBoundary>,
   }
 
@@ -3740,17 +3751,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-1" aria-label="Section navigation">
+            {/* Desktop Nav — horizontally scrollable for many items */}
+            <nav className="hidden md:flex items-center gap-1 overflow-x-auto scrollbar-none" aria-label="Section navigation" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {NAV_ITEMS.map(item => {
                 const isActive = activeSection === item.id
                 return (
                   <motion.button
                     key={item.id}
-                    onClick={() => setActiveSection(item.id)}
+                    onClick={() => handleSectionChange(item.id)}
                     whileHover={{ scale: 1.05, backgroundColor: 'rgba(245, 158, 11, 0.1)' }}
                     whileTap={{ scale: 0.97 }}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5 min-h-[36px] cursor-pointer focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+                    className={`relative shrink-0 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5 min-h-[36px] cursor-pointer focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
                       isActive
                         ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
                         : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
@@ -3763,7 +3774,7 @@ export default function HomePage() {
                     {isActive && (
                       <motion.div
                         layoutId="navActiveIndicator"
-                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-500 rounded-full"
+                        className="absolute bottom-0 left-1 right-1 h-0.5 bg-amber-500 rounded-full"
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                       />
                     )}
@@ -3800,7 +3811,7 @@ export default function HomePage() {
                     return (
                       <motion.button
                         key={item.id}
-                        onClick={() => { setActiveSection(item.id); setMobileNavOpen(false) }}
+                        onClick={() => { handleSectionChange(item.id) }}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: idx * 0.04, type: 'spring', stiffness: 300, damping: 30 }}
@@ -3824,8 +3835,18 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Hero Landing Section */}
-      <section className="relative overflow-hidden" aria-label="Hero">
+      {/* Hero Landing Section — only visible on Dashboard */}
+      <AnimatePresence>
+        {activeSection === 'dashboard' && (
+          <motion.section
+            key="hero"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="relative overflow-hidden"
+            aria-label="Hero"
+          >
         {/* Animated gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-emerald-950 to-gray-900">
           {/* Animated radial glow */}
@@ -3913,7 +3934,7 @@ export default function HomePage() {
               <motion.button
                 whileHover={{ scale: 1.04, y: -2 }}
                 whileTap={{ scale: 0.97 }}
-                onClick={() => setActiveSection('architecture')}
+                onClick={() => handleSectionChange('architecture')}
                 className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold text-sm shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-shadow cursor-pointer min-h-[44px] focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-gray-900"
                 aria-label="Explore the architecture"
               >
@@ -3925,7 +3946,7 @@ export default function HomePage() {
               <motion.button
                 whileHover={{ scale: 1.04, y: -2 }}
                 whileTap={{ scale: 0.97 }}
-                onClick={() => setActiveSection('topics')}
+                onClick={() => handleSectionChange('topics')}
                 className="px-6 py-3 rounded-xl bg-white/10 backdrop-blur-sm text-white font-semibold text-sm border border-white/20 hover:bg-white/15 transition-colors cursor-pointer min-h-[44px] focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-gray-900"
                 aria-label="Compare proxy stacks"
               >
@@ -3979,10 +4000,12 @@ export default function HomePage() {
             </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
+        )}
+      </AnimatePresence>
 
       {/* Main Content */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-6" role="main">
+      <main ref={mainRef} className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-6" role="main">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeSection}
