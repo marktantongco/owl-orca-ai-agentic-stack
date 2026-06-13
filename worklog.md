@@ -318,3 +318,21 @@ Stage Summary:
 - Hero landing section added with animated gradient, floating orbs, CTA buttons, stats
 - Build passes cleanly with Turbopack
 - Manual deployment required (Vercel token expired, no git push auth)
+
+---
+Task ID: 11
+Agent: Main Agent
+Task: Deploy to GitHub and Vercel with provided credentials
+
+Work Log:
+- Pushed to GitHub using PAT (commit d7ad98b → main)
+- GitHub reported 43 vulnerabilities (18 high, 21 moderate, 4 low) — dependabot alerts
+- Deployed to Vercel production using Vercel token
+- Build succeeded on Vercel (Next.js 16.1.3 Turbopack, 16.7s compile)
+- Cleaned up git remote URL to remove embedded token
+
+Stage Summary:
+- GitHub: https://github.com/marktantongco/owl-orca-ai-agentic-stack (pushed)
+- Vercel Production: https://my-project-beta-one-80.vercel.app/ (deployed, live)
+- Build: ✓ Compiled successfully, all routes generated
+- Hero section + GSAP fix both live on production
