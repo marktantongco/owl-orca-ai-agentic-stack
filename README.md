@@ -79,7 +79,7 @@ The AI coding agent ecosystem is exploding — OpenCode (95K+ stars), Cursor, Cl
 
 | Platform | URL | Notes |
 |----------|-----|-------|
-| **Vercel** | [Deployed on Vercel](https://vercel.com) | Primary deployment with SSR |
+| **Vercel** | [my-project-beta-one-80.vercel.app](https://my-project-beta-one-80.vercel.app/) | Primary deployment with SSR |
 | **GitHub Pages** | [marktantongco.github.io](https://marktantongco.github.io/owl-orca-ai-agentic-stack/) | Static export deployment |
 
 ---
