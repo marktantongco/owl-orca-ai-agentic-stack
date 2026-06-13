@@ -240,3 +240,32 @@ Stage Summary:
 - Accessibility: ARIA labels, roles, 44px touch targets, focus rings, keyboard nav support
 - Visual: WCAG AA contrast, consistent typography/spacing, rounded-xl cards, SectionHeader component
 - Navigation: safeNavigate() validates section IDs before routing
+
+---
+Task ID: 8
+Agent: Main Agent (coordinating full-stack-developer + explore + general-purpose subagents)
+Task: Create Research Hub, integrate opencode_enhancements_research.md, GSAP+Framer Motion hybrid, schematic diagrams, enhanced topics
+
+Work Log:
+- Owl Analysis: Found and analyzed opencode_enhancements_research.md (21KB, 450 lines) covering 15 plugins, MCP servers, skills ecosystem, and Above Mediocrity stack
+- Eagle Strategy: Researched GSAP+Framer Motion integration — strict domain separation (Framer=layout/enter/exit, GSAP=scroll/SVG/timeline), never same element
+- Installed gsap@3.15.0 and @gsap/react
+- Created /src/lib/gsapConfig.ts with centralized plugin registration (ScrollTrigger, MotionPathPlugin), golden ratio duration defaults, SSR guard
+- Added ResearchDocument/ResearchSection interfaces and RESEARCH_DOCUMENTS data (4 docs) to architecture-data.ts
+- Added new nav item: { id: 'research', label: 'Research Hub', icon: FileSearch }
+- Created DataFlowSchematic component with GSAP ScrollTrigger SVG path drawing + MotionPath particle animation
+- Created ResearchHubSection with: hero area, 4 document cards, Above Mediocrity tiered diagram, DataFlowSchematic, file gallery with lightbox
+- Enhanced ProxyComparisonTopicsSection with: Arena mode (Grid/VS), animated stat bars, VS mode comparison, SVG radar chart, Cross-Field Deep Dive with discipline filters + Synthesis Mode
+- Updated Dashboard: Added Research Hub quick access card (4-card grid)
+- Fixed Bug 1: Added MotionPathPlugin to gsapConfig.ts registration
+- Fixed Bug 2: Lightbox now shows actual <img> instead of placeholder icon, image preview buttons show thumbnails
+- Fixed accessibility: Added DialogDescription to lightbox dialog
+- Fixed TypeScript: lightboxImage null check with ?? undefined
+- Build verified: 0 TypeScript errors, dev server returns 200
+
+Stage Summary:
+- Research Hub section with 4 research documents, file gallery, schematic diagram
+- GSAP + Framer Motion hybrid animation system working (GSAP for scroll/SVG, Framer for layout/enter/exit)
+- Enhanced Proxy Topics with Arena mode, VS comparison, radar chart, discipline filters
+- All 10 sections working: Dashboard, A/B Compare, Architecture, ADE Compat, Plugins, Blueprint, Categories, Files, Research Hub, Proxy Topics
+- Total: 3854 lines in page.tsx, 708 lines in architecture-data.ts

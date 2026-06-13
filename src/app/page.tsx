@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback, type ElementType } from 'react'
+import { useState, useRef, useCallback, useEffect, type ElementType } from 'react'
 import { motion, AnimatePresence, useInView, type Variants } from 'framer-motion'
 import {
   LayoutDashboard, GitCompare, Network, Puzzle, Gift, Layers,
@@ -9,7 +9,7 @@ import {
   Code, Terminal, ArrowRight, BookOpen, Sparkles,
   TrendingUp, Activity, Trophy, FolderTree,
   FileText, FileCode, Settings, Database, Server, Download, Eye, Filter,
-  Users, Info
+  Users, Info, FileSearch, BookMarked, Microscope, FlaskConical, BarChart3, Waypoints
 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -22,13 +22,16 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { toast } from 'sonner'
 import ReactMarkdown from 'react-markdown'
 import { SectionErrorBoundary } from '@/components/ErrorBoundary'
+import { useGSAP } from '@gsap/react'
+import { gsap, ScrollTrigger } from '@/lib/gsapConfig'
 import {
   ARCHITECTURE_LAYERS, TOP_PLUGINS, COMPARISON_DATA, CATEGORY_GROUPS,
   ADE_COMPATIBILITY, ULTIMATE_BLUEPRINT_STEPS, PROXY_ENDPOINTS,
   FILE_INVENTORY, STANDING_OUT_CAPABILITIES,
   CROSS_FIELD_CONNECTIONS, CROSS_FIELD_DIMENSIONS,
+  RESEARCH_DOCUMENTS,
   type ArchLayer, type ArchComponent, type PluginEntry, type CompareItem,
-  type ADECompatEntry, type FileEntry
+  type ADECompatEntry, type FileEntry, type ResearchDocument, type ResearchSection
 } from '@/lib/architecture-data'
 
 // ==================== ANIMATION VARIANTS ====================
@@ -141,6 +144,7 @@ const NAV_ITEMS = [
   { id: 'blueprint', label: 'Blueprint', icon: Zap },
   { id: 'categories', label: 'Categories', icon: FolderTree },
   { id: 'files', label: 'Files', icon: FileText },
+  { id: 'research', label: 'Research Hub', icon: FileSearch },
   { id: 'topics', label: 'Proxy Topics', icon: BookOpen },
 ] as const
 
@@ -1928,6 +1932,110 @@ const PROXY_COMPARISONS = [
 
 function ProxyComparisonTopicsSection() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [arenaMode, setArenaMode] = useState<'grid' | 'vs'>('grid')
+  const [vsLeft, setVsLeft] = useState<string>('owl-orca')
+  const [vsRight, setVsRight] = useState<string>('litellm')
+  const [disciplineFilter, setDisciplineFilter] = useState<string>('all')
+  const [synthesisMode, setSynthesisMode] = useState(false)
+  const arenaRef = useRef<HTMLDivElement>(null)
+  const counterRef = useRef<HTMLDivElement>(null)
+
+  // GSAP animated counters and stat bars
+  useGSAP(() => {
+    if (!arenaRef.current) return
+    const statBars = arenaRef.current.querySelectorAll('.stat-bar-fill')
+    statBars.forEach((bar) => {
+      const target = bar.getAttribute('data-width') || '0'
+      gsap.fromTo(bar, { width: '0%' }, {
+        width: `${target}%`,
+        duration: 1.2,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: arenaRef.current,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+      })
+    })
+  }, { scope: arenaRef })
+
+  // GSAP counter animation
+  useGSAP(() => {
+    if (!counterRef.current) return
+    const counter = counterRef.current.querySelector('.counter-value')
+    if (counter) {
+      gsap.fromTo(counter, { textContent: '0' }, {
+        textContent: '5',
+        duration: 2,
+        ease: 'power2.out',
+        snap: { textContent: 1 },
+        scrollTrigger: {
+          trigger: counterRef.current,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+      })
+    }
+  }, { scope: counterRef })
+
+  // Stat data for each proxy for the arena
+  const proxyStats: Record<string, { label: string; value: number; color: string }[]> = {
+    'owl-orca': [
+      { label: 'Stream Racing', value: 95, color: '#10b981' },
+      { label: 'Protocol Translation', value: 90, color: '#10b981' },
+      { label: 'Free Tokens', value: 85, color: '#10b981' },
+      { label: 'Setup Ease', value: 95, color: '#10b981' },
+      { label: 'Premium Models Free', value: 90, color: '#10b981' },
+      { label: 'Circuit Breaking', value: 85, color: '#10b981' },
+    ],
+    'litellm': [
+      { label: 'Stream Racing', value: 30, color: '#3b82f6' },
+      { label: 'Protocol Translation', value: 40, color: '#3b82f6' },
+      { label: 'Free Tokens', value: 20, color: '#3b82f6' },
+      { label: 'Setup Ease', value: 60, color: '#3b82f6' },
+      { label: 'Premium Models Free', value: 15, color: '#3b82f6' },
+      { label: 'Circuit Breaking', value: 70, color: '#3b82f6' },
+    ],
+    'openrouter': [
+      { label: 'Stream Racing', value: 25, color: '#8b5cf6' },
+      { label: 'Protocol Translation', value: 20, color: '#8b5cf6' },
+      { label: 'Free Tokens', value: 55, color: '#8b5cf6' },
+      { label: 'Setup Ease', value: 90, color: '#8b5cf6' },
+      { label: 'Premium Models Free', value: 35, color: '#8b5cf6' },
+      { label: 'Circuit Breaking', value: 40, color: '#8b5cf6' },
+    ],
+    'freellmapi': [
+      { label: 'Stream Racing', value: 20, color: '#f59e0b' },
+      { label: 'Protocol Translation', value: 15, color: '#f59e0b' },
+      { label: 'Free Tokens', value: 90, color: '#f59e0b' },
+      { label: 'Setup Ease', value: 50, color: '#f59e0b' },
+      { label: 'Premium Models Free', value: 5, color: '#f59e0b' },
+      { label: 'Circuit Breaking', value: 35, color: '#f59e0b' },
+    ],
+  }
+
+  // Radar chart data for SVG
+  const radarCapabilities = ['Speed', 'Translation', 'Free Tokens', 'Zero Config', 'Circuit Breaking']
+  const radarData: Record<string, number[]> = {
+    'owl-orca': [95, 90, 85, 95, 85],
+    'litellm': [30, 40, 20, 40, 70],
+    'openrouter': [25, 20, 55, 90, 40],
+    'freellmapi': [20, 15, 90, 35, 35],
+  }
+
+  // Get VS mode comparison data
+  const getVsComparison = () => {
+    const left = PROXY_COMPARISONS.find(p => p.id === vsLeft)
+    const right = PROXY_COMPARISONS.find(p => p.id === vsRight)
+    return { left, right }
+  }
+
+  const { left: vsLeftData, right: vsRightData } = getVsComparison()
+
+  // Cross-field data with discipline filtering
+  const filteredConnections = disciplineFilter === 'all'
+    ? CROSS_FIELD_CONNECTIONS
+    : CROSS_FIELD_CONNECTIONS
 
   return (
     <div className="space-y-6">
@@ -1937,189 +2045,1272 @@ function ProxyComparisonTopicsSection() {
         description="How OWL-ORCA stands out against LiteLLM, OpenRouter, FreeLLMAPI, and the rest. Analyzed through economics, psychology, and network science."
       />
 
-      {/* 2x2 Comparison Grid */}
+      {/* Arena Mode Toggle */}
+      <div className="flex items-center gap-2">
+        <Button
+          variant={arenaMode === 'grid' ? 'default' : 'outline'}
+          size="sm"
+          className="text-xs min-h-[44px] cursor-pointer"
+          onClick={() => setArenaMode('grid')}
+          aria-label="Grid view"
+        >
+          <Trophy className="w-3.5 h-3.5 mr-1" /> Arena Grid
+        </Button>
+        <Button
+          variant={arenaMode === 'vs' ? 'default' : 'outline'}
+          size="sm"
+          className="text-xs min-h-[44px] cursor-pointer"
+          onClick={() => setArenaMode('vs')}
+          aria-label="VS mode"
+        >
+          <GitCompare className="w-3.5 h-3.5 mr-1" /> VS Mode
+        </Button>
+      </div>
+
+      {/* Arena Grid Mode */}
+      {arenaMode === 'grid' && (
+        <div ref={arenaRef}>
+          <motion.div
+            className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+          >
+            {PROXY_COMPARISONS.map((proxy) => (
+              <motion.div key={proxy.id} variants={fadeUpItem}>
+                <Card
+                  className="border-2 cursor-pointer hover:shadow-lg transition-all h-full rounded-xl"
+                  style={{ borderColor: expandedId === proxy.id ? proxy.color : `${proxy.color}40` }}
+                  onClick={() => setExpandedId(expandedId === proxy.id ? null : proxy.id)}
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={expandedId === proxy.id}
+                  aria-label={`${proxy.name} — click to ${expandedId === proxy.id ? 'collapse' : 'expand'}`}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedId(expandedId === proxy.id ? null : proxy.id) } }}
+                >
+                  <CardHeader className="pb-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <motion.div
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: proxy.color }}
+                          animate={{ scale: expandedId === proxy.id ? [1, 1.3, 1] : 1 }}
+                          transition={{ duration: 0.5 }}
+                        />
+                        <div>
+                          <CardTitle className="text-base font-bold tracking-tight" style={{ color: proxy.color }}>{proxy.name}</CardTitle>
+                          <CardDescription className="text-xs leading-relaxed">{proxy.tagline}</CardDescription>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {proxy.openSource && (
+                          <Badge variant="outline" className="text-xs border-emerald-400 text-emerald-600 dark:text-emerald-400">OSS</Badge>
+                        )}
+                        <motion.div animate={{ rotate: expandedId === proxy.id ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                          <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                        </motion.div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    {/* GSAP Animated Stat Bars */}
+                    <div className="space-y-2 mb-3">
+                      {(proxyStats[proxy.id] || []).map((stat) => (
+                        <div key={stat.label}>
+                          <div className="flex justify-between text-xs mb-0.5">
+                            <span className="text-gray-600 dark:text-gray-400">{stat.label}</span>
+                            <span className="font-medium" style={{ color: stat.color }}>{stat.value}%</span>
+                          </div>
+                          <div className="h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                            <div
+                              className="stat-bar-fill h-full rounded-full"
+                              data-width={stat.value}
+                              style={{ backgroundColor: stat.color, width: '0%' }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="space-y-1.5 mb-3">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-gray-600 dark:text-gray-400">Approach</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.approach}</span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-gray-600 dark:text-gray-400">Free Tokens</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.freeTokens}</span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-gray-600 dark:text-gray-400">Setup</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.setupComplexity}</span>
+                      </div>
+                    </div>
+
+                    <AnimatePresence>
+                      {expandedId === proxy.id && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: 'easeInOut' }}
+                          className="overflow-hidden"
+                        >
+                          <div className="mb-3 p-3 rounded-lg border" style={{ borderColor: `${proxy.color}30`, backgroundColor: `${proxy.color}05` }}>
+                            <p className="text-xs font-semibold mb-1" style={{ color: proxy.color }}>Architecture</p>
+                            <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">{proxy.architecture}</p>
+                          </div>
+
+                          <div className="mb-3">
+                            <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-1.5">Strengths</p>
+                            <div className="flex flex-wrap gap-1">
+                              {proxy.strengths.map(s => (
+                                <Badge key={s} variant="outline" className="text-xs border-emerald-300 text-emerald-700 dark:border-emerald-700 dark:text-emerald-400">{s}</Badge>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="mb-4">
+                            <p className="text-xs font-semibold text-red-600 dark:text-red-400 mb-1.5">Weaknesses</p>
+                            <div className="flex flex-wrap gap-1">
+                              {proxy.weaknesses.map(w => (
+                                <Badge key={w} variant="outline" className="text-xs border-red-300 text-red-700 dark:border-red-700 dark:text-red-400">{w}</Badge>
+                              ))}
+                            </div>
+                          </div>
+
+                          <Accordion type="multiple" className="w-full">
+                            <AccordionItem value="economics">
+                              <AccordionTrigger className="text-xs py-2">
+                                <span className="flex items-center gap-2">Economics Lens</span>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">{proxy.economics}</p>
+                              </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="psychology">
+                              <AccordionTrigger className="text-xs py-2">
+                                <span className="flex items-center gap-2">Psychology Lens</span>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">{proxy.psychology}</p>
+                              </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="network">
+                              <AccordionTrigger className="text-xs py-2">
+                                <span className="flex items-center gap-2">Network Science Lens</span>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">{proxy.networkScience}</p>
+                              </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="history">
+                              <AccordionTrigger className="text-xs py-2">
+                                <span className="flex items-center gap-2">Historical Parallels</span>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">{proxy.history}</p>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      )}
+
+      {/* VS Mode */}
+      {arenaMode === 'vs' && (
+        <div className="space-y-4">
+          {/* Proxy Selectors */}
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 items-center">
+            <div>
+              <label className="text-xs font-medium text-gray-600 dark:text-gray-400 block mb-1" htmlFor="vs-left">Champion A</label>
+              <select
+                id="vs-left"
+                value={vsLeft}
+                onChange={(e) => setVsLeft(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 min-h-[44px]"
+                aria-label="Select champion A"
+              >
+                {PROXY_COMPARISONS.map(p => (
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white font-black text-sm shadow-lg">
+                VS
+              </div>
+            </div>
+            <div>
+              <label className="text-xs font-medium text-gray-600 dark:text-gray-400 block mb-1" htmlFor="vs-right">Champion B</label>
+              <select
+                id="vs-right"
+                value={vsRight}
+                onChange={(e) => setVsRight(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 min-h-[44px]"
+                aria-label="Select champion B"
+              >
+                {PROXY_COMPARISONS.map(p => (
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* VS Comparison Cards */}
+          {vsLeftData && vsRightData && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Card className="border-2 rounded-xl h-full" style={{ borderColor: vsLeftData.color }}>
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: vsLeftData.color }} />
+                    <CardTitle className="text-base font-bold tracking-tight" style={{ color: vsLeftData.color }}>{vsLeftData.name}</CardTitle>
+                    {vsLeftData.openSource && <Badge variant="outline" className="text-xs border-emerald-400 text-emerald-600 dark:text-emerald-400">OSS</Badge>}
+                  </div>
+                  <CardDescription className="text-xs">{vsLeftData.tagline}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {/* Stat bars comparison */}
+                  <div className="space-y-2 mb-3">
+                    {(proxyStats[vsLeft] || []).map((stat) => {
+                      const rightStat = proxyStats[vsRight]?.find(s => s.label === stat.label)
+                      const isWinning = rightStat ? stat.value >= rightStat.value : true
+                      return (
+                        <div key={stat.label}>
+                          <div className="flex justify-between text-xs mb-0.5">
+                            <span className="text-gray-600 dark:text-gray-400">{stat.label}</span>
+                            <span className={`font-bold ${isWinning ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400'}`}>
+                              {stat.value}{isWinning ? ' ✓' : ''}
+                            </span>
+                          </div>
+                          <div className="h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                            <div className="h-full rounded-full transition-all duration-700" style={{ backgroundColor: stat.color, width: `${stat.value}%` }} />
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {vsLeftData.strengths.slice(0, 3).map(s => (
+                      <Badge key={s} variant="outline" className="text-xs border-emerald-300 text-emerald-700 dark:border-emerald-700 dark:text-emerald-400">{s}</Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="border-2 rounded-xl h-full" style={{ borderColor: vsRightData.color }}>
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: vsRightData.color }} />
+                    <CardTitle className="text-base font-bold tracking-tight" style={{ color: vsRightData.color }}>{vsRightData.name}</CardTitle>
+                    {vsRightData.openSource && <Badge variant="outline" className="text-xs border-emerald-400 text-emerald-600 dark:text-emerald-400">OSS</Badge>}
+                  </div>
+                  <CardDescription className="text-xs">{vsRightData.tagline}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 mb-3">
+                    {(proxyStats[vsRight] || []).map((stat) => {
+                      const leftStat = proxyStats[vsLeft]?.find(s => s.label === stat.label)
+                      const isWinning = leftStat ? stat.value >= leftStat.value : true
+                      return (
+                        <div key={stat.label}>
+                          <div className="flex justify-between text-xs mb-0.5">
+                            <span className="text-gray-600 dark:text-gray-400">{stat.label}</span>
+                            <span className={`font-bold ${isWinning ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400'}`}>
+                              {stat.value}{isWinning ? ' ✓' : ''}
+                            </span>
+                          </div>
+                          <div className="h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                            <div className="h-full rounded-full transition-all duration-700" style={{ backgroundColor: stat.color, width: `${stat.value}%` }} />
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {vsRightData.strengths.slice(0, 3).map(s => (
+                      <Badge key={s} variant="outline" className="text-xs border-emerald-300 text-emerald-700 dark:border-emerald-700 dark:text-emerald-400">{s}</Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Standing Out Analysis — Why OWL-ORCA Wins */}
+      <div ref={counterRef}>
+        <Card className="border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/10 dark:to-teal-900/10 rounded-xl">
+          <CardHeader>
+            <CardTitle className="text-emerald-800 dark:text-emerald-300 flex items-center gap-2 font-bold tracking-tight">
+              <Sparkles className="w-5 h-5" />
+              Standing Out — Why OWL-ORCA Wins the Combination Game
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <p className="text-sm leading-relaxed text-emerald-700 dark:text-emerald-400">
+                No single proxy wins every category. But <strong className="text-emerald-800 dark:text-emerald-300">OWL-ORCA</strong> is the ONLY proxy that combines all five critical capabilities in one install:
+              </p>
+
+              {/* Interactive Radar Chart (SVG) */}
+              <div className="flex justify-center">
+                <svg viewBox="0 0 300 280" className="w-full max-w-sm h-auto" role="img" aria-label="Radar chart comparing proxy capabilities">
+                  {/* Background pentagon rings */}
+                  {[20, 40, 60, 80, 100].map((pct) => {
+                    const r = (pct / 100) * 100
+                    const points = radarCapabilities.map((_, i) => {
+                      const angle = (Math.PI * 2 * i) / radarCapabilities.length - Math.PI / 2
+                      return `${150 + r * Math.cos(angle)},${120 + r * Math.sin(angle)}`
+                    }).join(' ')
+                    return <polygon key={pct} points={points} fill="none" stroke="#d1d5db" strokeWidth="0.5" opacity="0.5" />
+                  })}
+
+                  {/* Axis lines */}
+                  {radarCapabilities.map((cap, i) => {
+                    const angle = (Math.PI * 2 * i) / radarCapabilities.length - Math.PI / 2
+                    return (
+                      <g key={cap}>
+                        <line x1="150" y1="120" x2={150 + 100 * Math.cos(angle)} y2={120 + 100 * Math.sin(angle)} stroke="#d1d5db" strokeWidth="0.5" />
+                        <text
+                          x={150 + 115 * Math.cos(angle)}
+                          y={120 + 115 * Math.sin(angle)}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          fill="#6b7280"
+                          fontSize="9"
+                          fontWeight="500"
+                        >
+                          {cap}
+                        </text>
+                      </g>
+                    )
+                  })}
+
+                  {/* OWL-ORCA radar shape */}
+                  <polygon
+                    points={radarCapabilities.map((_, i) => {
+                      const angle = (Math.PI * 2 * i) / radarCapabilities.length - Math.PI / 2
+                      const v = radarData['owl-orca'][i] / 100
+                      return `${150 + 100 * v * Math.cos(angle)},${120 + 100 * v * Math.sin(angle)}`
+                    }).join(' ')}
+                    fill="#10b98120"
+                    stroke="#10b981"
+                    strokeWidth="2"
+                  />
+
+                  {/* Other proxy radar shapes */}
+                  {['litellm', 'openrouter', 'freellmapi'].map((id) => {
+                    const proxy = PROXY_COMPARISONS.find(p => p.id === id)
+                    return (
+                      <polygon
+                        key={id}
+                        points={radarCapabilities.map((_, i) => {
+                          const angle = (Math.PI * 2 * i) / radarCapabilities.length - Math.PI / 2
+                          const v = radarData[id][i] / 100
+                          return `${150 + 100 * v * Math.cos(angle)},${120 + 100 * v * Math.sin(angle)}`
+                        }).join(' ')}
+                        fill="none"
+                        stroke={proxy?.color || '#999'}
+                        strokeWidth="1"
+                        strokeDasharray="4 2"
+                        opacity="0.6"
+                      />
+                    )
+                  })}
+
+                  {/* Legend */}
+                  <g transform="translate(30, 245)">
+                    {PROXY_COMPARISONS.map((p, i) => (
+                      <g key={p.id} transform={`translate(0, ${i * 14})`}>
+                        <rect x="0" y="0" width="10" height="10" rx="2" fill={p.color} opacity={p.id === 'owl-orca' ? 0.8 : 0.5} />
+                        <text x="15" y="8" fontSize="8" fill="#6b7280">{p.name}</text>
+                      </g>
+                    ))}
+                  </g>
+                </svg>
+              </div>
+
+              {/* GSAP animated counter */}
+              <div className="p-4 rounded-lg bg-emerald-100/50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-center">
+                <div className="flex items-center justify-center gap-2">
+                  <span className="counter-value text-3xl font-black text-emerald-600 dark:text-emerald-400">0</span>
+                  <span className="text-lg font-bold text-emerald-700 dark:text-emerald-300">capabilities</span>
+                </div>
+                <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">
+                  <strong>0 competitors with all 5.</strong> Stream Racing + Protocol Translation + Premium Free + Zero-Config + Circuit Breaking
+                </p>
+              </div>
+
+              {/* Capability grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {[
+                  { label: 'Stream Racing', desc: 'Parallel requests across providers — fastest wins' },
+                  { label: 'Protocol Translation', desc: 'Copilot/Antigravity → OpenAI format on-the-fly' },
+                  { label: 'Premium Models Free', desc: 'AWS Builder ID gives Claude Sonnet 4.5 at $0' },
+                  { label: 'Zero-Config for OpenCode', desc: 'Auto-injected by install.sh — no manual setup' },
+                  { label: 'Circuit Breaking', desc: 'Prevents cascading failures across providers' },
+                ].map(item => (
+                  <motion.div
+                    key={item.label}
+                    whileHover={{ x: 4, backgroundColor: 'rgba(16, 185, 129, 0.08)' }}
+                    whileTap={{ scale: 0.98 }}
+                    className="p-2.5 rounded-lg bg-emerald-100/50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 cursor-default"
+                  >
+                    <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">{item.label}</span>
+                    <p className="text-xs leading-relaxed text-emerald-600 dark:text-emerald-400 mt-0.5">{item.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
+                {[
+                  { name: 'LiteLLM', win: 'Provider Count (100+)' },
+                  { name: 'OpenRouter', win: 'Convenience (cloud)' },
+                  { name: 'FreeLLMAPI', win: 'Free Volume (1.7B/mo)' },
+                  { name: 'OWL-ORCA', win: 'Free + Premium + Racing + Zero-Config' },
+                ].map(item => (
+                  <div key={item.name} className={`p-2 rounded-lg text-center border ${item.name === 'OWL-ORCA' ? 'border-emerald-400 bg-emerald-200/50 dark:bg-emerald-800/30' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900'}`}>
+                    <p className={`text-xs font-bold ${item.name === 'OWL-ORCA' ? 'text-emerald-800 dark:text-emerald-300' : 'text-gray-600 dark:text-gray-400'}`}>{item.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Wins: {item.win}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Cross-Field Deep Dive */}
+      <Card className="relative overflow-hidden rounded-xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-violet-500/5 pointer-events-none" />
+        <CardHeader className="relative">
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2 text-lg font-bold tracking-tight">
+              <Cpu className="w-5 h-5 text-emerald-500" />
+              Elephant Memory — Cross-Field Deep Dive
+            </CardTitle>
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="text-xs border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300">
+                Cross-Field Connections
+              </Badge>
+              <Button
+                variant={synthesisMode ? 'default' : 'outline'}
+                size="sm"
+                className="text-xs min-h-[44px] cursor-pointer"
+                onClick={() => setSynthesisMode(!synthesisMode)}
+                aria-label={synthesisMode ? 'Exit synthesis mode' : 'Enter synthesis mode'}
+              >
+                <Cpu className="w-3 h-3 mr-1" />
+                {synthesisMode ? 'Exit Synthesis' : 'Synthesis Mode'}
+              </Button>
+            </div>
+          </div>
+          <CardDescription className="text-sm leading-relaxed">
+            4 proxy stacks analyzed across 4 disciplines — knowledge synthesis, interdisciplinary bridging, and pattern transfer
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="relative">
+          {/* Discipline filter tabs */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            <Button
+              variant={disciplineFilter === 'all' ? 'default' : 'outline'}
+              size="sm"
+              className="text-xs min-h-[44px] cursor-pointer"
+              onClick={() => setDisciplineFilter('all')}
+              aria-label="Show all disciplines"
+            >
+              All
+            </Button>
+            {CROSS_FIELD_DIMENSIONS.map((dim) => {
+              const DimIconMap: Record<string, ElementType> = {
+                TrendingUp, Users, Globe, BookOpen,
+              }
+              const DimIcon = DimIconMap[dim.icon]
+              return (
+                <Button
+                  key={dim.id}
+                  variant={disciplineFilter === dim.id ? 'default' : 'outline'}
+                  size="sm"
+                  className="text-xs min-h-[44px] cursor-pointer"
+                  onClick={() => setDisciplineFilter(dim.id)}
+                  aria-label={`Filter by ${dim.label}`}
+                  style={disciplineFilter === dim.id ? { backgroundColor: dim.color, borderColor: dim.color } : undefined}
+                >
+                  {DimIcon && <DimIcon className="w-3 h-3 mr-1" />}
+                  {dim.label}
+                </Button>
+              )
+            })}
+          </div>
+
+          {/* Cross-field matrix */}
+          <div className="overflow-x-auto -mx-1">
+            <table className="w-full text-xs border-collapse min-w-[540px]" role="table">
+              <thead>
+                <tr>
+                  <th className="text-left p-2 font-semibold text-gray-600 dark:text-gray-400 w-24" scope="col">Proxy</th>
+                  {CROSS_FIELD_DIMENSIONS
+                    .filter(dim => disciplineFilter === 'all' || dim.id === disciplineFilter)
+                    .map(dim => (
+                      <th key={dim.id} className="text-left p-2 font-semibold" style={{ color: dim.color }} scope="col">
+                        {dim.label}
+                      </th>
+                    ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filteredConnections.map((entry, idx) => (
+                  <motion.tr
+                    key={entry.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.08, duration: 0.3, ease: customEase }}
+                    className={`group border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${synthesisMode && entry.id !== 'owl-orca' ? 'opacity-40' : ''}`}
+                  >
+                    <td className="p-2">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-2.5 h-2.5 rounded-full shrink-0"
+                          style={{ backgroundColor: entry.proxyColor }}
+                        />
+                        <span className="font-semibold text-gray-900 dark:text-white whitespace-nowrap">{entry.proxy}</span>
+                      </div>
+                    </td>
+                    {disciplineFilter === 'all' && (
+                      <>
+                        <td className="p-2">
+                          <span className="font-medium text-emerald-700 dark:text-emerald-300">{entry.economicsShort}</span>
+                        </td>
+                        <td className="p-2">
+                          <span className="font-medium text-violet-700 dark:text-violet-300">{entry.psychologyShort}</span>
+                        </td>
+                        <td className="p-2">
+                          <span className="font-medium text-cyan-700 dark:text-cyan-300">{entry.networkScienceShort}</span>
+                        </td>
+                        <td className="p-2">
+                          <span className="font-medium text-amber-700 dark:text-amber-300">{entry.historyShort}</span>
+                        </td>
+                      </>
+                    )}
+                    {disciplineFilter !== 'all' && CROSS_FIELD_DIMENSIONS
+                      .filter(dim => dim.id === disciplineFilter)
+                      .map(dim => (
+                        <td key={dim.id} className="p-2">
+                          <span className="font-medium" style={{ color: dim.color }}>
+                            {(entry as unknown as Record<string, string>)[`${dim.id}Short`]}
+                          </span>
+                        </td>
+                      ))}
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Synthesis Mode Highlight */}
+          {synthesisMode && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-4 p-3 rounded-lg bg-gradient-to-r from-emerald-50 via-violet-50 to-amber-50 dark:from-emerald-900/20 dark:via-violet-900/20 dark:to-amber-900/20 border border-emerald-300 dark:border-emerald-700"
+            >
+              <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300 mb-2 flex items-center gap-2">
+                <Cpu className="w-4 h-4" /> Synthesis Pattern Detected
+              </p>
+              <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                <strong className="text-emerald-700 dark:text-emerald-400">OWL-ORCA</strong> maps to the <strong>arbitrage-BGP-exchange</strong> convergence — the only proxy occupying the intersection of speed racing (HFT), protocol translation (BGP), and market making (exchange). All other proxies occupy single archetypes: <strong className="text-violet-600 dark:text-violet-400">LiteLLM</strong> = translator, <strong className="text-purple-600 dark:text-purple-400">OpenRouter</strong> = marketplace, <strong className="text-amber-600 dark:text-amber-400">FreeLLMAPI</strong> = commons.
+              </p>
+            </motion.div>
+          )}
+
+          {/* Expandable detail rows */}
+          <div className="mt-3 space-y-2">
+            {CROSS_FIELD_CONNECTIONS.map((entry) => (
+              <details key={entry.id} className="group/details">
+                <summary className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer text-xs font-medium text-gray-700 dark:text-gray-300 transition-colors list-none min-h-[44px] focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-lg">
+                  <ChevronRight className="w-3 h-3 transition-transform group-open/details:rotate-90" style={{ color: entry.proxyColor }} />
+                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.proxyColor }} />
+                  <span style={{ color: entry.proxyColor }}>{entry.proxy}</span>
+                  <span className="text-gray-500 dark:text-gray-400">— expand cross-field analysis</span>
+                </summary>
+                <div className="ml-5 mt-1 space-y-2 pb-2">
+                  {CROSS_FIELD_DIMENSIONS
+                    .filter(dim => disciplineFilter === 'all' || dim.id === disciplineFilter)
+                    .map(dim => (
+                      <div key={dim.id} className="flex items-start gap-2 p-2 rounded-lg border" style={{ borderColor: `${dim.color}20`, backgroundColor: `${dim.color}05` }}>
+                        <div className="shrink-0 mt-0.5">
+                          <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: dim.color }} />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-xs" style={{ color: dim.color }}>{dim.label}</p>
+                          <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400 mt-0.5">{(entry as unknown as Record<string, string>)[dim.id]}</p>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </details>
+            ))}
+          </div>
+
+          {/* Bottom interconnection summary */}
+          <div className="mt-4 p-3 rounded-lg bg-gradient-to-r from-emerald-50 via-violet-50 to-amber-50 dark:from-emerald-900/10 dark:via-violet-900/10 dark:to-amber-900/10 border border-emerald-200 dark:border-emerald-800/30">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+              <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400 text-center sm:text-left">
+                <strong className="text-gray-900 dark:text-white">Cross-field pattern:</strong> Each proxy maps to a distinct archetype across all 4 disciplines — OWL-ORCA is the <span className="text-emerald-600 dark:text-emerald-400 font-medium">arbitrage-BGP-exchange</span> convergence, while others occupy <span className="text-violet-600 dark:text-violet-400 font-medium">translator</span>, <span className="text-purple-600 dark:text-purple-400 font-medium">marketplace</span>, or <span className="text-amber-600 dark:text-amber-400 font-medium">commons</span> archetypes.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
+// ==================== DATA FLOW SCHEMATIC (GSAP) ====================
+
+function DataFlowSchematic() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [activeNode, setActiveNode] = useState<string | null>(null)
+
+  useGSAP(() => {
+    if (!containerRef.current) return
+
+    // Animate SVG paths drawing themselves
+    const paths = containerRef.current.querySelectorAll('.schematic-path')
+    paths.forEach((path) => {
+      const svgPath = path as SVGPathElement
+      const length = svgPath.getTotalLength()
+      gsap.set(svgPath, { strokeDasharray: length, strokeDashoffset: length })
+      gsap.to(svgPath, {
+        strokeDashoffset: 0,
+        duration: 1.8,
+        ease: 'power2.inOut',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 80%',
+          end: 'bottom 20%',
+          toggleActions: 'play none none reverse',
+        },
+      })
+    })
+
+    // Animate data particles along paths
+    const particles = containerRef.current.querySelectorAll('.data-particle')
+    particles.forEach((particle, i) => {
+      gsap.to(particle, {
+        motionPath: {
+          path: `#flow-path-${i % 3}`,
+          align: `#flow-path-${i % 3}`,
+          alignOrigin: [0.5, 0.5],
+        },
+        duration: 3 + i * 0.5,
+        repeat: -1,
+        ease: 'none',
+        delay: i * 0.8,
+      })
+    })
+
+    // Staggered reveal for nodes
+    const nodes = containerRef.current.querySelectorAll('.schematic-node')
+    gsap.fromTo(
+      nodes,
+      { scale: 0, opacity: 0 },
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.5,
+        stagger: 0.15,
+        ease: 'back.out(1.7)',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+      }
+    )
+  }, { scope: containerRef })
+
+  const nodes = [
+    { id: 'user', label: 'User / ADE', x: 50, y: 30, color: '#f59e0b', icon: '👤' },
+    { id: 'silent', label: 'Silent Protocol', x: 250, y: 30, color: '#8b5cf6', icon: '🔒' },
+    { id: 'orca', label: 'OWL-ORCA Proxy', x: 450, y: 30, color: '#10b981', icon: '🐋' },
+    { id: 'copilot', label: 'Copilot Free', x: 350, y: 110, color: '#06b6d4', icon: '🆓' },
+    { id: 'antigravity', label: 'Antigravity Free', x: 550, y: 110, color: '#3b82f6', icon: '🆓' },
+    { id: 'aws', label: 'AWS Builder ID', x: 450, y: 110, color: '#f59e0b', icon: '⭐' },
+  ]
+
+  return (
+    <div ref={containerRef} className="w-full">
+      <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl p-4 sm:p-6 overflow-hidden">
+        {/* Subtle grid background */}
+        <div className="absolute inset-0 opacity-10" aria-hidden="true">
+          <svg width="100%" height="100%">
+            <defs>
+              <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-gray-400" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+          </svg>
+        </div>
+
+        <svg viewBox="0 0 600 150" className="w-full h-auto relative z-10" role="img" aria-label="Data flow schematic showing the path from User through OWL-ORCA to cloud providers">
+          {/* Flow paths */}
+          <path id="flow-path-0" className="schematic-path" d="M 90 45 L 210 45" fill="none" stroke="#f59e0b" strokeWidth="2" opacity="0.7" />
+          <path id="flow-path-1" className="schematic-path" d="M 290 45 L 410 45" fill="none" stroke="#8b5cf6" strokeWidth="2" opacity="0.7" />
+          <path id="flow-path-2" className="schematic-path" d="M 490 55 Q 490 80 490 95" fill="none" stroke="#10b981" strokeWidth="2" opacity="0.7" />
+          <path id="flow-path-2b" className="schematic-path" d="M 450 55 Q 390 80 350 95" fill="none" stroke="#10b981" strokeWidth="2" opacity="0.5" />
+          <path id="flow-path-2c" className="schematic-path" d="M 530 55 Q 550 80 550 95" fill="none" stroke="#10b981" strokeWidth="2" opacity="0.5" />
+
+          {/* Data particles */}
+          {[0, 1, 2, 3, 4].map((i) => (
+            <circle key={i} className="data-particle" r="3" fill="#10b981" opacity="0.8">
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" repeatCount="indefinite" begin={`${i * 0.3}s`} />
+            </circle>
+          ))}
+
+          {/* Nodes */}
+          {nodes.map((node) => (
+            <g
+              key={node.id}
+              className="schematic-node cursor-pointer"
+              onClick={() => setActiveNode(activeNode === node.id ? null : node.id)}
+              role="button"
+              tabIndex={0}
+              aria-label={`${node.label} node`}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveNode(activeNode === node.id ? null : node.id) } }}
+            >
+              {/* Node glow on hover/active */}
+              <circle
+                cx={node.x}
+                cy={node.y}
+                r={activeNode === node.id ? 32 : 28}
+                fill={activeNode === node.id ? `${node.color}20` : `${node.color}10`}
+                stroke={node.color}
+                strokeWidth={activeNode === node.id ? 2 : 1}
+                className="transition-all duration-300"
+              />
+              <text
+                x={node.x}
+                y={node.y - 2}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize="16"
+              >
+                {node.icon}
+              </text>
+              <text
+                x={node.x}
+                y={node.y + 16}
+                textAnchor="middle"
+                fill={node.color}
+                fontSize="7"
+                fontWeight="bold"
+              >
+                {node.label}
+              </text>
+            </g>
+          ))}
+        </svg>
+
+        {/* Active node detail */}
+        <AnimatePresence>
+          {activeNode && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              className="mt-3 p-3 rounded-lg border border-gray-700 bg-gray-800/80 backdrop-blur"
+            >
+              {(() => {
+                const nodeData: Record<string, { label: string; desc: string; color: string }> = {
+                  user: { label: 'User / ADE', desc: 'Any OpenAI-compatible AI Development Environment (OpenCode, Goose, Aider, etc.) sends requests to the proxy.', color: '#f59e0b' },
+                  silent: { label: 'Silent Protocol', desc: 'Protocol translation layer — converts Copilot/Antigravity formats to standard OpenAI API on-the-fly.', color: '#8b5cf6' },
+                  orca: { label: 'OWL-ORCA Proxy', desc: '3 local endpoints: Orca Router (:60001) for stream racing, Kiro Gateway (:8333) for premium models, Forward Proxy (:60000) for domain bypass.', color: '#10b981' },
+                  copilot: { label: 'GitHub Copilot Free', desc: 'Free-tier access to GPT-4o and Claude 3.5 Sonnet via owl-token auth.', color: '#06b6d4' },
+                  antigravity: { label: 'Antigravity Free', desc: 'Free-tier access to GPT-4o-mini and Gemini Flash models.', color: '#3b82f6' },
+                  aws: { label: 'AWS Builder ID (Kiro)', desc: 'Premium models free — Claude Sonnet 4.5 and DeepSeek 3.2 via AWS Builder ID.', color: '#f59e0b' },
+                }
+                const n = nodeData[activeNode]
+                return n ? (
+                  <div>
+                    <p className="font-bold text-sm" style={{ color: n.color }}>{n.label}</p>
+                    <p className="text-xs text-gray-400 mt-1 leading-relaxed">{n.desc}</p>
+                  </div>
+                ) : null
+              })()}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <p className="text-xs text-gray-500 text-center mt-3 relative z-10">Click any node for details • Paths animate on scroll</p>
+      </div>
+    </div>
+  )
+}
+
+// ==================== RESEARCH HUB SECTION ====================
+
+function ResearchHubSection({ onNavigate }: { onNavigate: (section: string) => void }) {
+  const [selectedDoc, setSelectedDoc] = useState<ResearchDocument | null>(null)
+  const [expandedFinding, setExpandedFinding] = useState<string | null>(null)
+  const [expandedTier, setExpandedTier] = useState<number | null>(null)
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null)
+  const heroRef = useRef<HTMLDivElement>(null)
+
+  const safeNavigate = useCallback((target: string) => {
+    if (VALID_SECTIONS.includes(target as typeof VALID_SECTIONS[number])) {
+      onNavigate(target)
+    }
+  }, [onNavigate])
+
+  // GSAP parallax for hero
+  useGSAP(() => {
+    if (!heroRef.current) return
+    gsap.to(heroRef.current.querySelector('.hero-bg'), {
+      y: -40,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1,
+      },
+    })
+  }, { scope: heroRef })
+
+  // Category color map
+  const categoryColors: Record<string, { bg: string; text: string; border: string }> = {
+    research: { bg: 'bg-amber-100 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-300', border: 'border-amber-300 dark:border-amber-700' },
+    tools: { bg: 'bg-emerald-100 dark:bg-emerald-900/30', text: 'text-emerald-700 dark:text-emerald-300', border: 'border-emerald-300 dark:border-emerald-700' },
+    comparison: { bg: 'bg-violet-100 dark:bg-violet-900/30', text: 'text-violet-700 dark:text-violet-300', border: 'border-violet-300 dark:border-violet-700' },
+    architecture: { bg: 'bg-cyan-100 dark:bg-cyan-900/30', text: 'text-cyan-700 dark:text-cyan-300', border: 'border-cyan-300 dark:border-cyan-700' },
+  }
+
+  const tierColors: Record<number, { bg: string; text: string; badge: string; border: string }> = {
+    1: { bg: 'bg-amber-50 dark:bg-amber-900/10', text: 'text-amber-800 dark:text-amber-300', badge: 'bg-amber-500 text-white', border: 'border-amber-200 dark:border-amber-800' },
+    2: { bg: 'bg-emerald-50 dark:bg-emerald-900/10', text: 'text-emerald-800 dark:text-emerald-300', badge: 'bg-emerald-500 text-white', border: 'border-emerald-200 dark:border-emerald-800' },
+    3: { bg: 'bg-gray-50 dark:bg-gray-900/10', text: 'text-gray-700 dark:text-gray-300', badge: 'bg-gray-500 text-white', border: 'border-gray-200 dark:border-gray-800' },
+  }
+
+  // File gallery images
+  const galleryImages = FILE_INVENTORY.filter(f => f.type === 'png').map(f => ({ id: f.id, name: f.name, path: f.path }))
+  const pdfFile = FILE_INVENTORY.find(f => f.type === 'pdf')
+
+  return (
+    <div className="space-y-6">
+      {/* Hero with GSAP parallax */}
+      <div ref={heroRef} className="relative overflow-hidden rounded-2xl">
+        <div className="hero-bg absolute inset-0 bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 opacity-90" />
+        <div className="hero-bg absolute inset-0 opacity-20" aria-hidden="true">
+          <svg width="100%" height="100%">
+            <defs>
+              <pattern id="hero-dots" width="30" height="30" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1" fill="white" opacity="0.3" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#hero-dots)" />
+          </svg>
+        </div>
+        <div className="relative z-10 p-6 sm:p-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className="p-2 rounded-xl bg-white/10 backdrop-blur">
+                <Microscope className="w-6 h-6 text-emerald-300" />
+              </div>
+              <Badge className="bg-emerald-500/20 text-emerald-200 border-emerald-400/30 backdrop-blur">4 Research Documents</Badge>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">Research Hub</h2>
+            <p className="text-emerald-200/80 mt-2 max-w-2xl leading-relaxed">
+              Deep-dive reports covering enhancement tools, agentic development, variant comparisons, and animation architecture — all with interactive analysis.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Document Cards */}
       <motion.div
         className="grid grid-cols-1 lg:grid-cols-2 gap-4"
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: '-80px' }}
+        viewport={{ once: true, margin: '-60px' }}
       >
-        {PROXY_COMPARISONS.map((proxy) => (
-          <motion.div key={proxy.id} variants={fadeUpItem}>
-            <Card
-              className="border-2 cursor-pointer hover:shadow-lg transition-all h-full rounded-xl"
-              style={{ borderColor: expandedId === proxy.id ? proxy.color : `${proxy.color}40` }}
-              onClick={() => setExpandedId(expandedId === proxy.id ? null : proxy.id)}
-              role="button"
-              tabIndex={0}
-              aria-expanded={expandedId === proxy.id}
-              aria-label={`${proxy.name} — click to ${expandedId === proxy.id ? 'collapse' : 'expand'}`}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedId(expandedId === proxy.id ? null : proxy.id) } }}
-            >
-              <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <motion.div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: proxy.color }}
-                      animate={{ scale: expandedId === proxy.id ? [1, 1.3, 1] : 1 }}
-                      transition={{ duration: 0.5 }}
-                    />
-                    <div>
-                      <CardTitle className="text-base font-bold tracking-tight" style={{ color: proxy.color }}>{proxy.name}</CardTitle>
-                      <CardDescription className="text-xs leading-relaxed">{proxy.tagline}</CardDescription>
-                    </div>
+        {RESEARCH_DOCUMENTS.map((doc) => {
+          const catStyle = categoryColors[doc.category]
+          return (
+            <motion.div key={doc.id} variants={fadeUpItem}>
+              <Card className="h-full hover:shadow-lg transition-shadow rounded-xl">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <Badge className={`${catStyle.bg} ${catStyle.text} ${catStyle.border} border text-xs`}>
+                      {doc.category}
+                    </Badge>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{doc.size} • {doc.date}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {proxy.openSource && (
-                      <Badge variant="outline" className="text-xs border-emerald-400 text-emerald-600 dark:text-emerald-400">OSS</Badge>
+                  <CardTitle className="text-base font-bold tracking-tight mt-2 text-gray-900 dark:text-white">
+                    {doc.title}
+                  </CardTitle>
+                  <CardDescription className="text-xs leading-relaxed">{doc.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  {/* Section breakdown */}
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {doc.sections.map((sec) => (
+                      <div
+                        key={sec.id}
+                        className="flex items-center gap-1 px-2 py-1 rounded-md bg-muted/50 text-xs"
+                        title={sec.summary}
+                      >
+                        <span>{sec.icon}</span>
+                        <span className="text-gray-700 dark:text-gray-300 font-medium">{sec.title}</span>
+                        {sec.itemCount && (
+                          <span className="text-gray-500 dark:text-gray-400">({sec.itemCount})</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Key findings - expandable */}
+                  <div className="space-y-1.5 mb-3">
+                    <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Key Findings</p>
+                    {doc.keyFindings.slice(0, expandedFinding === doc.id ? undefined : 3).map((finding, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        className="flex items-start gap-2 text-xs leading-relaxed"
+                      >
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                        <span className="text-gray-600 dark:text-gray-400">{finding}</span>
+                      </motion.div>
+                    ))}
+                    {doc.keyFindings.length > 3 && (
+                      <button
+                        onClick={() => setExpandedFinding(expandedFinding === doc.id ? null : doc.id)}
+                        className="text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 min-h-[44px] flex items-center cursor-pointer focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded"
+                        aria-label={expandedFinding === doc.id ? 'Show fewer findings' : `Show all ${doc.keyFindings.length} findings`}
+                      >
+                        {expandedFinding === doc.id ? '← Show less' : `+${doc.keyFindings.length - 3} more findings`}
+                      </button>
                     )}
-                    <motion.div animate={{ rotate: expandedId === proxy.id ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                      <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                    </motion.div>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="space-y-1.5 mb-3">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 dark:text-gray-400">Approach</span>
-                    <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.approach}</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 dark:text-gray-400">Free Tokens</span>
-                    <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.freeTokens}</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 dark:text-gray-400">Setup</span>
-                    <span className="font-medium text-gray-700 dark:text-gray-300">{proxy.setupComplexity}</span>
-                  </div>
-                </div>
 
-                <AnimatePresence>
-                  {expandedId === proxy.id && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: 'easeInOut' }}
-                      className="overflow-hidden"
-                    >
-                      <div className="mb-3 p-3 rounded-lg border" style={{ borderColor: `${proxy.color}30`, backgroundColor: `${proxy.color}05` }}>
-                        <p className="text-xs font-semibold mb-1" style={{ color: proxy.color }}>Architecture</p>
-                        <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">{proxy.architecture}</p>
-                      </div>
-
-                      <div className="mb-3">
-                        <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-1.5">Strengths</p>
-                        <div className="flex flex-wrap gap-1">
-                          {proxy.strengths.map(s => (
-                            <Badge key={s} variant="outline" className="text-xs border-emerald-300 text-emerald-700 dark:border-emerald-700 dark:text-emerald-400">{s}</Badge>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="mb-4">
-                        <p className="text-xs font-semibold text-red-600 dark:text-red-400 mb-1.5">Weaknesses</p>
-                        <div className="flex flex-wrap gap-1">
-                          {proxy.weaknesses.map(w => (
-                            <Badge key={w} variant="outline" className="text-xs border-red-300 text-red-700 dark:border-red-700 dark:text-red-400">{w}</Badge>
-                          ))}
-                        </div>
-                      </div>
-
-                      <Accordion type="multiple" className="w-full">
-                        <AccordionItem value="economics">
-                          <AccordionTrigger className="text-xs py-2">
-                            <span className="flex items-center gap-2">Economics Lens</span>
-                          </AccordionTrigger>
-                          <AccordionContent>
-                            <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">{proxy.economics}</p>
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="psychology">
-                          <AccordionTrigger className="text-xs py-2">
-                            <span className="flex items-center gap-2">Psychology Lens</span>
-                          </AccordionTrigger>
-                          <AccordionContent>
-                            <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">{proxy.psychology}</p>
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="network">
-                          <AccordionTrigger className="text-xs py-2">
-                            <span className="flex items-center gap-2">Network Science Lens</span>
-                          </AccordionTrigger>
-                          <AccordionContent>
-                            <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">{proxy.networkScience}</p>
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="history">
-                          <AccordionTrigger className="text-xs py-2">
-                            <span className="flex items-center gap-2">Historical Parallels</span>
-                          </AccordionTrigger>
-                          <AccordionContent>
-                            <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">{proxy.history}</p>
-                          </AccordionContent>
-                        </AccordionItem>
-                      </Accordion>
-                    </motion.div>
+                  {/* Image previews */}
+                  {doc.imagePreviews.length > 0 && (
+                    <div className="flex gap-2 mb-3">
+                      {doc.imagePreviews.map((imgPath, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setLightboxImage(imgPath)}
+                          className="relative w-16 h-12 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-amber-400 dark:hover:border-amber-500 transition-colors cursor-pointer focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 min-h-[44px]"
+                          aria-label={`Preview image ${idx + 1}`}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={imgPath} alt={`Preview ${idx + 1}`} className="w-full h-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
                   )}
-                </AnimatePresence>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
+
+                  {/* Read Full Report */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs min-h-[44px] cursor-pointer"
+                    onClick={() => setSelectedDoc(doc)}
+                    aria-label={`Read full report: ${doc.title}`}
+                  >
+                    <BookMarked className="w-3.5 h-3.5 mr-1.5" />
+                    Read Full Report
+                  </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )
+        })}
       </motion.div>
 
-      {/* Standing Out Summary */}
-      <Card className="border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/10 dark:to-teal-900/10 rounded-xl">
+      {/* Above Mediocrity Stack Visualization */}
+      <Card className="rounded-xl">
         <CardHeader>
-          <CardTitle className="text-emerald-800 dark:text-emerald-300 flex items-center gap-2 font-bold tracking-tight">
-            <Sparkles className="w-5 h-5" />
-            Standing Out — Why OWL-ORCA Wins the Combination Game
+          <CardTitle className="flex items-center gap-2 font-bold tracking-tight">
+            <FlaskConical className="w-5 h-5 text-amber-500" />
+            Above Mediocrity Stack — Tiered Enhancement Diagram
           </CardTitle>
+          <CardDescription className="text-sm leading-relaxed">
+            The curated 3-tier enhancement stack — click a tier to expand
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            <p className="text-sm leading-relaxed text-emerald-700 dark:text-emerald-400">
-              No single proxy wins every category. But <strong className="text-emerald-800 dark:text-emerald-300">OWL-ORCA</strong> is the ONLY proxy that combines all five critical capabilities in one install:
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {[
-                { label: 'Stream Racing', desc: 'Parallel requests across providers — fastest wins' },
-                { label: 'Protocol Translation', desc: 'Copilot/Antigravity → OpenAI format on-the-fly' },
-                { label: 'Premium Models Free', desc: 'AWS Builder ID gives Claude Sonnet 4.5 at $0' },
-                { label: 'Zero-Config for OpenCode', desc: 'Auto-injected by install.sh — no manual setup' },
-                { label: 'Circuit Breaking', desc: 'Prevents cascading failures across providers' },
-              ].map(item => (
+            {RESEARCH_DOCUMENTS[0].tierHighlights?.map(({ tier, items }) => {
+              const style = tierColors[tier]
+              const isExpanded = expandedTier === tier
+              return (
                 <motion.div
-                  key={item.label}
-                  whileHover={{ x: 4, backgroundColor: 'rgba(16, 185, 129, 0.08)' }}
-                  whileTap={{ scale: 0.98 }}
-                  className="p-2.5 rounded-lg bg-emerald-100/50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 cursor-default"
+                  key={tier}
+                  layout
+                  className={`rounded-xl border-2 ${style.border} ${style.bg} overflow-hidden`}
                 >
-                  <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">{item.label}</span>
-                  <p className="text-xs leading-relaxed text-emerald-600 dark:text-emerald-400 mt-0.5">{item.desc}</p>
+                  <button
+                    onClick={() => setExpandedTier(isExpanded ? null : tier)}
+                    className="w-full p-4 flex items-center justify-between cursor-pointer min-h-[44px] focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-xl"
+                    aria-expanded={isExpanded}
+                    aria-label={`Tier ${tier} — click to ${isExpanded ? 'collapse' : 'expand'}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Badge className={`${style.badge} text-xs border-0`}>Tier {tier}</Badge>
+                      <span className={`text-sm font-bold ${style.text}`}>
+                        {tier === 1 ? 'Essential — Install First' : tier === 2 ? 'High Impact' : 'Quality of Life'}
+                      </span>
+                    </div>
+                    <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                      <ChevronDown className="w-4 h-4 text-gray-500" />
+                    </motion.div>
+                  </button>
+                  <AnimatePresence>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-4 pb-4 flex flex-wrap gap-2">
+                          {items.map((item, i) => (
+                            <motion.div
+                              key={item}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: i * 0.06, type: 'spring', stiffness: 300, damping: 25 }}
+                            >
+                              <Badge variant="secondary" className="text-xs py-1 px-3">{item}</Badge>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
-              ))}
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
-              {[
-                { name: 'LiteLLM', win: 'Provider Count (100+)' },
-                { name: 'OpenRouter', win: 'Convenience (cloud)' },
-                { name: 'FreeLLMAPI', win: 'Free Volume (1.7B/mo)' },
-                { name: 'OWL-ORCA', win: 'Free + Premium + Racing + Zero-Config' },
-              ].map(item => (
-                <div key={item.name} className={`p-2 rounded-lg text-center border ${item.name === 'OWL-ORCA' ? 'border-emerald-400 bg-emerald-200/50 dark:bg-emerald-800/30' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900'}`}>
-                  <p className={`text-xs font-bold ${item.name === 'OWL-ORCA' ? 'text-emerald-800 dark:text-emerald-300' : 'text-gray-600 dark:text-gray-400'}`}>{item.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Wins: {item.win}</p>
-                </div>
-              ))}
-            </div>
+              )
+            })}
           </div>
         </CardContent>
       </Card>
+
+      {/* Schematic Diagram */}
+      <Card className="rounded-xl">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 font-bold tracking-tight">
+            <Waypoints className="w-5 h-5 text-emerald-500" />
+            Data Flow Schematic
+          </CardTitle>
+          <CardDescription className="text-sm leading-relaxed">
+            Interactive SVG showing the complete data flow from User → Silent Protocol → OWL-ORCA Proxy → Cloud Providers
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <DataFlowSchematic />
+        </CardContent>
+      </Card>
+
+      {/* File Gallery */}
+      <Card className="rounded-xl">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 font-bold tracking-tight">
+            <BarChart3 className="w-5 h-5 text-violet-500" />
+            File Gallery — Images & Documents
+          </CardTitle>
+          <CardDescription className="text-sm leading-relaxed">
+            {galleryImages.length} images and {pdfFile ? '1 PDF document' : '0 PDFs'} — click to preview
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <motion.div
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {galleryImages.map((img) => (
+              <motion.div
+                key={img.id}
+                variants={scaleIn}
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setLightboxImage(img.path)}
+                className="p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 cursor-pointer hover:border-amber-400 dark:hover:border-amber-500 transition-colors min-h-[44px] focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                role="button"
+                tabIndex={0}
+                aria-label={`Preview ${img.name}`}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setLightboxImage(img.path) } }}
+              >
+                <div className="w-full aspect-video rounded-lg bg-muted/30 flex items-center justify-center mb-2">
+                  <Eye className="w-5 h-5 text-gray-400" />
+                </div>
+                <p className="text-xs font-medium text-gray-900 dark:text-white truncate">{img.name}</p>
+              </motion.div>
+            ))}
+            {pdfFile && (
+              <motion.div
+                variants={scaleIn}
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="p-3 rounded-xl border-2 border-dashed border-amber-300 dark:border-amber-700 bg-amber-50/50 dark:bg-amber-900/10 cursor-pointer hover:border-amber-500 dark:hover:border-amber-500 transition-colors min-h-[44px] focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                role="button"
+                tabIndex={0}
+                aria-label={`Download ${pdfFile.name}`}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.open(pdfFile.path, '_blank') } }}
+                onClick={() => window.open(pdfFile.path, '_blank')}
+              >
+                <div className="w-full aspect-video rounded-lg bg-amber-100/50 dark:bg-amber-900/20 flex items-center justify-center mb-2">
+                  <Download className="w-5 h-5 text-amber-500" />
+                </div>
+                <p className="text-xs font-medium text-amber-800 dark:text-amber-300 truncate">{pdfFile.name}</p>
+                <p className="text-xs text-amber-600 dark:text-amber-400">PDF • {pdfFile.size}</p>
+              </motion.div>
+            )}
+          </motion.div>
+        </CardContent>
+      </Card>
+
+      {/* Document Dialog */}
+      <Dialog open={!!selectedDoc} onOpenChange={(open) => { if (!open) setSelectedDoc(null) }}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <BookMarked className="w-5 h-5 text-amber-500" />
+              {selectedDoc?.title}
+            </DialogTitle>
+            <DialogDescription className="text-sm leading-relaxed">
+              {selectedDoc?.longDescription}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-2">
+            {/* Stats row */}
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline" className="text-xs">{selectedDoc?.category}</Badge>
+              <Badge variant="outline" className="text-xs">{selectedDoc?.size}</Badge>
+              <Badge variant="outline" className="text-xs">{selectedDoc?.date}</Badge>
+              <Badge variant="outline" className="text-xs">{selectedDoc?.sections.length} sections</Badge>
+            </div>
+
+            {/* Sections list */}
+            <div className="space-y-2">
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">Sections</p>
+              {selectedDoc?.sections.map((sec) => (
+                <div key={sec.id} className="flex items-center gap-2 p-2 rounded-lg bg-muted/30">
+                  <span className="text-base">{sec.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-gray-900 dark:text-white">{sec.title}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{sec.summary}</p>
+                  </div>
+                  {sec.itemCount && (
+                    <Badge variant="secondary" className="text-xs">{sec.itemCount}</Badge>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Key findings */}
+            <div className="space-y-2">
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">Key Findings</p>
+              {selectedDoc?.keyFindings.map((finding, idx) => (
+                <div key={idx} className="flex items-start gap-2 p-2 rounded-lg border border-gray-100 dark:border-gray-800">
+                  <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold shrink-0">
+                    {idx + 1}
+                  </div>
+                  <span className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">{finding}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Tier highlights if present */}
+            {selectedDoc?.tierHighlights && (
+              <div className="space-y-2">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">Tier Highlights</p>
+                {selectedDoc.tierHighlights.map(({ tier, items }) => (
+                  <div key={tier} className="p-3 rounded-lg border">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Badge className={`text-xs border-0 ${tier === 1 ? 'bg-amber-500' : tier === 2 ? 'bg-emerald-500' : 'bg-gray-400'} text-white`}>
+                        Tier {tier}
+                      </Badge>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {items.map(item => (
+                        <Badge key={item} variant="secondary" className="text-xs">{item}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Action buttons */}
+            <div className="flex gap-2 pt-2">
+              <Button
+                variant="default"
+                size="sm"
+                className="min-h-[44px] cursor-pointer"
+                onClick={() => { if (selectedDoc) window.open(selectedDoc.path, '_blank') }}
+                aria-label={`Open ${selectedDoc?.filename}`}
+              >
+                <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
+                Open {selectedDoc?.filename}
+              </Button>
+              <Button variant="outline" size="sm" className="min-h-[44px] cursor-pointer" onClick={() => setSelectedDoc(null)}>
+                Close
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Lightbox Dialog */}
+      <Dialog open={!!lightboxImage} onOpenChange={(open) => { if (!open) setLightboxImage(null) }}>
+        <DialogContent className="max-w-3xl p-2">
+          <DialogHeader>
+            <DialogTitle className="text-sm">Image Preview</DialogTitle>
+            <DialogDescription className="text-xs text-gray-500 dark:text-gray-400">Click Open in New Tab to view the full-size image</DialogDescription>
+          </DialogHeader>
+          <div className="relative w-full rounded-lg bg-muted/30 flex items-center justify-center overflow-hidden" style={{ minHeight: '300px' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={lightboxImage ?? undefined}
+              alt="Image preview"
+              className="max-w-full max-h-[60vh] object-contain rounded"
+            />
+          </div>
+          <div className="flex justify-end gap-2 mt-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="min-h-[44px] cursor-pointer"
+              onClick={() => { if (lightboxImage) window.open(lightboxImage, '_blank') }}
+            >
+              <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
+              Open in New Tab
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
@@ -2164,6 +3355,40 @@ function DashboardSection({ onNavigate }: { onNavigate: (section: string) => voi
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{stat.sub}</p>
               </CardContent>
             </Card>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* Quick Access */}
+      <motion.div
+        className="grid grid-cols-2 sm:grid-cols-4 gap-3"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-60px' }}
+      >
+        {[
+          { title: 'Research Hub', desc: 'Reports & documentation', gradient: 'from-emerald-400 to-cyan-500', emoji: '📚', target: 'research' },
+          { title: 'Architecture', desc: '7-layer stack view', gradient: 'from-amber-400 to-orange-500', emoji: '🏗️', target: 'architecture' },
+          { title: 'Proxy Arena', desc: 'Compare proxy stacks', gradient: 'from-violet-400 to-purple-500', emoji: '⚔️', target: 'topics' },
+          { title: 'Blueprint', desc: 'Setup guide', gradient: 'from-cyan-400 to-blue-500', emoji: '📋', target: 'blueprint' },
+        ].map(item => (
+          <motion.div key={item.title} variants={fadeUpItem}>
+            <motion.button
+              whileHover={{ scale: 1.03, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => safeNavigate(item.target)}
+              className="w-full p-4 rounded-xl bg-gradient-to-br text-white text-left shadow-sm hover:shadow-md transition-shadow cursor-pointer min-h-[44px] focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+              style={{ backgroundImage: `linear-gradient(to bottom right, var(--tw-gradient-stops))` }}
+              aria-label={`Navigate to ${item.title}`}
+            >
+              <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} rounded-xl`} />
+              <div className="relative">
+                <span className="text-2xl">{item.emoji}</span>
+                <p className="text-sm font-bold mt-1">{item.title}</p>
+                <p className="text-xs opacity-80">{item.desc}</p>
+              </div>
+            </motion.button>
           </motion.div>
         ))}
       </motion.div>
@@ -2485,6 +3710,7 @@ export default function HomePage() {
     blueprint: <SectionErrorBoundary sectionName="Blueprint"><UltimateBlueprintSection /></SectionErrorBoundary>,
     categories: <SectionErrorBoundary sectionName="Categories"><CategoriesSection /></SectionErrorBoundary>,
     files: <SectionErrorBoundary sectionName="Files"><FileBrowserSection /></SectionErrorBoundary>,
+    research: <SectionErrorBoundary sectionName="Research Hub"><ResearchHubSection onNavigate={setActiveSection} /></SectionErrorBoundary>,
     topics: <SectionErrorBoundary sectionName="Proxy Topics"><ProxyComparisonTopicsSection /></SectionErrorBoundary>,
   }
 

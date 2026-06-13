@@ -561,3 +561,148 @@ export const FILE_INVENTORY: FileEntry[] = [
   { id: 'opencode-enhancements', name: 'OpenCode Enhancement Tools', type: 'md', category: 'research', description: 'Research on plugins, MCP servers, skills ecosystem, and the curated "Above Mediocrity" 3-tier enhancement stack.', path: '/files/opencode_enhancements_research.md', size: '~35 KB', date: '2025-07', preview: '15 enhancement tools across 3 tiers. Plugin development guide, MCP configuration examples, and community recommendations from Reddit, HN, and YouTube.' },
   { id: 'infographic-research', name: 'Interactive Infographic Research', type: 'md', category: 'research', description: 'Animation library comparison (Framer Motion vs GSAP vs React Spring vs D3 vs Lottie vs React Flow) with code snippets and decision matrix.', path: '/files/interactive_infographic_research.md', size: '~40 KB', date: '2025-07', preview: '6 animation libraries compared across 12 dimensions. Recommended stack: Framer Motion + React Flow. Complete code snippets for SVG path drawing, node glow, and particle flow.' },
 ]
+
+// ==================== RESEARCH HUB DATA ====================
+
+export interface ResearchDocument {
+  id: string
+  title: string
+  filename: string
+  category: 'research' | 'tools' | 'comparison' | 'architecture'
+  description: string
+  longDescription: string
+  sections: ResearchSection[]
+  keyFindings: string[]
+  tierHighlights?: { tier: number; items: string[] }[]
+  path: string
+  size: string
+  date: string
+  imagePreviews: string[]
+}
+
+export interface ResearchSection {
+  id: string
+  title: string
+  icon: string
+  summary: string
+  itemCount?: number
+}
+
+export const RESEARCH_DOCUMENTS: ResearchDocument[] = [
+  {
+    id: 'opencode-enhancements',
+    title: 'OpenCode Enhancement Tools',
+    filename: 'opencode_enhancements_research.md',
+    category: 'research',
+    description: 'Plugins, MCP servers, skills ecosystem, and the curated "Above Mediocrity" 3-tier enhancement stack.',
+    longDescription: 'Comprehensive research covering 15 enhancement tools across 3 tiers: Oh-My-OpenAgent (multi-agent orchestration), Superpowers (skills framework), Context7 MCP (fresh docs), GitHub MCP, OpenSpec Plugin, Antigravity Awesome Skills (1,500+ skills), and more. Includes plugin development guide, MCP configuration examples, and community recommendations from Reddit, HN, and YouTube creators.',
+    sections: [
+      { id: 'plugins', title: 'Top Plugins & Extensions', icon: '🔌', summary: '14 OpenCode plugins rated 3-5 stars', itemCount: 14 },
+      { id: 'skills', title: 'Skills Ecosystem (SKILL.md)', icon: '⚡', summary: 'Antigravity Awesome Skills, Anthropic Official, Caveman', itemCount: 4 },
+      { id: 'mcp', title: 'MCP Servers', icon: '🔗', summary: '13 compatible MCP servers with configuration', itemCount: 13 },
+      { id: 'alternatives', title: 'Alternative Enhancement Tools', icon: '🛠️', summary: 'LSP, model routers, terminal enhancers, git tools', itemCount: 5 },
+      { id: 'community', title: 'Community Recommendations', icon: '👥', summary: 'Reddit, HN, dev.to, YouTube consensus', itemCount: 4 },
+      { id: 'stack', title: 'Above Mediocrity Stack', icon: '⭐', summary: '3-tier curated enhancement stack', itemCount: 3 },
+      { id: 'dev', title: 'Plugin Development', icon: '🧩', summary: 'TypeScript SDK, hook events, context API', itemCount: 1 },
+    ],
+    keyFindings: [
+      'Oh-My-OpenAgent is the #1 community plugin — 7 specialized AI agents orchestrated',
+      'Superpowers (140K+ stars) brings Claude Code-compatible skills to OpenCode',
+      'Antigravity Awesome Skills provides 1,500+ installable agentic skills',
+      'MCP servers enable GitHub, Supabase, Playwright, and Firecrawl integration',
+      'OpenSpec Plugin enforces "agree before you build" spec-driven development',
+      'The SKILL.md format is now a de-facto portable standard across all major AI coding CLIs',
+    ],
+    tierHighlights: [
+      { tier: 1, items: ['Oh-My-OpenAgent', 'Superpowers', 'Context7 MCP', 'GitHub MCP'] },
+      { tier: 2, items: ['OpenSpec Plugin', 'Antigravity Skills', 'Firecrawl MCP', 'OpenRouter', 'Gemini Auth'] },
+      { tier: 3, items: ['ntfy.sh Notifications', 'OpenCode Worktree', 'Daytona Sandbox', 'OpenCode Browser', 'Ollama'] },
+    ],
+    path: '/files/opencode_enhancements_research.md',
+    size: '~35 KB',
+    date: '2025-07',
+    imagePreviews: ['/files/wiki-ade-tools.png', '/files/wiki-dashboard.png'],
+  },
+  {
+    id: 'ai-agentic-tools',
+    title: 'AI Agentic Development Tools',
+    filename: 'ai_agentic_tools_research.md',
+    category: 'tools',
+    description: 'Top 20 ADE tools, Top 10 Proxy Stacks, Top 15 OpenCode Plugins, Top 10 Free AI Tools, and Top 10 Agent Orchestration Frameworks.',
+    longDescription: '18+ web search queries aggregated into 5 ranked categories with comparison tables, stack recommendations, and market trend analysis. Covers the full landscape from CLI agents to IDE integrations, proxy stacks, and orchestration frameworks.',
+    sections: [
+      { id: 'ade-tools', title: 'Top 20 ADE Tools', icon: '🛠️', summary: 'CLI, IDE, and terminal AI coding tools', itemCount: 20 },
+      { id: 'proxy-stacks', title: 'Top 10 Proxy Stacks', icon: '🔀', summary: 'OpenAI-compatible proxy comparison', itemCount: 10 },
+      { id: 'plugins', title: 'Top 15 OpenCode Plugins', icon: '🔌', summary: 'Community-rated plugins', itemCount: 15 },
+      { id: 'free-tools', title: 'Top 10 Free AI Tools', icon: '🎁', summary: 'Zero-cost developer tools', itemCount: 10 },
+      { id: 'orchestration', title: 'Top 10 Agent Frameworks', icon: '🤖', summary: 'Multi-agent orchestration', itemCount: 10 },
+    ],
+    keyFindings: [
+      'OpenCode leads with 95K+ GitHub stars and 2.5M monthly developers',
+      'OWL-ORCA combines stream racing + protocol translation + circuit breaking in one install',
+      'The proxy stack market is consolidating around OpenAI-compatible APIs',
+      'Multi-agent orchestration (oh-my-opencode pattern) is the dominant trend',
+      'Free-tier model access is the #1 driver of adoption for new developers',
+    ],
+    path: '/files/ai_agentic_tools_research.md',
+    size: '~45 KB',
+    date: '2025-07',
+    imagePreviews: ['/files/ai_agentic_architecture.png'],
+  },
+  {
+    id: 'oh-my-opencode',
+    title: 'Oh-My-OpenCode Variants Report',
+    filename: 'oh-my-opencode_research_report.md',
+    category: 'comparison',
+    description: 'Deep-dive on oh-my-opencode vs oh-my-opencode-slim: 20-dimension comparison, agent details, controversies, and community analysis.',
+    longDescription: '14 web searches across GitHub, npm, Reddit, Medium. Full agent breakdowns, token benchmarks, and license analysis. The full variant wins on features (10 dimensions), the slim variant wins on efficiency (10 dimensions) — a 10-10 tie across 20 dimensions.',
+    sections: [
+      { id: 'comparison', title: '20-Dimension Comparison', icon: '📊', summary: 'Feature vs efficiency head-to-head', itemCount: 20 },
+      { id: 'agents', title: 'Agent Breakdown', icon: '🤖', summary: '7 specialized agents detailed', itemCount: 7 },
+      { id: 'benchmarks', title: 'Token & Performance', icon: '⚡', summary: 'Usage benchmarks and efficiency metrics', itemCount: 4 },
+      { id: 'community', title: 'Community Analysis', icon: '👥', summary: 'Reddit, HN, YouTube reactions', itemCount: 3 },
+    ],
+    keyFindings: [
+      'oh-my-opencode (38K stars) wins on features — 10 dimension victories',
+      'oh-my-opencode-slim (5.1K stars) wins on efficiency — 10 dimension victories',
+      '7 specialized agents: Oracle, Librarian, Frontend Engineer, Backend Engineer, QA, DevOps, PM',
+      'The slim variant uses 60% fewer tokens per session on average',
+      'Community recommends the full variant for complex projects, slim for simple tasks',
+    ],
+    path: '/files/oh-my-opencode_research_report.md',
+    size: '~30 KB',
+    date: '2025-07',
+    imagePreviews: ['/files/provider_comparison_matrix.png'],
+  },
+  {
+    id: 'infographic-research',
+    title: 'Interactive Infographic Research',
+    filename: 'interactive_infographic_research.md',
+    category: 'architecture',
+    description: 'Animation library comparison (Framer Motion vs GSAP vs React Spring vs D3 vs Lottie vs React Flow) with code snippets and decision matrix.',
+    longDescription: '6 animation libraries compared across 12 dimensions. Recommended stack: Framer Motion for layout/enter/exit + GSAP for scroll/SVG/timeline. Complete code snippets for SVG path drawing, node glow, and particle flow effects.',
+    sections: [
+      { id: 'comparison', title: 'Library Comparison', icon: '📈', summary: '6 libraries × 12 dimensions', itemCount: 6 },
+      { id: 'framer', title: 'Framer Motion Patterns', icon: '🎬', summary: 'Enter/exit, layout, gestures, shared elements', itemCount: 8 },
+      { id: 'gsap', title: 'GSAP Techniques', icon: '✨', summary: 'ScrollTrigger, DrawSVG, SplitText, timelines', itemCount: 6 },
+      { id: 'integration', title: 'Hybrid Integration', icon: '🔗', summary: 'Framer + GSAP coexistence patterns', itemCount: 4 },
+      { id: 'decision', title: 'Decision Matrix', icon: '🎯', summary: 'When to use which library', itemCount: 1 },
+    ],
+    keyFindings: [
+      'Framer Motion is best for layout animations, enter/exit, and gestures',
+      'GSAP is best for scroll-driven, SVG, complex timelines, and text effects',
+      'Both can coexist but NEVER on the same DOM element simultaneously',
+      'The golden duration for animations is ~0.618s (1/golden ratio)',
+      'GPU acceleration: only animate transform + opacity for 60fps',
+    ],
+    tierHighlights: [
+      { tier: 1, items: ['Framer Motion (layout/enter/exit)', 'GSAP (scroll/SVG/timeline)'] },
+      { tier: 2, items: ['React Flow (node graphs)', 'Lottie (designer animations)', 'D3 (data-driven)'] },
+      { tier: 3, items: ['React Spring (physics)', 'CSS Animations (simple)'] },
+    ],
+    path: '/files/interactive_infographic_research.md',
+    size: '~40 KB',
+    date: '2025-07',
+    imagePreviews: ['/files/ai_agentic_architecture.png', '/files/wiki-app-screenshot.png'],
+  },
+]
