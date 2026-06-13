@@ -12,6 +12,8 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  // Ensure GSAP subpath imports resolve correctly with Turbopack
+  transpilePackages: ['gsap', '@gsap/react'],
 };
 
 export default nextConfig;

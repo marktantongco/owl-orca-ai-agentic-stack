@@ -3824,6 +3824,163 @@ export default function HomePage() {
         </div>
       </header>
 
+      {/* Hero Landing Section */}
+      <section className="relative overflow-hidden" aria-label="Hero">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-emerald-950 to-gray-900">
+          {/* Animated radial glow */}
+          <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.12) 0%, rgba(16,185,129,0.08) 40%, transparent 70%)' }}
+            animate={{ scale: [1, 1.15, 1], rotate: [0, 5, 0] }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          {/* Dot grid pattern */}
+          <div className="absolute inset-0 opacity-[0.06]" aria-hidden="true">
+            <svg width="100%" height="100%">
+              <defs>
+                <pattern id="hero-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <circle cx="1.5" cy="1.5" r="1" fill="white" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#hero-grid)" />
+            </svg>
+          </div>
+          {/* Floating orbs */}
+          <motion.div
+            className="absolute top-[15%] left-[10%] w-64 h-64 rounded-full bg-amber-500/10 blur-3xl"
+            animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
+            transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute bottom-[20%] right-[15%] w-80 h-80 rounded-full bg-emerald-500/10 blur-3xl"
+            animate={{ x: [0, -25, 0], y: [0, 30, 0] }}
+            transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute top-[40%] right-[30%] w-48 h-48 rounded-full bg-cyan-500/8 blur-3xl"
+            animate={{ x: [0, 15, 0], y: [0, -25, 0] }}
+            transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 md:py-28">
+          <div className="flex flex-col items-center text-center">
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: customEase }}
+            >
+              <Badge className="mb-6 px-4 py-1.5 text-sm font-medium bg-amber-500/15 text-amber-300 border-amber-500/25 backdrop-blur-sm rounded-full">
+                <Sparkles className="w-4 h-4 mr-1.5" />
+                Free &amp; Unlimited AI — Ubuntu Native
+              </Badge>
+            </motion.div>
+
+            {/* Main Title */}
+            <motion.h1
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.1]"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: customEase }}
+            >
+              AI Agentic Stack
+              <br />
+              <span className="bg-gradient-to-r from-amber-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                Knowledge Base
+              </span>
+            </motion.h1>
+
+            {/* Subtitle */}
+            <motion.p
+              className="mt-5 sm:mt-6 text-base sm:text-lg md:text-xl text-gray-300/90 max-w-2xl leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.25, ease: customEase }}
+            >
+              Interactive wiki covering the full-stack proxy architecture, 20+ ADE tools, tiered plugins,
+              and deep cross-field analysis — powered by OWL-ORCA v7.1.0.
+            </motion.p>
+
+            {/* CTA Buttons */}
+            <motion.div
+              className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center gap-3 sm:gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4, ease: customEase }}
+            >
+              <motion.button
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setActiveSection('architecture')}
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold text-sm shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-shadow cursor-pointer min-h-[44px] focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+                aria-label="Explore the architecture"
+              >
+                <span className="flex items-center gap-2">
+                  <Network className="w-4 h-4" />
+                  Explore Architecture
+                </span>
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setActiveSection('topics')}
+                className="px-6 py-3 rounded-xl bg-white/10 backdrop-blur-sm text-white font-semibold text-sm border border-white/20 hover:bg-white/15 transition-colors cursor-pointer min-h-[44px] focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-gray-900"
+                aria-label="Compare proxy stacks"
+              >
+                <span className="flex items-center gap-2">
+                  <GitCompare className="w-4 h-4" />
+                  Compare Proxies
+                </span>
+              </motion.button>
+            </motion.div>
+
+            {/* Stats Row */}
+            <motion.div
+              className="mt-12 sm:mt-14 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 w-full max-w-3xl"
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible"
+            >
+              {[
+                { icon: Layers, value: '7', label: 'Architecture Layers', color: 'text-amber-400' },
+                { icon: Terminal, value: '20+', label: 'ADE Tools', color: 'text-emerald-400' },
+                { icon: Puzzle, value: '15', label: 'Curated Plugins', color: 'text-violet-400' },
+                { icon: Gift, value: '~2B/mo', label: 'Free Tokens', color: 'text-cyan-400' },
+              ].map(stat => (
+                <motion.div
+                  key={stat.label}
+                  variants={fadeUpItem}
+                  className="flex flex-col items-center p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/8 transition-colors"
+                >
+                  <stat.icon className={`w-5 h-5 ${stat.color} mb-2`} />
+                  <p className="text-2xl sm:text-3xl font-black text-white tracking-tight">{stat.value}</p>
+                  <p className="text-xs text-gray-400 mt-1 text-center">{stat.label}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Scroll indicator */}
+            <motion.div
+              className="mt-10 sm:mt-14"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1, duration: 0.8 }}
+            >
+              <motion.div
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                className="flex flex-col items-center gap-1 text-gray-500"
+              >
+                <span className="text-xs tracking-wider uppercase">Scroll to explore</span>
+                <ChevronDown className="w-4 h-4" />
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Main Content */}
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-6" role="main">
         <AnimatePresence mode="wait">
